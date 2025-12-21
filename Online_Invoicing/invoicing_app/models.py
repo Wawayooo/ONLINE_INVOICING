@@ -13,13 +13,13 @@ class Seller(models.Model):
     room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name="seller")
     fullname = models.CharField(max_length=255)
     contact = models.CharField(max_length=255)
-    profile_picture = models.ImageField(upload_to="profiles/", null=True, blank=True)
+    profile_picture = models.ImageField(upload_to="profiles/sellers/", null=True, blank=True)
 
 class Buyer(models.Model):
     room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name="buyer")
     fullname = models.CharField(max_length=255)
     contact = models.CharField(max_length=255)
-    profile_picture = models.ImageField(upload_to="profiles/", null=True, blank=True)
+    profile_picture = models.ImageField(upload_to="profiles/buyers/", null=True, blank=True)
 
 class Invoice(models.Model):
     room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name="invoice")
