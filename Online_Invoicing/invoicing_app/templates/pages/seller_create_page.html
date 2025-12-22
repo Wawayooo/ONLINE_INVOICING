@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Invoice - Seller</title>
+
+  <!-- Link external CSS -->
+   {% load static %}
+  <link rel="stylesheet" href="{% static 'css/seller_create.css' %}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>📄 Create Invoice</h1>
+    <p class="subtitle">Fill in the details to create a new invoice</p>
+
+    <form id="invoiceForm">
+      <!-- Seller Information -->
+      <div class="form-section">
+        <h2 class="section-title">👤 Seller Information</h2>
+
+        <div class="form-group">
+          <label for="sellerFullname">Full Name *</label>
+          <input type="text" id="sellerFullname" name="seller_fullname" required>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="sellerEmail">Email</label>
+            <input type="email" id="sellerEmail" name="seller_email">
+          </div>
+          <div class="form-group">
+            <label for="sellerPhone">Phone</label>
+            <input type="text" id="sellerPhone" name="seller_phone">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sellerSocial">Social Media Handle</label>
+          <input type="text" id="sellerSocial" name="seller_social_media" placeholder="@username">
+        </div>
+
+        <div class="form-group">
+          <label>Profile Picture</label>
+          <div class="file-input-wrapper">
+            <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
+            <label for="sellerProfilePic" class="file-input-label">📷 Choose Profile Picture</label>
+          </div>
+          <img id="sellerPreview" class="preview-image" alt="Preview">
+        </div>
+      </div>
+
+      <!-- Invoice Details -->
+      <div class="form-section">
+        <h2 class="section-title">📋 Invoice Details</h2>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="invoiceDate">Invoice Date *</label>
+            <input type="date" id="invoiceDate" name="invoice_date" required>
+          </div>
+          <div class="form-group">
+            <label for="dueDate">Due Date</label>
+            <input type="date" id="dueDate" name="due_date">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea id="description" name="description" required placeholder="Describe the product or service..."></textarea>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="quantity">Quantity *</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="unitPrice">Unit Price *</label>
+            <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Line Total</label>
+          <div class="calculated" id="lineTotal">₱0.00</div>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method *</label>
+          <select id="paymentMethod" name="payment_method" required>
+            <option value="">Select Payment Method</option>
+            <option value="cash">Cash</option>
+            <option value="gcash">GCash</option>
+            <option value="paypal">PayPal</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">
+        Create Invoice & Get Shareable Link
+      </button>
+    </form>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 15px; color: #667eea;">Creating invoice...</p>
+    </div>
+  </div>
+
+  <!-- Link external JS -->
+  <script type="module" src="{% static 'js/seller_create.js' %}"></script>
+</body>
+
+</html>
