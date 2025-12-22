@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyer Room</title>
+  <link rel="stylesheet" href="{% static 'css/buyer_room.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>🛒 Buyer Room</h1>
+    <p><strong>Room Hash:</strong> <span id="roomHash"></span></p>
+
+    <!-- Buyer Form Section -->
+    <div id="buyerSection">
+      <h2>Your Information</h2>
+      <form id="buyerForm">
+        <div class="form-group">
+          <label for="buyerFullname">Full Name *</label>
+          <input type="text" id="buyerFullname" name="fullname" required>
+        </div>
+        <div class="form-group">
+          <label for="buyerEmail">Email</label>
+          <input type="email" id="buyerEmail" name="email">
+        </div>
+        <div class="form-group">
+          <label for="buyerPhone">Phone</label>
+          <input type="text" id="buyerPhone" name="phone">
+        </div>
+        <div class="form-group">
+          <label for="buyerSocial">Social Media Handle</label>
+          <input type="text" id="buyerSocial" name="social_media">
+        </div>
+        <div class="form-group">
+          <label for="buyerProfilePic">Profile Picture</label>
+          <input type="file" id="buyerProfilePic" name="profile_picture" accept="image/*">
+          <img id="buyerPreview" class="preview-image" alt="Preview">
+        </div>
+        <button type="submit" class="btn btn-primary">Join Room</button>
+      </form>
+    </div>
+
+    <!-- Seller Invoice Section -->
+    <div id="invoiceSection" style="display:none;">
+      <h2>Seller Invoice</h2>
+
+      <!-- Seller Info -->
+      <div class="seller-info">
+        <img id="sellerProfile" src="" alt="Seller Profile" class="profile-image">
+        <div class="seller-details">
+          <p><strong>Seller Name:</strong> <span id="sellerName"></span></p>
+          <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
+          <p><strong>Phone:</strong> <span id="sellerPhone"></span></p>
+          <p><strong>Social:</strong> <span id="sellerSocial"></span></p>
+        </div>
+      </div>
+
+      <!-- Invoice Details -->
+      <div id="invoiceDetailsContainer">
+        <p><strong>Description:</strong> <span id="description"></span></p>
+        <p><strong>Quantity:</strong> <span id="quantity"></span></p>
+        <p><strong>Unit Price:</strong> ₱<span id="unitPrice"></span></p>
+        <p><strong>Line Total:</strong> ₱<span id="lineTotal"></span></p>
+        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
+        <p><strong>Status:</strong> <span id="status"></span></p>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="btn btn-success" id="approveBtn">Approve</button>
+        <button class="btn btn-danger" id="disapproveBtn">Disapprove</button>
+        <span id="invoiceActionStatus" style="display:none;"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/buyer_room.js' %}"></script>
+</body>
+</html>
