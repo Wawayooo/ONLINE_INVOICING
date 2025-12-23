@@ -109,8 +109,97 @@
 
       </form>
     </div>
+    <div id="buyerPaidInfo" style="display:none; margin-top:2rem; padding:1rem; border:2px solid #b71c1c; border-radius:8px; background:#fff3f3;">
+      <h2 style="color:#b71c1c;">INVOICE STATUS: BUYER ALREADY PAID</h2>
+      <div id="buyerDetails">
+        <p><strong>Full Name:</strong> <span id="buyerName"></span></p>
+        <p><strong>Email:</strong> <span id="buyerEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="buyerPhone"></span></p>
+        <p><strong>Social Media:</strong> <span id="buyerSocial"></span></p>
+        <img id="buyerProfilePic" class="profile-image" alt="Buyer Profile Picture">
+      </div>
+      <button id="confirmPaymentBtn" class="btn btn-success" style="margin-top:1rem;">
+        ✅ Confirm Payment Received
+      </button>
+    </div>
   </div>
 
   <script src="{% static 'js/seller_room.js' %}"></script>
 </body>
+<script>
+  function showBuyerPaidInfo(buyer) {
+    document.getElementById('buyerPaidInfo').style.display = 'block';
+    document.getElementById('buyerName').textContent = buyer.fullname;
+    document.getElementById('buyerEmail').textContent = buyer.email || 'N/A';
+    document.getElementById('buyerPhone').textContent = buyer.phone || 'N/A';
+    document.getElementById('buyerSocial').textContent = buyer.social_media || 'N/A';
+    if (buyer.profile_picture) {
+      document.getElementById('buyerProfilePic').src = buyer.profile_picture;
+    }
+  }
+
+  // Example: when loading room data
+  async function loadRoom() {
+    try {
+      const res = await fetch(`/api/room/${roomHash}/`);
+      const data = await res.json();
+      if (res.ok) {
+        if (data.invoice && data.invoice.status === 'unconfirmed_payment') {
+          showBuyerPaidInfo(data.buyer);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load room data");
+    }
+  }
+  // Initial load
+  loadRoom();
+  
+  // Hook confirm payment button
+  document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
+    try {
+      const res = await fetch(`/api/seller/${roomHash}/confirm-payment/`, { method: 'POST' });
+      const result = await res.json();
+
+      if (res.ok && result.invoice_status === 'finalized') {
+        window.location.href = result.redirect_url;
+      } else {
+        alert(result.error || "Failed to confirm payment.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error.");
+    }
+  });
+</script>
+
+<script>
+  function renderSellerInfo(seller) {
+    if (!seller) return;
+
+    const preview = document.getElementById('sellerPreview');
+    let profilePic = seller.profile_picture || '';
+
+    if (profilePic) {
+      // 🔎 Detect if tunneling is being used
+      if (window.location.origin.includes('.devtunnels.ms')) {
+        // Tunnel setup → prepend tunnel origin
+        preview.src = profilePic.startsWith('http')
+          ? profilePic
+          : `${window.location.origin}${profilePic}`;
+      } else {
+        // Localhost or other → prepend localhost origin
+        preview.src = profilePic.startsWith('http')
+          ? profilePic
+          : `http://localhost:8000${profilePic}`;
+      }
+      preview.classList.add('active');
+    } else {
+      preview.src = '';
+      preview.classList.remove('active');
+    }
+  }
+</script>
+
 </html>
