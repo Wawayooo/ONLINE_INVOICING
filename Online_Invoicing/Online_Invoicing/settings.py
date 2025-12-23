@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'invoicing_app',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,12 +54,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",  # your frontend
+    "http://localhost:8000",  # optional, if you use localhost
+    "https://kt2980zx-8000.asse.devtunnels.ms",
+]
+
 ROOT_URLCONF = 'Online_Invoicing.urls'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'invoicing_app/templates/pages'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,10 +87,15 @@ WSGI_APPLICATION = 'Online_Invoicing.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Invoicing_DataBase',
+        'USER': 'keith_user',
+        'PASSWORD': '113728cortes',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -117,7 +132,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / "staticfiles"  # for collectstatic
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
