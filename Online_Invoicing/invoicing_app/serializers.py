@@ -1,19 +1,20 @@
 from rest_framework import serializers
 from .models import Room, Seller, Buyer, Invoice, NegotiationHistory
 
-
 # ===============================
 # SELLER CREATES INVOICE
 # ===============================
 class CreateInvoiceSerializer(serializers.Serializer):
-    # Seller info
     seller_fullname = serializers.CharField(max_length=255)
     seller_email = serializers.EmailField(required=False, allow_blank=True)
     seller_phone = serializers.CharField(required=False, allow_blank=True)
     seller_social_media = serializers.CharField(required=False, allow_blank=True)
     seller_profile_picture = serializers.ImageField(required=False, allow_null=True)
 
-    # Invoice info
+    # 🔑 Secret key fields
+    seller_secret_key = serializers.CharField(write_only=True)
+    seller_secret_key_confirm = serializers.CharField(write_only=True)
+
     invoice_date = serializers.DateField()
     due_date = serializers.DateField(required=False, allow_null=True)
     description = serializers.CharField()
@@ -21,6 +22,22 @@ class CreateInvoiceSerializer(serializers.Serializer):
     unit_price = serializers.DecimalField(max_digits=10, decimal_places=2)
     payment_method = serializers.CharField(max_length=100)
 
+    def validate(self, data):
+        # Check secret key strength
+        import re
+        strong_regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$')
+        if not strong_regex.match(data['seller_secret_key']):
+            raise serializers.ValidationError({
+                "seller_secret_key": "Secret key must be at least 8 characters and include uppercase, lowercase, number, and special character."
+            })
+
+        # Check confirmation
+        if data['seller_secret_key'] != data['seller_secret_key_confirm']:
+            raise serializers.ValidationError({
+                "seller_secret_key_confirm": "Secret key confirmation does not match."
+            })
+
+        return data
 
 # ===============================
 # BUYER JOINS ROOM
@@ -34,7 +51,7 @@ class BuyerJoinSerializer(serializers.Serializer):
 
 
 # ===============================
-# INVOICE SERIALIZER (EDIT)
+# INVOICE SERIALIZER
 # ===============================
 class InvoiceSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
@@ -61,39 +78,20 @@ class InvoiceSerializer(serializers.ModelSerializer):
 # SELLER SERIALIZER
 # ===============================
 class SellerSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField(use_url=True)
     class Meta:
         model = Seller
-        fields = [
-            'fullname',
-            'email',
-            'phone',
-            'social_media',
-            'profile_picture',
-        ]
-        extra_kwargs = {
-            'fullname': {'required': True},
-            'email': {'required': True},
-            'phone': {'required': True},
-            'social_media': {'required': True},
-            'profile_picture': {'required': True},
-        }
+        fields = ['fullname', 'email', 'phone', 'social_media', 'profile_picture']
 
 
 # ===============================
 # BUYER SERIALIZER
 # ===============================
 class BuyerSerializer(serializers.ModelSerializer):
+    profile_picture = serializers.ImageField(use_url=True)
     class Meta:
         model = Buyer
-        fields = ['fullname', 'email', 'phone', 'social_media', 'profile_picture']
-        extra_kwargs = {
-            'fullname': {'required': True},
-            'email': {'required': True},
-            'phone': {'required': True},
-            'social_media': {'required': True},
-            'profile_picture': {'required': True},
-        }
-
+        fields = ['buyer_hash', 'fullname', 'email', 'phone', 'social_media', 'profile_picture']
 
 
 # ===============================
@@ -102,49 +100,18 @@ class BuyerSerializer(serializers.ModelSerializer):
 class NegotiationHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = NegotiationHistory
-        fields = [
-            'action',
-            'actor',
-            'notes',
-            'created_at',
-        ]
+        fields = ['action', 'actor', 'notes', 'created_at']
 
 
 # ===============================
 # ROOM DETAIL (MAIN RESPONSE)
 # ===============================
+
 class RoomDetailSerializer(serializers.ModelSerializer):
     seller = SellerSerializer(read_only=True)
-    buyer = serializers.SerializerMethodField()
-    invoice = serializers.SerializerMethodField()
+    buyer = BuyerSerializer(read_only=True)   # includes buyer_hash + info
+    invoice = InvoiceSerializer(read_only=True)
 
     class Meta:
         model = Room
         fields = ['room_hash', 'is_buyer_assigned', 'seller', 'buyer', 'invoice']
-
-    def get_buyer(self, obj):
-        if hasattr(obj, 'buyer'):
-            return {
-                "fullname": obj.buyer.fullname,
-                "email": obj.buyer.email,
-                "phone": obj.buyer.phone,
-                "social_media": obj.buyer.social_media,
-                "profile_picture": obj.buyer.profile_picture.url if obj.buyer.profile_picture else None,
-            }
-        return None
-
-    def get_invoice(self, obj):
-        if hasattr(obj, 'invoice'):
-            return {
-                "invoice_date": obj.invoice.invoice_date,
-                "due_date": obj.invoice.due_date,
-                "description": obj.invoice.description,
-                "quantity": obj.invoice.quantity,
-                "unit_price": str(obj.invoice.unit_price),
-                "line_total": str(obj.invoice.line_total),
-                "payment_method": obj.invoice.payment_method,
-                "status": obj.invoice.status,
-                "seller": SellerSerializer(obj.seller).data if hasattr(obj, 'seller') else None
-            }
-        return None
-
