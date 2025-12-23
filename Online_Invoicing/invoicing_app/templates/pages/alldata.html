@@ -16,9 +16,8 @@
           <th>Room Hash</th>
           <th>Seller</th>
           <th>Buyer</th>
+          <th>Buyer Hash</th>
           <th>Invoice Status</th>
-          <th>Invoice Date</th>
-          <th>Due Date</th>
           <th>Description</th>
           <th>Quantity</th>
           <th>Unit Price</th>
@@ -30,8 +29,9 @@
       <tbody>
         {% for room in rooms %}
         <tr>
+          <!-- Room Hash -->
           <td>{{ room.room_hash }}</td>
-          
+          <td>{{ room.seller_hash }}</td>
           <!-- Seller Info -->
           <td>
             {% if room.seller %}
@@ -39,6 +39,7 @@
               {{ room.seller.email|default:"-" }}<br>
               {{ room.seller.phone|default:"-" }}<br>
               {{ room.seller.social_media|default:"-" }}
+              {{room.seller.secret_key}}
             {% else %}
               N/A
             {% endif %}
@@ -55,24 +56,38 @@
               N/A
             {% endif %}
           </td>
+
+          <!-- Buyer Hash -->
+          <td>
+            {% if room.buyer %}
+              {{ room.buyer.buyer_hash }}
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
           
           <!-- Invoice Info -->
           {% if room.invoice %}
-            <td>{{ room.invoice.status }}</td>
-            <td>{{ room.invoice.invoice_date }}</td>
-            <td>{{ room.invoice.due_date|default:"-" }}</td>
+            <td>{{ room.invoice.status|title }}</td>
             <td>{{ room.invoice.description }}</td>
             <td>{{ room.invoice.quantity }}</td>
-            <td>{{ room.invoice.unit_price }}</td>
-            <td>{{ room.invoice.line_total }}</td>
+            <td>₱{{ room.invoice.unit_price|floatformat:2 }}</td>
+            <td>₱{{ room.invoice.line_total|floatformat:2 }}</td>
             <td>{{ room.invoice.payment_method }}</td>
           {% else %}
-            <td colspan="9">No invoice data</td>
+            <td colspan="6" style="text-align:center;">No invoice data</td>
           {% endif %}
           
           <!-- Actions -->
           <td>
-            <form method="POST" action="{% url 'delete_room' room.id %}" onsubmit="return confirm('Are you sure you want to delete this room?');">
+            {% if room.buyer %}
+              <a href="{% url 'buyer_invoice_room' room.room_hash room.buyer.buyer_hash %}" class="btn-view">View</a>
+            {% else %}
+              <span class="btn-disabled">No Buyer</span>
+            {% endif %}
+            <form method="POST" action="{% url 'delete_room' room.id %}" 
+                  onsubmit="return confirm('Are you sure you want to delete this room?');" 
+                  style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="btn-delete">Delete</button>
             </form>
@@ -80,7 +95,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="12">No data found.</td>
+          <td colspan="11" style="text-align:center;">🚫 No rooms or invoices available.</td>
         </tr>
         {% endfor %}
       </tbody>
