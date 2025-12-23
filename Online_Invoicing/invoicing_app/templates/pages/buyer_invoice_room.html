@@ -1,0 +1,64 @@
+{% load static %}
+{% if invoice and invoice.status == 'finalized' %}
+  {% include "proof_transaction.html" %}
+{% endif %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyer Invoice Room</title>
+  <link rel="stylesheet" href="{% static 'css/buyer_invoice_room.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>📄 Buyer Invoice Room</h1>
+    <p>Always Copy the Hash To Visit the Page Again.</p>
+    <p>Don't Share these Hashes to Anyone - For your Security.</p>
+    <br>
+    <p><strong>Room Hash:</strong> {{ room_hash }}</p>
+    <p><strong>Buyer Hash:</strong> {{ buyer_hash }}</p>
+
+    <!-- Unauthorized message always rendered, hidden by default -->
+    <div class="unauthorized" style="display:none;">
+      🚫 You are not authorized to view this invoice.
+    </div>
+
+    {% if not unauthorized %}
+      <div class="side-by-side">
+        <!-- Invoice Info (Left) -->
+        <div class="invoice-form">
+          <h2>Invoice Details</h2>
+          <div id="invoiceDetailsContainer"></div>
+          <div class="actions">
+            <button class="btn btn-success" id="approveBtn">Approve</button>
+            <button class="btn btn-danger" id="disapproveBtn">Disapprove</button>
+            <span id="invoiceActionStatus" style="display:none;"></span>
+          </div>
+
+          <!-- Hidden Mark Paid Form -->
+          <div id="markPaidForm" style="display:none; margin-top:1rem;">
+            <label for="paymentMethod"><strong>Payment Method:</strong></label>
+            <input type="text" id="paymentMethod" readonly>
+            <button class="btn btn-warning" id="markPaidBtn">Mark as Paid</button>
+          </div>
+        </div>
+
+        <!-- Seller Info (Right) -->
+        <div class="seller-form">
+          <h2>Seller Information</h2>
+          <img id="sellerProfile" src="" alt="Seller Profile" class="profile-image">
+          <p><strong>Name:</strong> <span id="sellerName"></span></p>
+          <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
+          <p><strong>Phone:</strong> <span id="sellerPhone"></span></p>
+          <p><strong>Social:</strong> <span id="sellerSocial"></span></p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <script src="{% static 'js/buyer_invoice_room.js' %}"></script>
+</body>
+</html>
