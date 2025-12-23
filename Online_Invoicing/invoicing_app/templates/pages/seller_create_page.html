@@ -50,6 +50,30 @@
           </div>
           <img id="sellerPreview" class="preview-image" alt="Preview">
         </div>
+
+        <!-- 🔑 Secret Key Creation -->
+        <div class="form-group">
+          <label for="sellerSecretKey">Create Secret Key *</label>
+          <input 
+            type="password" 
+            id="sellerSecretKey" 
+            name="seller_secret_key" 
+            placeholder="At least 8 chars, upper, lower, number, special" 
+            required
+          >
+          <small class="hint">Must include uppercase, lowercase, number, and special character.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="sellerSecretKeyConfirm">Confirm Secret Key *</label>
+          <input 
+            type="password" 
+            id="sellerSecretKeyConfirm" 
+            name="seller_secret_key_confirm" 
+            placeholder="Re-enter your secret key" 
+            required
+          >
+        </div>
       </div>
 
       <!-- Invoice Details -->
