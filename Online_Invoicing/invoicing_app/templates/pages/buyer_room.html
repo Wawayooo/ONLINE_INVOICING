@@ -6,16 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buyer Room</title>
   <link rel="stylesheet" href="{% static 'css/buyer_room.css' %}">
+  <style>
+    /* Simple modal styles */
+    .modal {
+      display: none; /* hidden by default */
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .modal-content h2 {
+      margin-bottom: 10px;
+      color: #b71c1c;
+    }
+    .modal-content p {
+      margin-bottom: 20px;
+    }
+    .modal-content button {
+      padding: 8px 16px;
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>🛒 Buyer Room</h1>
-    <p><strong>Room Hash:</strong> <span id="roomHash"></span></p>
 
     <!-- Buyer Form Section -->
     <div id="buyerSection">
       <h2>Your Information</h2>
-      <form id="buyerForm">
+      <!-- No method/action: handled by JS -->
+      <form id="buyerForm" enctype="multipart/form-data">
         <div class="form-group">
           <label for="buyerFullname">Full Name *</label>
           <input type="text" id="buyerFullname" name="fullname" required>
@@ -40,38 +75,25 @@
         <button type="submit" class="btn btn-primary">Join Room</button>
       </form>
     </div>
+  </div>
 
-    <!-- Seller Invoice Section -->
-    <div id="invoiceSection" style="display:none;">
-      <h2>Seller Invoice</h2>
+  <!-- Occupied Modal -->
+  <div id="occupiedModal" class="modal">
+    <div class="modal-content">
+      <h2>🚫 Room Occupied</h2>
+      <p>This room already has a buyer assigned. You cannot join.</p>
+    </div>
+  </div>
 
-      <!-- Seller Info -->
-      <div class="seller-info">
-        <img id="sellerProfile" src="" alt="Seller Profile" class="profile-image">
-        <div class="seller-details">
-          <p><strong>Seller Name:</strong> <span id="sellerName"></span></p>
-          <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
-          <p><strong>Phone:</strong> <span id="sellerPhone"></span></p>
-          <p><strong>Social:</strong> <span id="sellerSocial"></span></p>
-        </div>
-      </div>
-
-      <!-- Invoice Details -->
-      <div id="invoiceDetailsContainer">
-        <p><strong>Description:</strong> <span id="description"></span></p>
-        <p><strong>Quantity:</strong> <span id="quantity"></span></p>
-        <p><strong>Unit Price:</strong> ₱<span id="unitPrice"></span></p>
-        <p><strong>Line Total:</strong> ₱<span id="lineTotal"></span></p>
-        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
-        <p><strong>Status:</strong> <span id="status"></span></p>
-      </div>
-
-      <!-- Actions -->
-      <div class="actions">
-        <button class="btn btn-success" id="approveBtn">Approve</button>
-        <button class="btn btn-danger" id="disapproveBtn">Disapprove</button>
-        <span id="invoiceActionStatus" style="display:none;"></span>
-      </div>
+  <!-- Buyer Hash Verification Modal -->
+  <div id="hashModal" class="modal">
+    <div class="modal-content">
+      <h2>🔑 Enter Buyer Hash</h2>
+      <p>Please enter your buyer hash to access the invoice room.</p>
+      <input type="text" id="buyerHashInput" placeholder="Enter buyer hash">
+      <button id="verifyHashBtn">Verify</button>
+      <p id="hashError" style="color:#b71c1c; display:none;"></p>
+      <p id="lockoutMsg" style="color:#b71c1c; display:none;"></p>
     </div>
   </div>
 
