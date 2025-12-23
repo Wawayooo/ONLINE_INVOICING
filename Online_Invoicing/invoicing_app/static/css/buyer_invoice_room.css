@@ -1,0 +1,382 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container Styles */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  text-align: center;
+  color: #667eea;
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container>p {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.container>p strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Unauthorized Message */
+.unauthorized {
+  background: linear-gradient(135deg, #fff3f3 0%, #ffe0e0 100%);
+  border: 3px solid #b71c1c;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 30px 0;
+  text-align: center;
+  font-size: 24px;
+  color: #b71c1c;
+  font-weight: 700;
+  box-shadow: 0 10px 40px rgba(183, 28, 28, 0.2);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-10px);
+  }
+
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+/* Side by Side Layout */
+.side-by-side {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* Invoice Form Section */
+.invoice-form {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.invoice-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.invoice-form h2 {
+  color: #667eea;
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #667eea;
+}
+
+/* Invoice Details Container */
+#invoiceDetailsContainer {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border: 2px solid #e0e0e0;
+}
+
+#invoiceDetailsContainer p {
+  margin: 12px 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+#invoiceDetailsContainer strong {
+  color: #333;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 150px;
+}
+
+/* Actions Section */
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  flex: 1;
+  min-width: 150px;
+}
+
+#invoiceActionStatus {
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 15px;
+  animation: fadeInScale 0.4s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mark Paid Form */
+#markPaidForm {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe0b3 100%);
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid #ff9800;
+  margin-top: 20px;
+  box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
+}
+
+#markPaidForm label {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+#markPaidForm input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  background: white;
+  font-weight: 600;
+}
+
+/* Seller Form Section */
+.seller-form {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.seller-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.seller-form h2 {
+  color: #667eea;
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #667eea;
+}
+
+.seller-form .profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 20px auto;
+  border: 4px solid #667eea;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+.seller-form p {
+  margin: 15px 0;
+  color: #555;
+  line-height: 1.8;
+  font-size: 15px;
+  text-align: left;
+}
+
+.seller-form p strong {
+  color: #667eea;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 100px;
+}
+
+/* Button Styles */
+.btn {
+  padding: 14px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(17, 153, 142, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(183, 28, 28, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(183, 28, 28, 0.4);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+  width: 100%;
+}
+
+.btn-warning:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 152, 0, 0.4);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+}
+
+/* Status Colors */
+.status-approved {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.status-disapproved {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+.status-paid {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe0b3 100%);
+  color: #856404;
+  border-left: 4px solid #ff9800;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .side-by-side {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-form {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .invoice-form,
+  .seller-form {
+    padding: 20px;
+  }
+
+  .invoice-form h2,
+  .seller-form h2 {
+    font-size: 20px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .seller-form .profile-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  #invoiceDetailsContainer strong {
+    min-width: auto;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .seller-form p strong {
+    min-width: auto;
+    display: block;
+    margin-bottom: 5px;
+  }
+}
