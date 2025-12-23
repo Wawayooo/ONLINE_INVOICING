@@ -1,0 +1,375 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container Styles */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  text-align: center;
+  color: #667eea;
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Room Info Styles */
+.room-info {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.room-info p {
+  margin: 15px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.room-info strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+#roomHash {
+  font-family: 'Courier New', monospace;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+#shareableLink {
+  width: calc(100% - 120px);
+  padding: 10px 15px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-right: 10px;
+  background: white;
+}
+
+#copyBtn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#copyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Form Wrapper - Two Column Layout */
+.form-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+/* Form Section Styles */
+.form-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.form-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+  border-color: #667eea;
+}
+
+.form-section h2 {
+  color: #667eea;
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #667eea;
+}
+
+/* Form Group Styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-group input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f8f9ff;
+  width: 100%;
+}
+
+/* Preview Image */
+.preview-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 15px;
+  border: 4px solid #667eea;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+.preview-image[src] {
+  display: block;
+}
+
+/* Calculated Field */
+.calculated {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+}
+
+/* Button Styles */
+.btn {
+  padding: 14px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+}
+
+.btn-success:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(17, 153, 142, 0.4);
+}
+
+/* Form Lock Notice */
+#formLockNotice {
+  background: #fff3f3;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #b71c1c;
+  margin-bottom: 20px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Invoice Approved Label */
+#invoiceApprovedLabel {
+  text-align: center;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(17, 153, 142, 0.3);
+  animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Buyer Paid Info Section */
+#buyerPaidInfo {
+  background: linear-gradient(135deg, #fff3f3 0%, #ffe0e0 100%);
+  border: 3px solid #b71c1c;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 30px;
+  box-shadow: 0 10px 40px rgba(183, 28, 28, 0.2);
+}
+
+#buyerPaidInfo h2 {
+  color: #b71c1c;
+  margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+}
+
+#buyerDetails {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#buyerDetails p {
+  margin: 12px 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+#buyerDetails strong {
+  color: #333;
+  font-weight: 600;
+  display: inline-block;
+  min-width: 150px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 15px;
+  border: 4px solid #b71c1c;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  #shareableLink {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #copyBtn {
+    width: 100%;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-section h2 {
+    font-size: 20px;
+  }
+
+  #buyerPaidInfo h2 {
+    font-size: 22px;
+  }
+}
