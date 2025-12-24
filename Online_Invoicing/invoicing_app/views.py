@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 def landing_page(request):
     return render(request, 'pages/landing_page.html')
@@ -243,30 +244,59 @@ def buyer_join_room(request, room_hash):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.hashers import check_password, make_password
+import logging
+
+logger = logging.getLogger(__name__)
+
+@require_http_methods(["POST"])
 def seller_authenticate_view(request):
-    if request.method == "POST":
-        # Raw secret key typed by seller
-        raw_secret_key = request.POST.get("secret_key")
-        # Room identifier (safe opaque hash for routing)
-        room_hash = request.POST.get("room_hash")
+    raw_secret_key = request.POST.get("secret_key")
+    
+    if not raw_secret_key:
+        return JsonResponse({
+            "success": False, 
+            "error": "Secret key is required"
+        }, status=400)
 
-        try:
-            room = get_object_or_404(Room, room_hash=room_hash)
-            seller = room.seller
-
-            # Hash the raw key and compare against stored hash
-            if seller and seller.check_secret_key(raw_secret_key):
+    try:
+        from .models import Seller
+        
+        # Get all sellers with their rooms
+        sellers = Seller.objects.select_related('room').exclude(secret_key__isnull=True)
+        
+        # Check each seller's hashed key
+        for seller in sellers:
+            if check_password(raw_secret_key, seller.secret_key):
+                room = seller.room
+                
+                # Store seller info in session for later use
+                request.session['authenticated_seller_id'] = seller.id
+                request.session['authenticated_room_hash'] = room.room_hash
+                
+                logger.info(f"✓ Authentication successful: {seller.fullname}")
+                
                 return JsonResponse({
                     "success": True,
-                    # Redirect using seller_hash (which equals the hashed secret key stored in Room)
-                    "redirect_url": f"/seller_room/{room.seller_hash}/"
+                    "redirect_url": f"/seller_room/{room.room_hash}/"
                 })
-            else:
-                return JsonResponse({"success": False, "error": "Invalid secret key"})
-        except Room.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Room not found"})
-    return JsonResponse({"success": False, "error": "Invalid request"})
-
+        
+        # No match found
+        logger.warning("✗ Invalid secret key attempt")
+        return JsonResponse({
+            "success": False, 
+            "error": "Invalid secret key"
+        }, status=401)
+            
+    except Exception as e:
+        logger.exception(f"Authentication error: {str(e)}")
+        return JsonResponse({
+            "success": False, 
+            "error": "Server error occurred"
+        }, status=500)
 
 @api_view(['POST'])
 def buyer_approve_invoice(request, room_hash):
