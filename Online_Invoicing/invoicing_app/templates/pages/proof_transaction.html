@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Proof of Transaction</title>
   <link rel="stylesheet" href="{% static 'css/proof_transaction.css' %}">
+  <link rel="stylesheet" href="{% static 'css/proofTransactionDesign2.css' %}">
+  <link rel="stylesheet" href="{% static 'css/typing_label.css' %}">
 </head>
 <body>
   <!-- Loading Modal -->
@@ -29,10 +31,11 @@
     <h1>📄 Proof of Transaction</h1>
 
     <div class="room-info">
-      <p>Always Copy the Hash To Visit the Page Again!!</p>
-
-      <p><strong>Room Hash:</strong> <span id="roomHash">{{ room_hash }}</span></p>
-      <p><strong>Buyer Hash:</strong> <span id="roomHash">{{ buyer_hash }}</span></p> 
+      <!--<p>“Bound By Truth & Guarded Flame, No Hand May Alter, For All Is Sealed In Steadfast Security.”</p>-->
+      
+      <div class="body_type">
+        <div class="typing-container" id="typing"></div>
+      </div>
       
       <!-- QR Code Section -->
       <div class="qr-section">
@@ -66,42 +69,52 @@
       </div>
     </div>
 
-    <!-- Proof of Transaction Section -->
+    <!-- Proof of Transaction Section Landscape Preview-->
     <div class="proof-wrapper">
       <!-- Seller Information -->
-      <div class="proof-block">
-        <h2>Seller Information</h2>
-        <p><strong>Name:</strong>{{ seller.fullname }}</p>
-        <p><strong>Email:</strong>{{ seller.email }}</p>
-        <p><strong>Phone:</strong>{{ seller.phone }}</p>
-        <p><strong>Social:</strong>{{ seller.social_media }}</p>
-        {% if seller.profile_picture %}
-          <img src="{{ seller.profile_picture.url }}" alt="Seller Profile Picture" class="profile-image">
-        {% endif %}
+      <div class="seller-card">
+        <div class="seller-Info">
+          <h2>Seller Information</h2>
+          <p><strong>Name:</strong>{{ seller.fullname }}</p>
+          <p><strong>Email:</strong>{{ seller.email }}</p>
+          <p><strong>Phone:</strong>{{ seller.phone }}</p>
+          <p><strong>Social:</strong>{{ seller.social_media }}</p>
+        </div>
+        <div class="Seller_Img">
+          {% if seller.profile_picture %}
+            <img src="{{ seller.profile_picture.url }}" alt="Seller Profile Picture" class="profile-image">
+          {% endif %}
+        </div>
       </div>
 
-      <!-- Buyer Information -->
-      <div class="proof-block">
-        <h2>Buyer Information</h2>
-        <p><strong>Name:</strong> {{ buyer.fullname }}</p>
-        <p><strong>Email:</strong> {{ buyer.email }}</p>
-        <p><strong>Phone:</strong> {{ buyer.phone }}</p>
-        <p><strong>Social:</strong> {{ buyer.social_media }}</p>
-        {% if buyer.profile_picture %}
-          <img src="{{ buyer.profile_picture.url }}" alt="Buyer Profile Picture" class="profile-image">
-        {% endif %}
+      <!-- Buyer Information Landscape Preview-->
+      <div class="buyer-card">
+        <div class="Buyer_Info">
+          <h2>Buyer Information</h2>
+          <p><strong>Name:</strong> {{ buyer.fullname }}</p>
+          <p><strong>Email:</strong> {{ buyer.email }}</p>
+          <p><strong>Phone:</strong> {{ buyer.phone }}</p>
+          <p><strong>Social:</strong> {{ buyer.social_media }}</p>
+        </div>
+        <div class="Buyer_Img">
+           {% if buyer.profile_picture %}
+              <img src="{{ buyer.profile_picture.url }}" alt="Buyer Profile Picture" class="profile-image">
+            {% endif %}
+        </div>
       </div>
 
-      <!-- Invoice Information -->
-      <div class="proof-block">
-        <h2>Invoice Details</h2>
-        <p><strong>Invoice Date:</strong> {{ invoice.invoice_date }}</p>
-        <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
-        <p><strong>Description:</strong> {{ invoice.description }}</p>
-        <p><strong>Quantity:</strong> {{ invoice.quantity }}</p>
-        <p><strong>Unit Price:</strong> ₱{{ invoice.unit_price }}</p>
-        <p><strong>Total:</strong> ₱{{ invoice.line_total }}</p>
-        <p><strong>Status:</strong> {{ invoice.status }}</p>
+      <!-- Invoice Information Landscape Preview-->
+      <div class="invoice-card" style="filter: drop-shadow(2px 4px 6px black); position: relative; top: 8px;">
+        <div class="Invoice_Header"><h2>Invoice Details</h2></div>
+        <div class="Invoice_Notes">
+          <p><strong>Invoice Date:</strong> {{ invoice.invoice_date }}</p>
+          <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
+          <p><strong>Description:</strong> {{ invoice.description }}</p>
+          <p><strong>Quantity:</strong> {{ invoice.quantity }}</p>
+          <p><strong>Unit Price:</strong> ₱{{ invoice.unit_price }}</p>
+          <p><strong>Total:</strong> ₱{{ invoice.line_total }}</p>
+          <p><strong>Status:</strong> {{ invoice.status }}</p>
+        </div>
       </div>
     </div>
 
@@ -186,5 +199,31 @@
       });
     });
   </script>
+  
+  <script>
+    const text = "Bound By Truth & Guarded Flame, No Hand May Alter, For All Is Sealed In Steadfast Security.";
+    const typingElement = document.getElementById("typing");
+    let index = 0;
+
+    function typeEffect() {
+      if (index < text.length) {
+        typingElement.textContent += text.charAt(index);
+        index++;
+        setTimeout(typeEffect, 80); // typing speed (ms per letter)
+      } else {
+        // Finished typing, wait 3 seconds then reset
+        setTimeout(() => {
+          typingElement.textContent = "";
+          index = 0;
+          typeEffect();
+        }, 3000);
+      }
+    }
+
+    // Start typing loop
+    typeEffect();
+  </script>
 </body>
 </html>
+
+
