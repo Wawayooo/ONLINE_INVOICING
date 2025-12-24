@@ -1,0 +1,366 @@
+/* ==================== TYPING ANIMATION SECTION ==================== */
+.body_type {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 40px 30px;
+  border-radius: 20px;
+  margin: 30px 0;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Animated border effect */
+.body_type::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #667eea, #764ba2, #11998e, #38ef7d, #ff9800, #667eea);
+  background-size: 400%;
+  border-radius: 20px;
+  z-index: -1;
+  animation: gradientBorder 8s linear infinite;
+}
+
+@keyframes gradientBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glowing background effect */
+.body_type::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.15), transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Typing container */
+.typing-container {
+  position: relative;
+  z-index: 2;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Typing text styling */
+#typing {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(102, 126, 234, 0.8),
+    0 0 20px rgba(102, 126, 234, 0.6),
+    0 0 30px rgba(102, 126, 234, 0.4);
+  letter-spacing: 1.5px;
+  line-height: 1.6;
+  position: relative;
+  display: inline-block;
+  /*background: linear-gradient(90deg, #667eea, #764ba2, #11998e, #38ef7d);*/
+  background: linear-gradient(90deg, white, white, white);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textShimmer 3s linear infinite;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Blinking cursor effect */
+#typing::after {
+  content: '|';
+  position: absolute;
+  right: -15px;
+  color: #38ef7d;
+  font-weight: 400;
+  animation: blink 0.8s step-end infinite;
+  text-shadow: 0 0 10px #38ef7d;
+  -webkit-text-fill-color: #38ef7d;
+}
+
+@keyframes blink {
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Decorative corner elements */
+.typing-container::before,
+.typing-container::after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(102, 126, 234, 0.5);
+  animation: cornerPulse 3s ease-in-out infinite;
+}
+
+.typing-container::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 10px;
+}
+
+.typing-container::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 10px;
+}
+
+@keyframes cornerPulse {
+
+  0%,
+  100% {
+    border-color: rgba(102, 126, 234, 0.5);
+  }
+
+  50% {
+    border-color: rgba(56, 239, 125, 0.8);
+  }
+}
+
+/* Lock icon decoration */
+.body_type::before {
+  content: '🔒';
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  opacity: 0.6;
+  animation: lockFloat 3s ease-in-out infinite;
+  z-index: 3;
+}
+
+@keyframes lockFloat {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Shield icon decoration */
+.typing-container::before {
+  content: '🛡️';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  opacity: 0.6;
+  animation: lockFloat 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+  border: none;
+  width: auto;
+  height: auto;
+}
+
+/* Flame particles effect */
+.body_type .particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(135deg, #ff9800, #ffc107);
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff9800;
+  animation: particleFloat 4s linear infinite;
+  opacity: 0;
+}
+
+/* Generate multiple particles with different positions */
+.body_type .particle:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.body_type .particle:nth-child(2) {
+  left: 25%;
+  animation-delay: 0.5s;
+}
+
+.body_type .particle:nth-child(3) {
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.body_type .particle:nth-child(4) {
+  left: 75%;
+  animation-delay: 1.5s;
+}
+
+.body_type .particle:nth-child(5) {
+  left: 90%;
+  animation-delay: 2s;
+}
+
+@keyframes particleFloat {
+  0% {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    bottom: 100%;
+    opacity: 0;
+  }
+}
+
+/* Scanline effect */
+.body_type::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.8), transparent);
+  animation: scanline 3s linear infinite;
+  z-index: 4;
+}
+
+@keyframes scanline {
+  0% {
+    top: 0;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  #typing {
+    font-size: 20px;
+  }
+
+  .typing-container {
+    min-height: 70px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .body_type {
+    padding: 30px 20px;
+    margin: 20px 0;
+  }
+
+  #typing {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  #typing::after {
+    right: -10px;
+  }
+
+  .typing-container {
+    min-height: 60px;
+    padding: 15px 10px;
+  }
+
+  .typing-container::before,
+  .typing-container::after {
+    width: 40px;
+    height: 40px;
+  }
+
+  .body_type::before {
+    font-size: 18px;
+    top: 10px;
+    left: 10px;
+  }
+
+  .typing-container::before {
+    font-size: 18px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  #typing {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .body_type {
+    padding: 14px 15px;
+    height: 178px;
+  }
+
+  .typing-container::before,
+  .typing-container::after {
+    width: 30px;
+    height: 30px;
+  }
+}

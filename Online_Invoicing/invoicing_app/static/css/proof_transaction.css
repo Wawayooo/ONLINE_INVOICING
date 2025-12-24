@@ -12,7 +12,7 @@ body {
   padding: 20px;
 }
 
-/* Loading Modal Styles */
+/* ==================== LOADING MODAL STYLES ==================== */
 .loading-modal {
   position: fixed;
   top: 0;
@@ -34,7 +34,6 @@ body {
   padding: 40px;
 }
 
-/* Spinner Animation */
 .loading-spinner {
   position: relative;
   width: 120px;
@@ -80,7 +79,6 @@ body {
   }
 }
 
-/* Loading Text */
 .loading-text {
   font-size: 28px;
   font-weight: 600;
@@ -119,7 +117,6 @@ body {
   }
 }
 
-/* Progress Bar */
 .loading-progress {
   width: 100%;
   height: 4px;
@@ -145,7 +142,7 @@ body {
   }
 }
 
-/* Main Content Fade In Animation */
+/* ==================== MAIN CONTAINER ==================== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -158,9 +155,8 @@ body {
   }
 }
 
-/* Container Styles */
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   background: white;
   border-radius: 20px;
@@ -176,62 +172,44 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Room Info Styles */
+/* ==================== ROOM INFO - ID CARD STYLE ==================== */
 .room-info {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.room-info p {
-  margin: 15px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.room-info strong {
-  color: #667eea;
-  font-weight: 600;
-}
-
-#roomHash {
-  font-family: 'Courier New', monospace;
-  background: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-/* QR Code Section Styles */
-.qr-section {
-  margin-top: 30px;
-}
-
-.qr-container {
-  background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-  padding: 30px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 0;
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15);
-  border: 3px solid #667eea;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.room-info>p:first-child {
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+  color: white;
+  margin: 0;
+  padding: 20px 30px;
+  font-size: 16px;
+  font-weight: 700;
   text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(183, 28, 28, 0.5);
   position: relative;
   overflow: hidden;
 }
 
-.qr-container::before {
+.room-info>p:first-child::before {
   content: '';
   position: absolute;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.05), transparent);
-  animation: shimmer 3s infinite;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s infinite;
 }
 
-@keyframes shimmer {
+@keyframes shine {
   0% {
     transform: translateX(-100%) translateY(-100%) rotate(45deg);
   }
@@ -241,296 +219,578 @@ h1 {
   }
 }
 
-.qr-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
-  position: relative;
-  z-index: 1;
-}
-
-.qr-header h3 {
-  color: #667eea;
-  font-size: 24px;
-  font-weight: 700;
+.room-info>p:nth-child(2),
+.room-info>p:nth-child(3) {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 20px 30px;
   margin: 0;
+  font-size: 16px;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
 }
 
-.verified-badge {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+.room-info>p:nth-child(2):hover,
+.room-info>p:nth-child(3):hover {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8eaf6 100%);
+  transform: translateX(5px);
+}
+
+.room-info>p:nth-child(3) {
+  border-bottom: none;
+}
+
+.room-info strong {
+  color: #667eea;
+  font-weight: 700;
+  min-width: 150px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+#roomHash {
+  font-family: 'Courier New', monospace;
+  background: #1a1a2e;
+  color: #38ef7d;
+  padding: 8px 15px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
-  animation: pulse-badge 2s ease-in-out infinite;
+  letter-spacing: 1px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes pulse-badge {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.qr-code-display {
-  display: inline-block;
-  padding: 20px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  margin: 20px 0;
-  position: relative;
-  z-index: 1;
-  border: 5px solid #667eea;
-}
-
-.qr-code-display img {
-  display: block;
-  border-radius: 10px;
-}
-
-.qr-description {
-  color: #555;
-  line-height: 1.8;
-  margin: 25px 0;
-  font-size: 15px;
-  text-align: left;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 4px solid #667eea;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  position: relative;
-  z-index: 1;
-}
-
-.qr-description strong {
-  color: #667eea;
-  font-size: 16px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.qr-info-box {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-  margin: 25px 0;
-  position: relative;
-  z-index: 1;
-}
-
-.info-item {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 15px;
-  border-radius: 12px;
+/* ==================== PROOF BLOCKS - LANDSCAPE ID CARD STYLE ==================== */
+.proof-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
-  transition: all 0.3s ease;
-}
-
-.info-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
-}
-
-.info-icon {
-  font-size: 28px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.info-text {
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-  text-align: center;
-}
-
-.copy-link-btn {
-  padding: 14px 35px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-  position: relative;
-  z-index: 1;
-  margin-top: 10px;
-}
-
-.copy-link-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-}
-
-.copy-link-btn:active {
-  transform: translateY(-1px);
-}
-
-/* Proof Wrapper */
-.proof-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
+  gap: 30px;
   margin-bottom: 30px;
 }
 
-/* Proof Block Styles */
-.proof-block {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
+/* ==================== SELLER BLOCK - LANDSCAPE ==================== */
+.proof-block-seller {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out;
+  transition: all 0.4s ease;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  min-height: 300px;
 }
 
-.proof-block:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-  border-color: #667eea;
+.proof-block-seller:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 70px rgba(102, 126, 234, 0.4);
 }
 
-.proof-block h2 {
-  color: #667eea;
+.seller-Info {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 35px 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.seller-Info h2 {
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0 0 25px 0;
+  padding: 20px 25px;
   font-size: 22px;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 3px solid #667eea;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 
-.proof-block p {
+.seller-Info h2::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+.seller-Info::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 3px solid #667eea;
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  z-index: 1;
+}
+
+.seller-Info::after {
+  content: 'VERIFIED';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+  z-index: 10;
+}
+
+.seller-Info p {
   margin: 12px 0;
-  color: #555;
-  line-height: 1.6;
-}
-
-.proof-block strong {
   color: #333;
-  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.8;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.seller-Info p:last-of-type {
+  border-bottom: none;
+}
+
+.seller-Info p:hover {
+  transform: translateX(5px);
+  border-bottom-color: #667eea;
+}
+
+.seller-Info strong {
+  color: #1a1a2e;
+  font-weight: 700;
+  min-width: 90px;
   display: inline-block;
-  min-width: 120px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.profile-image {
-  width: 120px;
-  height: 120px;
+.Seller_Img {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+
+.Seller_Img::after {
+  content: 'SELLER';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #667eea 0%, #764ba2 100%);
   border-radius: 50%;
-  object-fit: cover;
-  margin-top: 15px;
-  border: 4px solid #667eea;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  z-index: 3;
+  transform: rotate(-15deg);
 }
 
-/* Download Section */
+.Seller_Img .profile-image {
+  width: 220px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 5px solid white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+}
+
+.Seller_Img .profile-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* ==================== BUYER BLOCK - LANDSCAPE ==================== */
+.proof-block-buyer {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out;
+  animation-delay: 0.2s;
+  transition: all 0.4s ease;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  min-height: 300px;
+}
+
+.proof-block-buyer:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 70px rgba(17, 153, 142, 0.4);
+}
+
+.Buyer_Info {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 35px 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Buyer_Info h2 {
+  color: white;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  margin: 0 0 25px 0;
+  padding: 20px 25px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.Buyer_Info h2::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+.Buyer_Info::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 3px solid #11998e;
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  z-index: 1;
+}
+
+.Buyer_Info::after {
+  content: 'VERIFIED';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  z-index: 10;
+}
+
+.Buyer_Info p {
+  margin: 12px 0;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.8;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.Buyer_Info p:last-of-type {
+  border-bottom: none;
+}
+
+.Buyer_Info p:hover {
+  transform: translateX(5px);
+  border-bottom-color: #11998e;
+}
+
+.Buyer_Info strong {
+  color: #1a1a2e;
+  font-weight: 700;
+  min-width: 90px;
+  display: inline-block;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.Buyer_Img {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+
+.Buyer_Img::after {
+  content: 'BUYER';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #11998e 0%, #38ef7d 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5);
+  z-index: 3;
+  transform: rotate(-15deg);
+}
+
+.Buyer_Img .profile-image {
+  width: 220px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 5px solid white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+}
+
+.Buyer_Img .profile-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* ==================== INVOICE BLOCK - LANDSCAPE ==================== */
+.proof-block-invoice {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out;
+  animation-delay: 0.4s;
+  transition: all 0.4s ease;
+  min-height: 300px;
+}
+
+.proof-block-invoice:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 70px rgba(255, 152, 0, 0.4);
+}
+
+.Invoice_Header {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+  padding: 25px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.Invoice_Header h2 {
+  color: white;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.Invoice_Header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s infinite;
+}
+
+.Invoice_Notes {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 35px 40px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+  row-gap: 60px;
+  column-gap: 100%;
+}
+
+.Invoice_Notes::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 3px solid #ff9800;
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  z-index: 1;
+}
+
+.Invoice_Notes::after {
+  content: 'OFFICIAL';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #ff9800 0%, #ffc107 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 1px;
+  border: 4px solid white;
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
+  z-index: 10;
+  transform: rotate(-15deg);
+}
+
+.Invoice_Notes p {
+  margin: 8px 0;
+  color: #333;
+  font-size: 25px;
+  line-height: 1.8;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 10px;
+  transition: all 0.3s ease;
+  font-family: monospace;
+}
+
+.Invoice_Notes p:last-of-type {
+  border-bottom: none;
+}
+
+.Invoice_Notes p:hover {
+  transform: translateX(5px);
+  border-bottom-color: #ff9800;
+}
+
+.Invoice_Notes strong {
+  color: #0404f2;
+  font-weight: 700;
+  min-width: 120px;
+  display: inline-block;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== DOWNLOAD SECTION ==================== */
 .download-section {
   text-align: center;
   padding: 30px 0;
 }
 
-.btn-primary {
-  padding: 15px 40px;
+.btn {
+  padding: 18px 50px;
   font-size: 18px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  font-weight: 700;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  transition: all 0.4s ease;
+  display: inline-block;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 45px rgba(102, 126, 234, 0.5);
+}
+
+.btn-primary:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-primary:active {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .container {
-    padding: 20px;
+/* ==================== RESPONSIVE DESIGN ==================== */
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Tablet and small desktop screens */
+@media (max-width: 1024px) {
+
+  .proof-block-seller,
+  .proof-block-buyer {
+    grid-template-columns: 1fr 220px;
   }
 
-  .room-info p {
-    margin: 15px 0;
-    font-size: 9px;
-    color: #333;
-    font-family: math;
+  .Seller_Img .profile-image,
+  .Buyer_Img .profile-image {
+    width: 180px;
+    height: 220px;
   }
 
-  .qr-container {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
-    padding: 10px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15);
-    border: 3px solid #667eea;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .qr-section {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .room-info {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    align-items: center;
-    justify-content: center;
-    display: grid;
-  }
-
-  h1 {
-    font-size: 20px;
-  }
-
-  .proof-wrapper {
-    grid-template-columns: 1fr;
-  }
-
-  .qr-header {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .qr-header h3 {
-    font-size: 18px;
-  }
-
-  .verified-badge {
-    font-size: 14px;
-  }
-
-  .qr-info-box {
+  .Invoice_Notes {
     grid-template-columns: 1fr;
   }
 
@@ -542,17 +802,129 @@ h1 {
     width: 100px;
     height: 100px;
   }
+}
 
-  .copy-link-btn {
-    width: 100%;
-    font-size: 14px;
-    filter: drop-shadow(2px 4px 6px black);
-    margin-bottom: 10px;
+/* Mobile screens */
+@media (max-width: 768px) {
+
+  /* Mobile Landscape Cards */
+  .proof-block-seller,
+  .proof-block-buyer {
+    grid-template-columns: 1fr 140px;
+    min-height: 220px;
   }
 
-  .proof-block p {
-    line-height: 1.4;
+  .seller-Info,
+  .Buyer_Info {
+    padding: 20px 25px;
+  }
+
+  .seller-Info h2,
+  .Buyer_Info h2 {
+    font-size: 16px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+  }
+
+  .seller-Info::before,
+  .Buyer_Info::before {
+    width: 35px;
+    height: 35px;
+    top: 15px;
+    left: 15px;
+  }
+
+  .seller-Info::after,
+  .Buyer_Info::after {
+    font-size: 9px;
+    padding: 4px 10px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .seller-Info p,
+  .Buyer_Info p {
+    font-size: 13px;
+    margin: 8px 0;
+    padding-bottom: 8px;
+  }
+
+  .seller-Info strong,
+  .Buyer_Info strong {
+    min-width: 70px;
+    font-size: 11px;
+  }
+
+  .Seller_Img,
+  .Buyer_Img {
+    padding: 15px;
+  }
+
+  .Seller_Img .profile-image,
+  .Buyer_Img .profile-image {
+    width: 110px;
+    height: 140px;
+    border: 3px solid white;
+  }
+
+  .Seller_Img::after,
+  .Buyer_Img::after {
+    width: 50px;
+    height: 50px;
     font-size: 8px;
-    font-family: monospace;
+    bottom: 10px;
+    right: 10px;
+    filter: drop-shadow(0px 1px 2px black);
+  }
+
+  /* Invoice Block Mobile */
+  .proof-block-invoice {
+    min-height: auto;
+  }
+
+  .Invoice_Header {
+    padding: 18px 20px;
+  }
+
+  .Invoice_Header h2 {
+    font-size: 16px;
+  }
+
+  .Invoice_Notes {
+    padding: 25px 20px;
+    grid-template-columns: 1fr;
+  }
+
+  .Invoice_Notes::before {
+    width: 35px;
+    height: 35px;
+    top: 15px;
+    left: 15px;
+  }
+
+  .Invoice_Notes::after {
+    width: 50px;
+    height: 50px;
+    font-size: 6px;
+    bottom: 10px;
+    right: 10px;
+    filter: drop-shadow(0px 1px 2px black);
+  }
+
+  .Invoice_Notes p {
+    font-size: 10px;
+    margin: 6px 0;
+    padding-bottom: 8px;
+  }
+
+  .Invoice_Notes strong {
+    min-width: 90px;
+    font-size: 9px;
+  }
+
+  .btn-primary {
+    padding: 15px 35px;
+    font-size: 8px;
+    filter: drop-shadow(2px 4px 6px black);
   }
 }
