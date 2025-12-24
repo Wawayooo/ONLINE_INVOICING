@@ -20,11 +20,10 @@
     </div>
 
     <div class="cards" id="sellerRoomDiv">
-        <input type="hidden" id="roomHashInput" value="{{ room.room_hash }}">
+        {% csrf_token %}
         <input type="password" id="sellerSecretInput" placeholder="Enter your secret key">
         <button class="btn btn-seller" id="sellerGoBtn">Go to Seller Room</button>
     </div>
-
 
     <div class="cards">
       <div class="card" onclick="window.location.href='/seller/create/'">
@@ -41,11 +40,11 @@
         <div class="btn btn-buyer" id="buyerBtn">Enter Room</div>
       </div>
 
-      <div style="text-align: right; margin: 20px 0;">
+      <!--<div style="text-align: right; margin: 20px 0;">
         <a href="{% url 'all_data' %}">
           <button class="btn btn-primary">View All Data</button>
         </a>
-      </div>
+      </div>-->
     </div>
 
     <div class="features">
