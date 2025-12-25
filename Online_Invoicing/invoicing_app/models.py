@@ -124,9 +124,28 @@ class Invoice(models.Model):
         # Auto-calculate line total
         self.line_total = self.quantity * self.unit_price
         super().save(*args, **kwargs)
+        
+    def total_amount(self): 
+        """Sum of all line items""" 
+        return sum(item.line_total for item in self.items.all())
 
     def __str__(self):
         return f"Invoice for Room {self.room.room_hash} - {self.status}"
+    
+class InvoiceItem(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
+    product_name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    quantity = models.PositiveIntegerField()
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    line_total = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+
+    def save(self, *args, **kwargs):
+        self.line_total = self.quantity * self.unit_price
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product_name} ({self.quantity} x {self.unit_price})"
 
 class NegotiationHistory(models.Model):
     ACTION_CHOICES = [
