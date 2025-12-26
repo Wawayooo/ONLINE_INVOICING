@@ -773,6 +773,95 @@ h1 {
   transform: translateY(-2px);
 }
 
+.invoice-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-card h2,
+.invoice-card h3 {
+  color: #667eea;
+  margin-bottom: 15px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95rem;
+}
+
+.invoice-table th,
+.invoice-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.invoice-table th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.invoice-table tr:hover {
+  background: #f9f9ff;
+}
+
+.Invoice_Total {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: right;
+  color: #764ba2;
+}
+
+/* 📱 Mobile-friendly styles */
+@media (max-width: 600px) {
+
+  .invoice-table,
+  .invoice-table thead,
+  .invoice-table tbody,
+  .invoice-table th,
+  .invoice-table td,
+  .invoice-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .invoice-table thead {
+    display: none;
+    /* hide headers on mobile */
+  }
+
+  .invoice-table tr {
+    margin-bottom: 15px;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.1);
+  }
+
+  .invoice-table td {
+    border: none;
+    padding: 8px 10px;
+    position: relative;
+    text-align: left;
+  }
+
+  .invoice-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #667eea;
+    display: block;
+    margin-bottom: 4px;
+  }
+}
+
+
 /* ==================== RESPONSIVE DESIGN ==================== */
 /* ==================== RESPONSIVE DESIGN ==================== */
 
