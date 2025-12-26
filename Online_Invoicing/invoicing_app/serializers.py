@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, Seller, Buyer, Invoice, NegotiationHistory
+from .models import Room, Seller, Buyer, Invoice, NegotiationHistory, InvoiceItem
 
 # ===============================
 # SELLER CREATES INVOICE
@@ -53,7 +53,57 @@ class BuyerJoinSerializer(serializers.Serializer):
 # ===============================
 # INVOICE SERIALIZER
 # ===============================
+# =============MULTI INVOICE SERIALIZER==================
+
+class InvoiceItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvoiceItem
+        fields = ['id', 'product_name', 'description', 'quantity', 'unit_price', 'line_total']
+        read_only_fields = ['line_total']
+
+
 class InvoiceSerializer(serializers.ModelSerializer):
+    items = InvoiceItemSerializer(many=True)  # ✅ make writable
+    total_amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Invoice
+        fields = [
+            'invoice_date',
+            'due_date',
+            'description',
+            'payment_method',
+            'status',
+            'items',
+            'total_amount',
+        ]
+        read_only_fields = ['status']
+
+    def get_total_amount(self, obj):
+        return sum(item.line_total for item in obj.items.all())
+
+    def update(self, instance, validated_data):
+        # Pop out items data
+        items_data = validated_data.pop('items', None)
+
+        # Update invoice fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Update items if provided
+        if items_data is not None:
+            # Clear existing items and recreate (simplest approach)
+            instance.items.all().delete()
+            for item_data in items_data:
+                InvoiceItem.objects.create(invoice=instance, **item_data)
+
+        return instance
+
+    
+# =============SINGLE INVOICE SERIALIZER==================
+
+class SingleInvoiceSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
 
     class Meta:
@@ -76,12 +126,15 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 # ===============================
 # SELLER SERIALIZER
-# ===============================
+# ===============================        
+
 class SellerSerializer(serializers.ModelSerializer):
     profile_picture = serializers.ImageField(use_url=True)
+
     class Meta:
         model = Seller
         fields = ['fullname', 'email', 'phone', 'social_media', 'profile_picture']
+
 
 
 # ===============================
@@ -109,9 +162,20 @@ class NegotiationHistorySerializer(serializers.ModelSerializer):
 
 class RoomDetailSerializer(serializers.ModelSerializer):
     seller = SellerSerializer(read_only=True)
-    buyer = BuyerSerializer(read_only=True)   # includes buyer_hash + info
-    invoice = InvoiceSerializer(read_only=True)
+    buyer = BuyerSerializer(read_only=True)
+    history = NegotiationHistorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Room
-        fields = ['room_hash', 'is_buyer_assigned', 'seller', 'buyer', 'invoice']
+        fields = ['room_hash', 'is_buyer_assigned', 'seller', 'buyer', 'invoice', 'history']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        invoice = instance.invoice
+        if invoice.description.strip().lower() == "multi-item invoice":
+            data['invoice'] = InvoiceSerializer(invoice).data
+            #print(f"Invoice: {data['invoice']}")
+        else:
+            data['invoice'] = SingleInvoiceSerializer(invoice).data
+            #print(f"Invoice: {data['invoice']}")
+        return data
