@@ -194,7 +194,121 @@ h1 {
   filter: drop-shadow(2px 4px 6px black);
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background: #fff;
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 600px;
+  text-align: center;
+}
+
+.modal-subtitle {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.modal-options {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.option-card {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  background: #f9f9f9;
+}
+
+.option-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.option-card h3 {
+  margin: 10px 0;
+}
+
+.option-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.btn.btn-seller {
+  background: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn.btn-seller:hover {
+  background: #0056b3;
+}
+
+.close-btn {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 @media (max-width:768px) {
+  .modal-content {
+    width: 90%;
+    /* make modal almost full width */
+    margin: 20% auto;
+    /* center vertically with more margin */
+    padding: 20px;
+  }
+
+  .modal-options {
+    flex-direction: column;
+    /* stack options vertically */
+    gap: 15px;
+  }
+
+  .option-card {
+    width: 100%;
+    /* full width cards */
+    padding: 15px;
+  }
+
+  .option-icon {
+    font-size: 32px;
+    /* slightly smaller icons */
+    margin-bottom: 8px;
+  }
+
+  .option-card h3 {
+    font-size: 18px;
+  }
+
+  .option-card p {
+    font-size: 14px;
+  }
+
+  .modal-buttons .btn {
+    width: 100%;
+    /* buttons span full card width */
+    margin-top: 10px;
+  }
+
   #sellerSecretInput {
     font-size: 12px;
     background-color: white;
