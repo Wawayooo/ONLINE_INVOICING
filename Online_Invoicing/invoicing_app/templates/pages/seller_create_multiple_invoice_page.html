@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Invoice</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/seller_create_multiple_invoice_page.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Create Multiple Item Invoice</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Seller Info -->
+        <div class="section" id="seller-info">
+            <h3>Seller Information</h3>
+            
+            <div class="seller-content">
+                <!-- Left: Profile Image -->
+                <div class="seller-profile-section">
+                    <div class="profile-upload-area">
+                        <label>Profile Picture</label>
+                        <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
+                    </div>
+                    <div class="profile-preview-area">
+                        <img id="sellerPreview" class="preview-image" alt="Preview" style="display:none;">
+                        <div class="no-image-placeholder" id="imagePlaceholder">
+                            <span>📷</span>
+                            <p>Upload Photo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Seller Details -->
+                <div class="seller-details-section">
+                    <div class="form-row">
+                        <div class="form-field full-width">
+                            <label>Full Name *</label>
+                            <input type="text" name="seller_fullname" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-column">
+                        <div class="form-field">
+                            <label>Email</label>
+                            <input type="email" name="seller_email">
+                        </div>
+                        <div class="form-field">
+                            <label>Phone</label>
+                            <input type="text" name="seller_phone">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-field full-width">
+                            <label>Social Media</label>
+                            <input type="text" name="seller_social_media" placeholder="Ex: Elon Musk (FB)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secret Key -->
+        <div class="section" id="seller-secret-key">
+          <h3>Seller Secret Key</h3>
+          
+          <div class="secret-key-content">
+              <div class="form-row two-column">
+                  <div class="form-field">
+                      <label for="sellerSecretKey">Secret Key *</label>
+                      <input type="password" id="sellerSecretKey" name="seller_secret_key" required>
+                      <small>⚠️ Required to access your seller room</small>
+                  </div>
+
+                  <div class="form-field">
+                      <label for="sellerSecretKeyConfirm">Confirm Secret Key *</label>
+                      <input type="password" id="sellerSecretKeyConfirm" name="seller_secret_key_confirm" required>
+                      <small>Re-enter your secret key</small>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <!-- Invoice Info -->
+        <div class="section" id="invoice-info">
+            <h3>Invoice Information</h3>
+
+            <div class="invoice-content">
+                <div class="form-row two-column">
+                    <div class="form-field">
+                        <label>Invoice Date *</label>
+                        <input type="date" name="invoice_date" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Due Date</label>
+                        <input type="date" name="due_date">
+                    </div>
+                </div>
+
+                <div class="form-row two-column">
+                    <div class="form-field">
+                        <label>Payment Method *</label>
+                        <select name="payment_method" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="cash">Cash</option>
+                            <option value="gcash">GCash</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank_transfer">Bank Transfer</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Items -->
+        <div class="section" id="invoice-items">
+            <h3>Invoice Items</h3>
+
+            <div class="invoice-items-content">
+                <input type="hidden" id="items-count" name="items-count" value="0">
+                <div id="items-container"></div>
+                
+                <div class="add-item-section">
+                    <button type="button" onclick="addItem()" class="btn-add-item">
+                        <span class="icon">+</span>
+                        <span class="text">Add Item</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-section">
+            <button type="submit" class="btn-submit">Create Invoice</button>
+        </div>
+    </form>
+</div>
+<script src="{% static 'js/seller_create_multiple_invoice_page.js' %}"></script>
+  <script>
+      function addItem() {
+        const container = document.getElementById("items-container");
+        const index = container.children.length;
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "item-form";
+        itemDiv.innerHTML = `
+            <div class="item-header">
+                <h4>Item ${index + 1}</h4>
+                <button type="button" class="btn-remove-item" onclick="removeItem(this)">×</button>
+            </div>
+            <div class="item-body">
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label>Product Name *</label>
+                        <input type="text" name="items-${index}-product_name" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label>Description</label>
+                        <textarea name="items-${index}-description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-row two-column">
+                    <div class="form-field">
+                        <label>Quantity *</label>
+                        <input type="number" name="items-${index}-quantity" min="1" required 
+                              oninput="updateLineTotal(this)">
+                    </div>
+                    <div class="form-field">
+                        <label>Unit Price *</label>
+                        <input type="number" step="0.01" name="items-${index}-unit_price" required 
+                              oninput="updateLineTotal(this)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label>Line Total</label>
+                        <div class="line-total" id="lineTotal-${index}">₱0.00</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(itemDiv);
+        document.getElementById("items-count").value = index + 1;
+        updateGrandTotal(); // refresh grand total
+    }
+
+    function updateLineTotal(el) {
+        const itemBody = el.closest(".item-body");
+        const qtyInput = itemBody.querySelector("[name$='quantity']");
+        const priceInput = itemBody.querySelector("[name$='unit_price']");
+        const lineTotalDiv = itemBody.querySelector(".line-total");
+
+        const qty = parseFloat(qtyInput.value) || 0;
+        const price = parseFloat(priceInput.value) || 0;
+        const total = qty * price;
+
+        lineTotalDiv.textContent = "₱" + total.toFixed(2);
+        updateGrandTotal();
+    }
+
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        document.querySelectorAll(".line-total").forEach(div => {
+            const value = parseFloat(div.textContent.replace(/[₱,]/g, "")) || 0;
+            grandTotal += value;
+        });
+        document.getElementById("grandTotal").textContent = "₱" + grandTotal.toFixed(2);
+    }
+
+    function removeItem(button) {
+        const itemForm = button.closest('.item-form');
+        itemForm.style.animation = 'itemFadeOut 0.3s ease-out';
+        setTimeout(() => {
+            itemForm.remove();
+            updateItemCount();
+        }, 300);
+    }
+
+    function updateItemCount() {
+        const container = document.getElementById("items-container");
+        document.getElementById("items-count").value = container.children.length;
+        
+        // Update item numbers
+        Array.from(container.children).forEach((item, index) => {
+            const header = item.querySelector('h4');
+            if (header) {
+                header.textContent = `Item ${index + 1}`;
+            }
+        });
+    }
+
+    // Profile image preview
+    document.getElementById('sellerProfilePic').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('sellerPreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+            placeholder.style.display = 'flex';
+        }
+    });
+</script>
+</body>
+</html>
+
+
