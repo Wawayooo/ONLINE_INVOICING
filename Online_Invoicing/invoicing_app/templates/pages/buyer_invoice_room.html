@@ -3,7 +3,6 @@
   {% include "proof_transaction.html" %}
 {% endif %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,25 +12,74 @@
   <link rel="stylesheet" href="{% static 'css/buyer_invoice_room.css' %}">
 </head>
 <body>
+  <div id="loadingModal" class="loading-modal" style="display:none;">
+    <div class="spinner"></div>
+    <p>Updating invoice, please wait...</p>
+  </div>
+  
   <div class="container">
+    <div id="notification" class="notification" style="display:none;"></div>
+
     <h1>📄 Buyer Invoice Room</h1>
-    <p>Always Copy the Hash To Visit the Page Again.</p>
-    <p>Don't Share this Hash to Anyone - For your Security.</p>
-    <br>
-    <!--<p><strong>Room Hash:</strong> {{ room_hash }}</p>-->
+    <p>Always copy the hash to visit the page again.</p>
+    <p>Don't share this hash with anyone — for your security.</p>
     <p><strong>Buyer Hash:</strong> {{ buyer_hash }}</p>
 
-    <!-- Unauthorized message always rendered, hidden by default -->
+    <!-- Unauthorized message -->
     <div class="unauthorized" style="display:none;">
       🚫 You are not authorized to view this invoice.
     </div>
 
     {% if not unauthorized %}
       <div class="side-by-side">
+        <!-- Single Item Card (hidden by default) -->
+        <div id="singleItemCard" style="display:none;" class="single-item-card">
+          <h3>Invoice Item</h3>
+          <div class="item-field">
+            <strong>Description:</strong> <span id="singleDescription"></span>
+          </div>
+          <div class="item-field">
+            <strong>Quantity:</strong> <span id="singleQuantity"></span>
+          </div>
+          <div class="item-field">
+            <strong>Unit Price:</strong> ₱<span id="singleUnitPrice"></span>
+          </div>
+          <div class="item-field total">
+            <strong>Line Total:</strong> ₱<span id="singleLineTotal"></span>
+          </div>
+        </div>
+
         <!-- Invoice Info (Left) -->
         <div class="invoice-form">
           <h2>Invoice Details</h2>
-          <div id="invoiceDetailsContainer"></div>
+
+          <!-- Invoice header fields -->
+          <div id="invoiceHeader"></div>
+
+          <!-- Items table -->
+          <h3>Invoice Items</h3>
+          <table id="itemsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Line Total</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+
+          <!-- Grand total -->
+          <div class="form-group">
+            <label><strong>Grand Total:</strong></label>
+            <div id="grandTotal">₱0.00</div>
+          </div>
+
+          <!-- Actions -->
           <div class="actions">
             <button class="btn btn-success" id="approveBtn">Approve</button>
             <button class="btn btn-danger" id="disapproveBtn">Disapprove</button>
