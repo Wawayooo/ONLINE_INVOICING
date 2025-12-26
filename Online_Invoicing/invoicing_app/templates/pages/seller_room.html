@@ -6,11 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Room</title>
   <link rel="stylesheet" href="{% static 'css/seller_room.css' %}">
+  <link rel="stylesheet" href="{% static 'css/sellerRoom.css' %}">
 </head>
 <body>
   <div class="container">
     <h1>📄 Seller Room</h1>
 
+    <!-- Room Info -->
     <div class="room-info">
       <p><strong>Room Hash:</strong> <span id="roomHash"></span></p>
       <p>
@@ -20,7 +22,6 @@
       </p>
     </div>
 
-    <!-- Two-column layout -->
     <div class="form-wrapper">
       <!-- Seller Information -->
       <form id="sellerForm" class="form-section seller-section">
@@ -29,22 +30,18 @@
           <label for="sellerFullname">Full Name *</label>
           <input type="text" id="sellerFullname" name="seller_fullname" required>
         </div>
-
         <div class="form-group">
           <label for="sellerEmail">Email</label>
           <input type="email" id="sellerEmail" name="seller_email">
         </div>
-
         <div class="form-group">
           <label for="sellerPhone">Phone</label>
           <input type="text" id="sellerPhone" name="seller_phone">
         </div>
-
         <div class="form-group">
           <label for="sellerSocial">Social Media Handle</label>
           <input type="text" id="sellerSocial" name="seller_social_media" placeholder="@username">
         </div>
-
         <div class="form-group">
           <label>Profile Picture</label>
           <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
@@ -55,34 +52,15 @@
       <!-- Invoice Details -->
       <form id="invoiceForm" class="form-section invoice-section">
         <h2>Invoice Details</h2>
-        <div class="form-group">
-          <label for="invoiceDate">Invoice Date *</label>
-          <input type="date" id="invoiceDate" name="invoice_date" required>
-        </div>
-
-        <div class="form-group">
-          <label for="dueDate">Due Date</label>
-          <input type="date" id="dueDate" name="due_date">
-        </div>
-
-        <div class="form-group">
-          <label for="description">Description *</label>
-          <textarea id="description" name="description" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="quantity">Quantity *</label>
-          <input type="number" id="quantity" name="quantity" min="1" required>
-        </div>
-
-        <div class="form-group">
-          <label for="unitPrice">Unit Price *</label>
-          <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
-        </div>
-
-        <div class="form-group">
-          <label>Line Total</label>
-          <div class="calculated" id="lineTotal">₱0.00</div>
+        <div class="form-group inline">
+          <div>
+            <label for="invoiceDate">Invoice Date *</label>
+            <input type="date" id="invoiceDate" name="invoice_date" required>
+          </div>
+          <div>
+            <label for="dueDate">Due Date</label>
+            <input type="date" id="dueDate" name="due_date">
+          </div>
         </div>
 
         <div class="form-group">
@@ -97,113 +75,96 @@
           </select>
         </div>
 
+        <!-- Editable Items for Multi-Items -->
+        <div class="multi-item-invoice">
+          <h3>Invoice Details</h3>
+          <div id="itemsContainer">
+            <!-- Example item block -->
+            <div class="item-block">
+              <div class="form-group">
+                <label>Product</label>
+                <input type="text" name="product_name[]" required>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <input type="text" name="description[]">
+              </div>
+              <div class="form-group inline">
+                <div>
+                  <label>Quantity</label>
+                  <input type="number" name="quantity[]" min="1" required>
+                </div>
+                <div>
+                  <label>Unit Price</label>
+                  <input type="number" name="unit_price[]" step="0.01" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Line Total</label>
+                <div class="line-total">₱0.00</div>
+              </div>
+              <button type="button" class="btn btn-remove-item" id="btn_remove">✖ Remove</button>
+            </div>
+          </div>
+
+          <!-- Add Item button -->
+          <button type="button" id="addItemBtn" class="btn">➕ Add Item</button>
+
+          <!-- Grand Total -->
+          <div class="form-group">
+            <label>Grand Total</label>
+            <div id="grandTotal">₱0.00</div>
+          </div>
+        </div>
+
+        <!-- Update Invoice -->
         <button id="updateInvoiceBtn" type="submit" class="btn btn-primary">Update Invoice</button>
 
-        <div id="formLockNotice" style="display:none; color:#b71c1c; font-weight:bold; margin-bottom:1rem;">
+        <!-- Notices -->
+        <div id="formLockNotice" style="display:none;" class="notice">
           Form is locked until buyer disapproves.
         </div>
-
-        <div id="invoiceApprovedLabel" style="display:none; color:green; font-weight:bold; margin-bottom:1rem; margin-top:2rem; font-size:3rem;">
+        <div id="invoiceApprovedLabel" style="display:none;" class="approved-label">
           INVOICE APPROVED
         </div>
-
       </form>
     </div>
-    <div id="buyerPaidInfo" style="display:none; margin-top:2rem; padding:1rem; border:2px solid #b71c1c; border-radius:8px; background:#fff3f3;">
-      <h2 style="color:white; font-family: monospace;">INVOICE STATUS: BUYER ALREADY PAID</h2>
-      <div class="Buyer_ID">
-        <div id="buyerDetails">
-          <p><strong>Full Name:</strong> <span id="buyerName"></span></p>
-          <p><strong>Email:</strong> <span id="buyerEmail"></span></p>
-          <p><strong>Phone:</strong> <span id="buyerPhone"></span></p>
-          <p><strong>Social Media:</strong> <span id="buyerSocial"></span></p>
-        </div>
-        <div id="BuyerImage">
-          <img id="buyerProfilePic" class="profile-image" alt="Buyer Profile Picture">
-        </div>
+
+    <div id="loadingModal" class="loading-modal" style="display:none;">
+      <div class="spinner"></div>
+      <p>Updating invoice, please wait...</p>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="loading-modal" style="display:none;">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <h2>Redirecting...</h2>
+        <p>Please wait while we prepare your invoice.</p>
       </div>
-      <button id="confirmPaymentBtn" class="btn btn-success" style="margin-top:1rem;">
-        ✅ Confirm Payment Received
-      </button>
+    </div>
+
+    <!-- Buyer Paid Info -->
+    <div id="buyerPaidInfo" style="display:none; margin-top:2rem; padding:1rem; border:2px solid #b71c1c; border-radius:8px; background:#fff3f3;">
+        <h2 style="color:white; font-family: monospace;">INVOICE STATUS: BUYER ALREADY PAID</h2>
+        <div class="Buyer_ID">
+          <div id="buyerDetails">
+            <p><strong>Full Name:</strong> <span id="buyerName"></span></p>
+            <p><strong>Email:</strong> <span id="buyerEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="buyerPhone"></span></p>
+            <p><strong>Social Media:</strong> <span id="buyerSocial"></span></p>
+          </div>
+          <div id="BuyerImage">
+            <img id="buyerProfilePic" class="profile-image" alt="Buyer Profile Picture">
+          </div>
+        </div>
+        <button id="confirmPaymentBtn" class="btn btn-success" style="margin-top:1rem;">
+          ✅ Confirm Payment Received
+        </button>
+      </div>
     </div>
   </div>
 
   <script src="{% static 'js/seller_room.js' %}"></script>
 </body>
-<script>
-  function showBuyerPaidInfo(buyer) {
-    document.getElementById('buyerPaidInfo').style.display = 'block';
-    document.getElementById('buyerName').textContent = buyer.fullname;
-    document.getElementById('buyerEmail').textContent = buyer.email || 'N/A';
-    document.getElementById('buyerPhone').textContent = buyer.phone || 'N/A';
-    document.getElementById('buyerSocial').textContent = buyer.social_media || 'N/A';
-    if (buyer.profile_picture) {
-      document.getElementById('buyerProfilePic').src = buyer.profile_picture;
-    }
-  }
-
-  // Example: when loading room data
-  async function loadRoom() {
-    try {
-      const res = await fetch(`/api/room/${roomHash}/`);
-      const data = await res.json();
-      if (res.ok) {
-        if (data.invoice && data.invoice.status === 'unconfirmed_payment') {
-          showBuyerPaidInfo(data.buyer);
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to load room data");
-    }
-  }
-  // Initial load
-  loadRoom();
-  
-  // Hook confirm payment button
-  document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
-    try {
-      const res = await fetch(`/api/seller/${roomHash}/confirm-payment/`, { method: 'POST' });
-      const result = await res.json();
-
-      if (res.ok && result.invoice_status === 'finalized') {
-        window.location.href = result.redirect_url;
-      } else {
-        alert(result.error || "Failed to confirm payment.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Network error.");
-    }
-  });
-</script>
-
-<script>
-  function renderSellerInfo(seller) {
-    if (!seller) return;
-
-    const preview = document.getElementById('sellerPreview');
-    let profilePic = seller.profile_picture || '';
-
-    if (profilePic) {
-      // 🔎 Detect if tunneling is being used
-      if (window.location.origin.includes('.devtunnels.ms')) {
-        // Tunnel setup → prepend tunnel origin
-        preview.src = profilePic.startsWith('http')
-          ? profilePic
-          : `${window.location.origin}${profilePic}`;
-      } else {
-        // Localhost or other → prepend localhost origin
-        preview.src = profilePic.startsWith('http')
-          ? profilePic
-          : `http://localhost:8000${profilePic}`;
-      }
-      preview.classList.add('active');
-    } else {
-      preview.src = '';
-      preview.classList.remove('active');
-    }
-  }
-</script>
-
 </html>
