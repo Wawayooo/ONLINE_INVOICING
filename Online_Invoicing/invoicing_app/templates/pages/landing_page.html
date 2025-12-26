@@ -12,7 +12,7 @@
 <body>
   <div class="container">
     <div class="hero">
-      <h1>📄 Invoice Negotiation System</h1>
+      <h1>📄 Online Invoicing System</h1>
       <p class="subtitle">
         Create, negotiate, and finalize invoices without creating an account.<br>
         Simple, fast, and secure transactions between sellers and buyers.
@@ -26,11 +26,11 @@
     </div>
 
     <div class="cards">
-      <div class="card" onclick="window.location.href='/seller/create/'">
+      <div class="card">
         <div class="card-icon">🏪</div>
         <h2>I'm a Seller</h2>
         <p>Create an invoice, set your terms, and share a secure link with your buyer to start negotiation.</p>
-        <a href="/seller/create/" class="btn btn-seller">Create Invoice</a>
+        <a class="btn btn-seller" id="openInvoiceModal">Create Invoice</a>
       </div>
 
       <div class="card" id="buyerCard">
@@ -39,12 +39,33 @@
         <p>Received a link from a seller? Click the link they shared with you to view and negotiate the invoice.</p>
         <div class="btn btn-buyer" id="buyerBtn">Enter Room</div>
       </div>
+    </div>
 
-      <!--<div style="text-align: right; margin: 20px 0;">
-        <a href="{% url 'all_data' %}">
-          <button class="btn btn-primary">View All Data</button>
-        </a>
-      </div>-->
+    <!-- Hidden Modal for Invoice Type Selection -->
+    <div id="invoiceModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
+        <h2>📑 Select Invoice Type</h2>
+        <p class="modal-subtitle">Choose the type of invoice you want to create:</p>
+
+        <div class="modal-options">
+          <!-- Single Item Invoice -->
+          <div class="option-card">
+            <div class="option-icon">🛍️</div>
+            <h3>Single-Item Invoice</h3>
+            <p>Best for selling one product or service (e.g., 10 hours of consulting, 1 laptop).</p>
+            <button onclick="window.location.href='/seller/create/'" class="btn btn-seller">Create Single-Item</button>
+          </div>
+
+          <!-- Multiple Item Invoice -->
+          <div class="option-card">
+            <div class="option-icon">📦</div>
+            <h3>Multiple-Item Invoice</h3>
+            <p>Perfect for wholesale or sari-sari store sales with many products in one invoice.</p>
+            <button onclick="window.location.href='/invoice/create/'" class="btn btn-seller">Create Multiple-Item</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="features">
@@ -91,6 +112,28 @@
   </div>
 
   <script src="{% static 'js/landingPage.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const openBtn = document.getElementById("openInvoiceModal");
+      const modal = document.getElementById("invoiceModal");
+      const closeBtn = document.getElementById("closeModal");
+
+      openBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        modal.style.display = "block";
+      });
+
+      closeBtn.addEventListener("click", function() {
+        modal.style.display = "none";
+      });
+
+      window.addEventListener("click", function(event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
