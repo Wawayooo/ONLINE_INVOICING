@@ -1,0 +1,826 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* ==================== CONTAINER ==================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 50px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container h1 {
+  text-align: center;
+  color: #667eea;
+  font-size: 42px;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+/* ==================== SECTION STYLES ==================== */
+.section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  animation: slideIn 0.5s ease-out;
+  transition: all 0.4s ease;
+}
+
+.section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Section Headers */
+.section h3 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: 0;
+  padding: 25px 35px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+}
+
+/* Decorative corner elements */
+.section::before,
+.section::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 3px solid #667eea;
+  z-index: 1;
+}
+
+.section::before {
+  top: 80px;
+  left: 25px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+}
+
+.section::after {
+  bottom: 25px;
+  right: 25px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 8px;
+}
+
+/* ==================== SELLER INFO SECTION ==================== */
+.seller-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Profile Section (Left) */
+.seller-profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-upload-area label {
+  display: block;
+  color: #1a1a2e;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-upload-area input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed #667eea;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #f8f9ff;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.profile-upload-area input[type="file"]::-webkit-file-upload-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.profile-upload-area input[type="file"]::-webkit-file-upload-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.profile-upload-area input[type="file"]:hover {
+  background: #e8eaf6;
+  border-color: #764ba2;
+  transform: translateY(-2px);
+}
+
+/* Profile Preview */
+.profile-preview-area {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 3px solid white;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.profile-preview-area::before {
+  content: 'SELLER';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: 4px solid white;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  z-index: 3;
+  transform: rotate(-15deg);
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 5px solid white;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+}
+
+.preview-image:hover {
+  transform: scale(1.03);
+}
+
+.no-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: white;
+  opacity: 0.7;
+}
+
+.no-image-placeholder span {
+  font-size: 64px;
+}
+
+.no-image-placeholder p {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Seller Details Section (Right) */
+.seller-details-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* ==================== FORM ELEMENTS ==================== */
+.form-row {
+  display: grid;
+  gap: 20px;
+}
+
+.form-row.two-column {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-field label {
+  display: block;
+  color: #1a1a2e;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+  font-family: inherit;
+  color: #333;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field small {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ==================== SECRET KEY SECTION ==================== */
+#seller-secret-key {
+  border: 3px solid #b71c1c;
+}
+
+#seller-secret-key h3 {
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+}
+
+#seller-secret-key::before,
+#seller-secret-key::after {
+  border-color: #b71c1c;
+  animation: securityPulse 2s ease-in-out infinite;
+}
+
+@keyframes securityPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    border-width: 3px;
+  }
+
+  50% {
+    opacity: 0.6;
+    border-width: 5px;
+  }
+}
+
+.secret-key-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.secret-key-content::before {
+  content: '🔐';
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 48px;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.secret-key-content input:focus {
+  border-color: #b71c1c;
+  box-shadow: 0 0 0 4px rgba(183, 28, 28, 0.1);
+}
+
+/* ==================== INVOICE INFO SECTION ==================== */
+.invoice-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==================== INVOICE ITEMS SECTION ==================== */
+#invoice-items h3 {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+}
+
+#invoice-items::before,
+#invoice-items::after {
+  border-color: #ff9800;
+}
+
+.invoice-items-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+#items-container {
+  display: grid;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+/* Individual Item Form */
+.item-form {
+  background: white;
+  border: 3px solid #ff9800;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(255, 152, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: itemFadeIn 0.4s ease-out;
+  position: relative;
+}
+
+@keyframes itemFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes itemFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.item-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(255, 152, 0, 0.3);
+}
+
+.item-header {
+  background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-header h4 {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.btn-remove-item {
+  background: red;
+  border: 2px solid white;
+  color: black;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  z-index: 1000;
+}
+
+.btn-remove-item:hover {
+  background: white;
+  color: #ff9800;
+  transform: rotate(90deg);
+}
+
+.item-body {
+  padding: 25px;
+}
+
+.item-form .form-field input:focus,
+.item-form .form-field textarea:focus {
+  border-color: #ff9800;
+  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.1);
+}
+
+/* Line Total in Item */
+.line-total {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffe0b3 100%);
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff9800;
+  text-align: center;
+  border: 2px solid #ff9800;
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.1);
+}
+
+/* Item number badge */
+.item-form::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #ff9800 0%, #ffc107 100%);
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+  z-index: 5;
+}
+
+/* ==================== ADD ITEM SECTION ==================== */
+.add-item-section {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.btn-add-item {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  padding: 18px 50px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add-item .icon {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.btn-add-item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-add-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(17, 153, 142, 0.5);
+}
+
+.btn-add-item:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+/* ==================== GRAND TOTAL SECTION ==================== */
+.grand-total-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #11998e;
+}
+
+.grand-total-section h3 {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  margin: 0;
+  padding: 25px 35px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.grand-total-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  text-align: center;
+}
+
+#grandTotal {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  padding: 20px 40px;
+  border-radius: 15px;
+  font-size: 36px;
+  font-weight: 800;
+  color: #11998e;
+  border: 3px solid #11998e;
+  box-shadow: 0 8px 30px rgba(17, 153, 142, 0.2);
+  display: inline-block;
+  min-width: 300px;
+}
+
+/* ==================== SUBMIT SECTION ==================== */
+.submit-section {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 20px 80px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-submit:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 50px rgba(102, 126, 234, 0.5);
+}
+
+.btn-submit:hover::before {
+  width: 500px;
+  height: 500px;
+}
+
+.btn-submit:active {
+  transform: translateY(-2px);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1024px) {
+  .seller-content {
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+    padding: 35px;
+  }
+
+  .profile-preview-area {
+    min-height: 300px;
+  }
+
+  #grandTotal {
+    font-size: 30px;
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  .container {
+    padding: 30px 20px;
+  }
+
+  .container h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .section h3 {
+    font-size: 18px;
+    padding: 20px 25px;
+  }
+
+  .section::before,
+  .section::after {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section::before {
+    top: 70px;
+    left: 15px;
+  }
+
+  .section::after {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .seller-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 25px 20px;
+  }
+
+  .profile-preview-area {
+    min-height: 280px;
+  }
+
+  .secret-key-content,
+  .invoice-content,
+  .invoice-items-content,
+  .grand-total-content {
+    padding: 25px 20px;
+  }
+
+  .form-row.two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .item-body {
+    padding: 20px;
+  }
+
+  .btn-add-item,
+  .btn-submit {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .btn-submit {
+    padding: 18px 40px;
+  }
+
+  .secret-key-content::before {
+    font-size: 36px;
+    top: 15px;
+    right: 20px;
+  }
+
+  #grandTotal {
+    font-size: 28px;
+    padding: 18px 30px;
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .section h3 {
+    font-size: 16px;
+    padding: 15px 20px;
+    letter-spacing: 1px;
+  }
+
+  .seller-content,
+  .secret-key-content,
+  .invoice-content,
+  .invoice-items-content,
+  .grand-total-content {
+    padding: 20px 15px;
+  }
+
+  .profile-preview-area {
+    min-height: 250px;
+  }
+
+  .item-header {
+    padding: 12px 20px;
+  }
+
+  .item-header h4 {
+    font-size: 16px;
+  }
+
+  .btn-remove-item {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .line-total {
+    font-size: 18px;
+  }
+
+  #grandTotal {
+    font-size: 24px;
+    padding: 15px 25px;
+  }
+}
