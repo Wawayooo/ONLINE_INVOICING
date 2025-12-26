@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from .models import Room, Seller, Buyer, Invoice, NegotiationHistory
 from .serializers import (
     RoomDetailSerializer, CreateInvoiceSerializer, 
-    BuyerJoinSerializer, InvoiceSerializer
+    BuyerJoinSerializer, InvoiceSerializer, SingleInvoiceSerializer
 )
 
 import uuid, secrets, hashlib
@@ -390,6 +390,13 @@ def buyer_mark_paid(request, room_hash):
     return Response(serializer.data)
 
 
+from decimal import Decimal, InvalidOperation
+from django.db import transaction
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
+
 @api_view(['PUT'])
 def seller_edit_invoice(request, room_hash):
     """
@@ -398,28 +405,92 @@ def seller_edit_invoice(request, room_hash):
     """
     room = get_object_or_404(Room, room_hash=room_hash)
     invoice = room.invoice
+    data = request.data or {}
 
-    serializer = InvoiceSerializer(invoice, data=request.data, partial=True)
+    # Decide serializer based on payload
+    if 'items' in data and isinstance(data['items'], list):
+        serializer = InvoiceSerializer(invoice, data=data, partial=True)
+    else:
+        serializer = SingleInvoiceSerializer(invoice, data=data, partial=True)
+
     if serializer.is_valid():
-        # Save the updated invoice fields
-        invoice = serializer.save()
+        with transaction.atomic():
+            invoice = serializer.save()
+            invoice.status = 'draft'
+            invoice.save(update_fields=['status'])
 
-        # Force status back to 'draft' after any seller edit
-        invoice.status = 'draft'
-        invoice.save(update_fields=['status'])
-
-        # Record the edit in negotiation history
-        NegotiationHistory.objects.create(
-            room=room,
-            action='edited',
-            actor='seller',
-            notes='Invoice edited by seller'
-        )
+            NegotiationHistory.objects.create(
+                room=room,
+                action='edited',
+                actor='seller',
+                notes='Invoice edited by seller'
+            )
 
         room_serializer = RoomDetailSerializer(room, context={'request': request})
         return Response(room_serializer.data)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def seller_edit_single_invoice(request, room_hash):
+    """
+    Seller edits a single-item invoice (directly updates Invoice fields).
+    PUT /api/seller/{room_hash}/edit-single-invoice/
+    """
+    room = get_object_or_404(Room, room_hash=room_hash)
+    invoice = room.invoice
+    data = request.data or {}
+
+    # Helper coercion functions
+    def to_int(val):
+        try:
+            return int(val)
+        except (TypeError, ValueError):
+            return None
+
+    def to_decimal(val):
+        try:
+            return Decimal(str(val))
+        except (TypeError, InvalidOperation, ValueError):
+            return None
+
+    # Allowed fields for single-item invoice
+    allowed = ['invoice_date', 'due_date', 'description', 'quantity', 'unit_price', 'payment_method']
+    updated = False
+
+    with transaction.atomic():
+        for key in allowed:
+            if key in data:
+                if key == 'quantity':
+                    coerced = to_int(data.get(key))
+                    if coerced is None:
+                        return Response({key: ['Invalid integer value']}, status=status.HTTP_400_BAD_REQUEST)
+                    setattr(invoice, key, coerced)
+                elif key == 'unit_price':
+                    coerced = to_decimal(data.get(key))
+                    if coerced is None:
+                        return Response({key: ['Invalid decimal value']}, status=status.HTTP_400_BAD_REQUEST)
+                    setattr(invoice, key, coerced)
+                else:
+                    setattr(invoice, key, data.get(key))
+                updated = True
+
+        if updated:
+            # model's save() recalculates line_total
+            invoice.status = 'draft'
+            invoice.save()
+            NegotiationHistory.objects.create(
+                room=room,
+                action='edited',
+                actor='seller',
+                notes='Invoice edited by seller (single-item)'
+            )
+
+    # Return updated room representation
+    room_serializer = RoomDetailSerializer(room, context={'request': request})
+    return Response(room_serializer.data)
+
 
 
 @api_view(['POST'])
