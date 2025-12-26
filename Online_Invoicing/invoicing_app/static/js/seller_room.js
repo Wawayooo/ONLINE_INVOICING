@@ -1,62 +1,56 @@
 //const API_BASE = 'http://localhost:8000';
 const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
 
-
 // Extract roomHash from URL path: /seller_room/<room_hash>/
-
 const pathParts = window.location.pathname.split('/').filter(Boolean);
-// URL: /seller_room/<room_hash>/
 const roomHash = pathParts[1];  // this is the room hash
-
 
 // Display room hash and shareable link
 document.getElementById('roomHash').textContent = roomHash;
 const shareableInput = document.getElementById('shareableLink');
 
-// If buyerHash exists (stored after join)
-const buyerHash = localStorage.getItem('buyer_hash');
-
 // Confirm Payment
 document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
-  try {
-    // Always build API URL relative to current origin
-    const apiUrl = `${window.location.origin}/api/seller/${roomHash}/confirm-payment/`;
+  // Extra confirmation layer
+  const confirmed = window.confirm("Are you sure you want to confirm this payment?");
+  if (!confirmed) return; // stop if user cancels
 
+  const loadingModal = document.getElementById('loadingModal');
+  const confirmBtn = document.getElementById('confirmPaymentBtn');
+
+  // Show loading modal + disable button
+  if (loadingModal) loadingModal.style.display = 'flex';
+  if (confirmBtn) confirmBtn.disabled = true;
+
+  try {
+    const apiUrl = `${API_BASE}/api/seller/${roomHash}/confirm-payment/`;
     const res = await fetch(apiUrl, { method: 'POST' });
     const result = await res.json();
 
     if (res.ok && result.invoice_status === 'finalized') {
       alert("Payment confirmed! Invoice finalized.");
+      await loadRoomData();
 
-      // Refresh UI with updated invoice status
-      loadRoom();
-
-      // After confirmation, allow PDF export or redirect
+      // Redirect to proof of transaction
       const proofUrl = result.redirect_url?.startsWith('http')
         ? result.redirect_url
         : `${window.location.origin}${result.redirect_url}`;
-
-      // If you want to redirect immediately:
       window.location.href = proofUrl;
-
-      // Or if you want to trigger your export logic:
-      // exportProofOfTransaction(proofUrl);
     } else {
       alert(result.error || "Failed to confirm payment.");
     }
   } catch (err) {
     console.error(err);
-    alert("Network error.");
+    alert("Network error while confirming payment.");
+  } finally {
+    // Hide loading modal + re-enable button
+    if (loadingModal) loadingModal.style.display = 'none';
+    if (confirmBtn) confirmBtn.disabled = false;
   }
 });
 
-
-// Generate correct shareable link
-if (buyerHash) {
-  shareableInput.value = `${window.location.origin}/buyer_invoice_room/${roomHash}/${buyerHash}/`;
-} else {
-  shareableInput.value = `${window.location.origin}/buyer_room/${roomHash}/`;
-}
+// Generate correct shareable link (seller only shares room link, not buyer hash)
+shareableInput.value = `${window.location.origin}/buyer_room/${roomHash}/`;
 
 // Clipboard copy
 document.getElementById('copyBtn').addEventListener('click', async () => {
@@ -72,6 +66,77 @@ document.getElementById('copyBtn').addEventListener('click', async () => {
 /**
  * Toggle seller/invoice form editability based on invoice status
  */
+// Attach handler once at startup
+
+async function submitInvoiceForm(formElement) {
+  const confirmed = window.confirm("Are you sure you want to update this invoice?");
+  if (!confirmed) return;
+
+  const items = collectItems();
+
+  if (items.length === 0) {
+    alert("Please add at least one valid item with product name, quantity, and unit price.");
+    return;
+  }
+
+  const updateBtn = document.getElementById('updateInvoiceBtn');
+  const loadingModal = document.getElementById('loadingModal');
+
+  // Show loading + disable button before request
+  if (loadingModal) loadingModal.style.display = 'flex';
+  if (updateBtn) updateBtn.disabled = true;
+
+  // Decide endpoint + payload
+  let url, payload;
+  if (items.length > 1) {
+    // Multi-item invoice
+    url = `${API_BASE}/api/seller/${roomHash}/edit-invoice/`;
+    payload = {
+      invoice_date: document.getElementById('invoiceDate').value,
+      due_date: document.getElementById('dueDate').value,
+      payment_method: document.getElementById('paymentMethod').value,
+      items: items
+    };
+  } else {
+    // Single-item invoice
+    const item = items[0];
+    url = `${API_BASE}/api/seller/${roomHash}/edit-single-invoice/`;
+    payload = {
+      invoice_date: document.getElementById('invoiceDate').value,
+      due_date: document.getElementById('dueDate').value,
+      payment_method: document.getElementById('paymentMethod').value,
+      description: item.description,
+      quantity: item.quantity,
+      unit_price: item.unit_price
+    };
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Invoice updated successfully!");
+      if (data.invoice) toggleSellerFormEditable(data.invoice.status);
+      await loadRoomData();
+    } else {
+      console.error(data);
+      alert(data.error || "Failed to update invoice");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error while updating invoice");
+  } finally {
+    if (loadingModal) loadingModal.style.display = 'none';
+    if (updateBtn) updateBtn.disabled = false;
+  }
+}
+
+
 function toggleSellerFormEditable(invoiceStatus) {
   const notice = document.getElementById('formLockNotice');
   const updateBtn = document.getElementById('updateInvoiceBtn');
@@ -85,7 +150,6 @@ function toggleSellerFormEditable(invoiceStatus) {
   }
 
   const editable = invoiceStatus === 'negotiating';
-
   if (notice) notice.style.display = editable ? 'none' : 'block';
   if (updateBtn) updateBtn.style.display = editable ? 'block' : 'none';
   if (approvedLabel) approvedLabel.style.display = 'none';
@@ -114,50 +178,151 @@ function toggleSellerFormEditable(invoiceStatus) {
 }
 
 /**
- * Submit invoice form
+ * Collect items from form fields
+ */
+function collectItems() {
+  const items = [];
+  document.querySelectorAll('#itemsContainer .item-block').forEach(block => {
+    const product = block.querySelector('[name="product_name[]"]').value.trim();
+    const description = block.querySelector('[name="description[]"]').value.trim();
+    const quantity = parseFloat(block.querySelector('[name="quantity[]"]').value) || 0;
+    const unit_price = parseFloat(block.querySelector('[name="unit_price[]"]').value) || 0;
+    
+    // Only add items with valid data
+    if (product && quantity > 0 && unit_price > 0) {
+      items.push({
+        product_name: product,
+        description: description,
+        quantity: quantity,
+        unit_price: unit_price
+      });
+    }
+  });
+  return items;
+}
+
+/**
+ * Submit invoice form with items
+ */
+
+
+/**
+ * Handle form submissions
  */
 document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   await submitInvoiceForm(e.target);
 });
 
-/**
- * Submit seller form
- */
 document.getElementById('sellerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   await submitInvoiceForm(e.target);
 });
 
 /**
- * Shared invoice submission logic
+ * Recalculate totals for all items
  */
-async function submitInvoiceForm(formElement) {
-  const formData = new FormData(formElement);
-
-  try {
-    // Use correct endpoint from urls.py
-    const response = await fetch(`${API_BASE}/api/seller/${roomHash}/edit-invoice/`, {
-      method: 'PUT',
-      body: formData
-    });
-
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert("Invoice updated successfully!");
-      calculateTotal();
-      if (data.invoice) toggleSellerFormEditable(data.invoice.status);
-    } else {
-      console.error(data);
-      alert(data.error || "Failed to update invoice");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Network error while updating invoice");
-  }
+function recalcTotals() {
+  let grandTotal = 0;
+  document.querySelectorAll('#itemsContainer .item-block').forEach(block => {
+    const qty = parseFloat(block.querySelector('[name="quantity[]"]').value) || 0;
+    const price = parseFloat(block.querySelector('[name="unit_price[]"]').value) || 0;
+    const lineTotal = qty * price;
+    block.querySelector('.line-total').textContent = '₱' + lineTotal.toFixed(2);
+    grandTotal += lineTotal;
+  });
+  document.getElementById('grandTotal').textContent = '₱' + grandTotal.toFixed(2);
 }
+
+/**
+ * Create a new item block
+ */
+function createItemBlock(itemData = null) {
+  const block = document.createElement("div");
+  block.classList.add("item-block");
+  
+  const productValue = itemData?.product_name || '';
+  const descriptionValue = itemData?.description || '';
+  const quantityValue = itemData?.quantity || 1;
+  const unitPriceValue = itemData?.unit_price || 0;
+  
+  // Calculate line total and ensure it's a number
+  let lineTotal = 0;
+  if (itemData?.line_total !== undefined && itemData?.line_total !== null) {
+    lineTotal = parseFloat(itemData.line_total);
+  } else {
+    lineTotal = quantityValue * unitPriceValue;
+  }
+  
+  // Ensure lineTotal is a valid number
+  if (isNaN(lineTotal)) {
+    lineTotal = 0;
+  }
+  
+  block.innerHTML = `
+    <div class="form-group">
+      <label>Product</label>
+      <input type="text" name="product_name[]" value="${productValue}" required>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" name="description[]" value="${descriptionValue}">
+    </div>
+    <div class="form-group inline">
+      <div>
+        <label>Quantity</label>
+        <input type="number" name="quantity[]" value="${quantityValue}" min="1" step="1" required>
+      </div>
+      <div>
+        <label>Unit Price</label>
+        <input type="number" name="unit_price[]" value="${unitPriceValue}" step="0.01" min="0" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Line Total</label>
+      <div class="line-total">₱${lineTotal.toFixed(2)}</div>
+    </div>
+    <button type="button" class="btn btn-remove-item">✖ Remove</button>
+  `;
+  
+  return block;
+}
+
+/**
+ * Add item button handler
+ */
+document.getElementById('addItemBtn').addEventListener('click', () => {
+  const itemsContainer = document.getElementById('itemsContainer');
+  const newBlock = createItemBlock();
+  itemsContainer.appendChild(newBlock);
+  recalcTotals();
+});
+
+/**
+ * Delegate remove buttons and input changes
+ */
+const itemsContainer = document.getElementById('itemsContainer');
+
+itemsContainer.addEventListener('click', e => {
+  if (e.target.classList.contains('btn-remove-item')) {
+    const itemBlocks = document.querySelectorAll('#itemsContainer .item-block');
+    
+    // Prevent removing the last item
+    if (itemBlocks.length <= 1) {
+      alert("You must have at least one item in the invoice.");
+      return;
+    }
+    
+    e.target.closest('.item-block').remove();
+    recalcTotals();
+  }
+});
+
+itemsContainer.addEventListener('input', e => {
+  if (e.target.matches('[name="quantity[]"], [name="unit_price[]"]')) {
+    recalcTotals();
+  }
+});
 
 /**
  * Fetch room data and populate forms
@@ -168,88 +333,144 @@ async function loadRoomData() {
     if (!response.ok) throw new Error("Room not found");
 
     const data = await response.json();
+    console.log("Room data loaded:", data);
 
-    // Populate seller fields
-    if (data.seller) {
-      document.getElementById('sellerFullname').value = data.seller.fullname || '';
-      document.getElementById('sellerEmail').value = data.seller.email || '';
-      document.getElementById('sellerPhone').value = data.seller.phone || '';
-      document.getElementById('sellerSocial').value = data.seller.social_media || '';
-
-      if (data.seller.profile_picture) {
-        const preview = document.getElementById('sellerPreview');
-        if (preview) {
-          const pic = data.seller.profile_picture;
-          preview.src = pic.startsWith('http') ? pic : `${API_BASE}${pic}`;
-          preview.classList.add('active');
-        }
-      }
+    // Redirect if invoice finalized
+    if (data.invoice?.status === 'finalized') {
+      const modal = document.getElementById('loadingModal');
+      if (modal) modal.style.display = 'flex';
+      setTimeout(() => {
+        window.location.href = `${API_BASE}/proof_transaction/${roomHash}/`;
+      }, 2000);
+      return;
     }
 
-    // Populate invoice fields
-    if (data.invoice) {
-      document.getElementById('invoiceDate').value = data.invoice.invoice_date.slice(0,10);
-      document.getElementById('dueDate').value = data.invoice.due_date ? data.invoice.due_date.slice(0,10) : '';
-      document.getElementById('description').value = data.invoice.description || '';
-      document.getElementById('quantity').value = data.invoice.quantity || 0;
-      document.getElementById('unitPrice').value = data.invoice.unit_price || 0;
-      document.getElementById('paymentMethod').value = data.invoice.payment_method || '';
+    populateSellerFields(data.seller);
+    if (data.invoice) populateInvoiceFields(data);
 
-      calculateTotal();
-      showInvoice(data.invoice);
-      toggleSellerFormEditable(data.invoice.status);
-    }
   } catch (err) {
-    console.error(err);
+    console.error("Load room data error:", err);
     alert(err.message === "Room not found" ? "Room not found" : "Failed to load room data");
   }
 }
 
-/**
- * Render invoice summary
- */
-function showInvoice(invoice) {
-  const container = document.getElementById('invoiceDetailsContainer');
-  if (container) {
-    container.innerHTML = `
-      <p><strong>Invoice Date:</strong> ${invoice.invoice_date}</p>
-      <p><strong>Due Date:</strong> ${invoice.due_date || 'N/A'}</p>
-      <p><strong>Description:</strong> ${invoice.description}</p>
-      <p><strong>Quantity:</strong> ${invoice.quantity}</p>
-      <p><strong>Unit Price:</strong> ₱${invoice.unit_price}</p>
-      <p><strong>Line Total:</strong> ₱${invoice.total_amount || invoice.line_total}</p>
-      <p><strong>Payment Method:</strong> ${invoice.payment_method}</p>
-      <p><strong>Status:</strong> ${invoice.status}</p>
-    `;
-  }
+function populateSellerFields(seller) {
+  if (!seller) return;
+  document.getElementById('sellerFullname').value = seller.fullname || '';
+  document.getElementById('sellerEmail').value = seller.email || '';
+  document.getElementById('sellerPhone').value = seller.phone || '';
+  document.getElementById('sellerSocial').value = seller.social_media || '';
 
-  if (invoice.status === 'draft') {
-    // Approve/Disapprove
-  } else if (invoice.status === 'negotiating') {
-    // Disapproved
-  } else if (invoice.status === 'pending') {
-    // Approved + Mark Paid
-  } else if (invoice.status === 'unconfirmed_payment') {
-    // Paid awaiting seller
-  } else if (invoice.status === 'finalized') {
-    // 🚀 Redirect buyer or seller to proof_transaction
-    window.location.href = `/proof_transaction/${roomHash}/`;
+  if (seller.profile_picture) {
+    const preview = document.getElementById('sellerPreview');
+    if (preview) {
+      const pic = seller.profile_picture;
+      preview.src = pic.startsWith('http') ? pic : `${API_BASE}${pic}`;
+      preview.classList.add('active');
+    }
   }
 }
 
+function populateInvoiceFields(data) {
+  const invoice = data.invoice;
+  document.getElementById('invoiceDate').value = invoice.invoice_date || '';
+  document.getElementById('dueDate').value = invoice.due_date || '';
+  document.getElementById('paymentMethod').value = invoice.payment_method || '';
 
-/**
- * Calculate line total
- */
-function calculateTotal() {
-  const qty = parseFloat(document.getElementById('quantity').value) || 0;
-  const price = parseFloat(document.getElementById('unitPrice').value) || 0;
-  document.getElementById('lineTotal').textContent = '₱' + (qty * price).toFixed(2);
+  const itemsContainer = document.getElementById("itemsContainer");
+  itemsContainer.innerHTML = "";
+  let grandTotal = 0;
+
+  // Decide invoice type based on description
+  const isMultiItem = invoice.description?.trim().toLowerCase() === 'multi-item invoice';
+  const isSingleItem = !isMultiItem && invoice.description;
+
+  if (isMultiItem) {
+    console.log("Loading multi-item invoice with", invoice.items.length, "items");
+    invoice.items.forEach((item, index) => {
+      console.log(`Item ${index + 1}:`, item);
+      const block = createItemBlock(item);
+      itemsContainer.appendChild(block);
+      grandTotal += parseFloat(item.line_total || 0);
+    });
+    toggleInvoiceDivs('multi');
+  } else if (isSingleItem) {
+    console.log("Loading single-item invoice");
+    const singleItem = {
+      product_name: 'Product/Service',
+      description: invoice.description || '',
+      quantity: invoice.quantity || 1,
+      unit_price: parseFloat(invoice.unit_price || 0),
+      line_total: parseFloat(invoice.line_total || 0)
+    };
+    const block = createItemBlock(singleItem);
+    itemsContainer.appendChild(block);
+    grandTotal = singleItem.line_total;
+
+    hideSingleItemButtons(block);
+    toggleInvoiceDivs('single');
+  } else {
+    console.log("No items found, creating empty block");
+    const emptyBlock = createItemBlock();
+    itemsContainer.appendChild(emptyBlock);
+  }
+
+  document.getElementById("grandTotal").textContent = "₱" + grandTotal.toFixed(2);
+  setTimeout(() => recalcTotals(), 100);
+
+  if (invoice.status) toggleSellerFormEditable(invoice.status);
+  if (invoice.status === 'unconfirmed_payment' && data.buyer) showBuyerPaidInfo(data.buyer);
 }
 
-// Event listeners for live calculation
-document.getElementById('quantity').addEventListener('input', calculateTotal);
-document.getElementById('unitPrice').addEventListener('input', calculateTotal);
+function hideSingleItemButtons(block) {
+  const addItemBtn = document.getElementById('addItemBtn');
+  if (addItemBtn) addItemBtn.style.display = 'none';
+  const removeBtn = block.querySelector('.btn-remove-item');
+  if (removeBtn) removeBtn.style.display = 'none';
+}
+
+function toggleInvoiceDivs(type) {
+  const singleDiv = document.getElementById('singleItemDiv');
+  const multiDiv = document.getElementById('multiItemDiv');
+  if (type === 'multi') {
+    if (multiDiv) multiDiv.style.display = 'block';
+    if (singleDiv) singleDiv.style.display = 'none';
+  } else {
+    if (singleDiv) singleDiv.style.display = 'block';
+    if (multiDiv) multiDiv.style.display = 'none';
+  }
+}
+
+function showBuyerPaidInfo(buyer) {
+  const buyerPaidInfo = document.getElementById('buyerPaidInfo');
+  const notice = document.getElementById('formLockNotice');
+  const approvedLabel = document.getElementById('invoiceApprovedLabel');
+
+  if (buyerPaidInfo) {
+    buyerPaidInfo.style.display = 'block';
+    if (approvedLabel) approvedLabel.style.display = 'block';
+    if (notice) notice.style.display = 'none';
+
+    document.getElementById('buyerName').textContent = buyer.fullname || 'N/A';
+    document.getElementById('buyerEmail').textContent = buyer.email || 'N/A';
+    document.getElementById('buyerPhone').textContent = buyer.phone || 'N/A';
+    document.getElementById('buyerSocial').textContent = buyer.social_media || 'N/A';
+
+    if (buyer.profile_picture) {
+      const buyerPic = document.getElementById('buyerProfilePic');
+      if (buyerPic) {
+        const pic = buyer.profile_picture;
+        buyerPic.src = pic.startsWith('http') ? pic : `${API_BASE}${pic}`;
+      }
+    }
+  }
+}
 
 // Initial load
-loadRoomData();
+document.addEventListener('DOMContentLoaded', loadRoomData);
+
+
+
+
+
+
