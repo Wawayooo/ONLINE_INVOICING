@@ -18,126 +18,215 @@
 
     <form id="invoiceForm">
       <!-- Seller Information -->
-      <div class="form-section">
-        <h2 class="section-title">👤 Seller Information</h2>
+      <div class="section" id="seller-info">
+        <h3>👤 Seller Information</h3>
+        
+        <div class="seller-content">
+            <!-- Left: Profile Image -->
+            <div class="seller-profile-section">
+                <div class="profile-upload-area">
+                    <label>Profile Picture</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
+                        <label for="sellerProfilePic" class="file-input-label">
+                            <span class="icon">📷</span>
+                            <span class="text">Choose Photo</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="profile-preview-area">
+                    <img id="sellerPreview" class="preview-image" alt="Preview" style="display:none;">
+                    <div class="no-image-placeholder" id="imagePlaceholder">
+                        <span>📷</span>
+                        <p>Upload Photo</p>
+                    </div>
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="sellerFullname">Full Name *</label>
-          <input type="text" id="sellerFullname" name="seller_fullname" required>
+            <!-- Right: Seller Details -->
+            <div class="seller-details-section">
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="sellerFullname">Full Name *</label>
+                        <input type="text" id="sellerFullname" name="seller_fullname" required>
+                    </div>
+                </div>
+
+                <div class="form-row two-column">
+                    <div class="form-field">
+                        <label for="sellerEmail">Email</label>
+                        <input type="email" id="sellerEmail" name="seller_email">
+                    </div>
+                    <div class="form-field">
+                        <label for="sellerPhone">Phone</label>
+                        <input type="text" id="sellerPhone" name="seller_phone">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field full-width">
+                        <label for="sellerSocial">Social Media Handle</label>
+                        <input type="text" id="sellerSocial" name="seller_social_media" placeholder="Ex: Elon Musk (FB)">
+                    </div>
+                </div>
+            </div>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label for="sellerEmail">Email</label>
-            <input type="email" id="sellerEmail" name="seller_email">
-          </div>
-          <div class="form-group">
-            <label for="sellerPhone">Phone</label>
-            <input type="text" id="sellerPhone" name="seller_phone">
-          </div>
-        </div>
+      <!-- Secret Key -->
+      <div class="section" id="seller-secret-key">
+        <h3>🔑 Seller Secret Key</h3>
+        
+        <div class="secret-key-content">
+            <div class="form-row two-column">
+                <div class="form-field">
+                    <label for="sellerSecretKey">Create Secret Key *</label>
+                    <input 
+                        type="password" 
+                        id="sellerSecretKey" 
+                        name="seller_secret_key" 
+                        placeholder="At least 8 characters" 
+                        required
+                    >
+                    <small>⚠️ Must include uppercase, lowercase, number, and special character</small>
+                </div>
 
-        <div class="form-group">
-          <label for="sellerSocial">Social Media Handle</label>
-          <input type="text" id="sellerSocial" name="seller_social_media" placeholder="@username">
-        </div>
-
-        <div class="form-group">
-          <label>Profile Picture</label>
-          <div class="file-input-wrapper">
-            <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
-            <label for="sellerProfilePic" class="file-input-label">📷 Choose Profile Picture</label>
-          </div>
-          <img id="sellerPreview" class="preview-image" alt="Preview">
-        </div>
-
-        <!-- 🔑 Secret Key Creation -->
-        <div class="form-group">
-          <label for="sellerSecretKey">Create Secret Key *</label>
-          <input 
-            type="password" 
-            id="sellerSecretKey" 
-            name="seller_secret_key" 
-            placeholder="At least 8 chars, upper, lower, number, special" 
-            required
-          >
-          <small class="hint">Must include uppercase, lowercase, number, and special character.</small>
-        </div>
-
-        <div class="form-group">
-          <label for="sellerSecretKeyConfirm">Confirm Secret Key *</label>
-          <input 
-            type="password" 
-            id="sellerSecretKeyConfirm" 
-            name="seller_secret_key_confirm" 
-            placeholder="Re-enter your secret key" 
-            required
-          >
+                <div class="form-field">
+                    <label for="sellerSecretKeyConfirm">Confirm Secret Key *</label>
+                    <input 
+                        type="password" 
+                        id="sellerSecretKeyConfirm" 
+                        name="seller_secret_key_confirm" 
+                        placeholder="Re-enter your secret key" 
+                        required
+                    >
+                    <small>Re-enter your secret key to confirm</small>
+                </div>
+            </div>
         </div>
       </div>
 
       <!-- Invoice Details -->
-      <div class="form-section">
-        <h2 class="section-title">📋 Invoice Details</h2>
+      <div class="section" id="invoice-info">
+        <h3>📋 Invoice Details</h3>
 
-        <div class="row">
-          <div class="form-group">
-            <label for="invoiceDate">Invoice Date *</label>
-            <input type="date" id="invoiceDate" name="invoice_date" required>
-          </div>
-          <div class="form-group">
-            <label for="dueDate">Due Date</label>
-            <input type="date" id="dueDate" name="due_date">
-          </div>
-        </div>
+        <div class="invoice-content">
+            <div class="form-row two-column">
+                <div class="form-field">
+                    <label for="invoiceDate">Invoice Date *</label>
+                    <input type="date" id="invoiceDate" name="invoice_date" required>
+                </div>
+                <div class="form-field">
+                    <label for="dueDate">Due Date</label>
+                    <input type="date" id="dueDate" name="due_date">
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="description">Description *</label>
-          <textarea id="description" name="description" required placeholder="Describe the product or service..."></textarea>
-        </div>
+            <div class="form-row">
+                <div class="form-field full-width">
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" required placeholder="Describe the product or service..." rows="4"></textarea>
+                </div>
+            </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label for="quantity">Quantity *</label>
-            <input type="number" id="quantity" name="quantity" min="1" required>
-          </div>
-          <div class="form-group">
-            <label for="unitPrice">Unit Price *</label>
-            <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
-          </div>
-        </div>
+            <div class="form-row two-column">
+                <div class="form-field">
+                    <label for="quantity">Quantity *</label>
+                    <input type="number" id="quantity" name="quantity" min="1" required>
+                </div>
+                <div class="form-field">
+                    <label for="unitPrice">Unit Price *</label>
+                    <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label>Line Total</label>
-          <div class="calculated" id="lineTotal">₱0.00</div>
-        </div>
+            <div class="form-row">
+                <div class="form-field full-width">
+                    <label>Line Total</label>
+                    <div class="calculated" id="lineTotal">₱0.00</div>
+                </div>
+            </div>
 
-        <div class="form-group">
-          <label for="paymentMethod">Payment Method *</label>
-          <select id="paymentMethod" name="payment_method" required>
-            <option value="">Select Payment Method</option>
-            <option value="cash">Cash</option>
-            <option value="gcash">GCash</option>
-            <option value="paypal">PayPal</option>
-            <option value="bank_transfer">Bank Transfer</option>
-            <option value="other">Other</option>
-          </select>
+            <div class="form-row">
+                <div class="form-field full-width">
+                    <label for="paymentMethod">Payment Method *</label>
+                    <select id="paymentMethod" name="payment_method" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="cash">Cash</option>
+                        <option value="gcash">GCash</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" id="submitBtn">
-        Create Invoice & Get Shareable Link
-      </button>
+      <!-- Submit Button -->
+      <div class="submit-section">
+        <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="icon">🔗</span>
+            <span class="text">Create Invoice & Get Shareable Link</span>
+        </button>
+      </div>
     </form>
 
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <p style="margin-top: 15px; color: #667eea;">Creating invoice...</p>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Creating your invoice...</p>
+        </div>
     </div>
   </div>
 
   <!-- Link external JS -->
   <script type="module" src="{% static 'js/seller_create.js' %}"></script>
+  <script>
+      // Profile image preview
+      document.getElementById('sellerProfilePic').addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          const preview = document.getElementById('sellerPreview');
+          const placeholder = document.getElementById('imagePlaceholder');
+
+          if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  preview.src = e.target.result;
+                  preview.style.display = 'block';
+                  placeholder.style.display = 'none';
+              };
+              reader.readAsDataURL(file);
+          } else {
+              preview.src = '';
+              preview.style.display = 'none';
+              placeholder.style.display = 'flex';
+          }
+      });
+
+      // Calculate line total
+      function calculateTotal() {
+          const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+          const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
+          const total = quantity * unitPrice;
+          document.getElementById('lineTotal').textContent = '₱' + total.toFixed(2);
+      }
+
+      document.getElementById('quantity').addEventListener('input', calculateTotal);
+      document.getElementById('unitPrice').addEventListener('input', calculateTotal);
+
+      // Form submission
+      document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Show loading
+          document.getElementById('loading').style.display = 'flex';
+          
+          // Your form submission logic here
+          // After success, hide loading: document.getElementById('loading').style.display = 'none';
+      });
+  </script>
 </body>
 
 </html>
