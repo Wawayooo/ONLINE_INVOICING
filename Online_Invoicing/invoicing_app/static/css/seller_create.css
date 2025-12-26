@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -8,158 +9,502 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
+/* ==================== CONTAINER ==================== */
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 40px;
+  padding: 50px;
+  animation: fadeInUp 0.6s ease-out;
+  position: relative;
 }
 
-h1 {
-  color: #333;
-  margin-bottom: 10px;
-  font-size: 32px;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container h1 {
+  text-align: center;
+  color: #667eea;
+  font-size: 42px;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
 }
 
 .subtitle {
+  text-align: center;
   color: #666;
-  margin-bottom: 30px;
-}
-
-.form-section {
-  margin-bottom: 30px;
-}
-
-.section-title {
-  color: #667eea;
-  font-size: 20px;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  color: #555;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="date"],
-input[type="number"],
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
   font-size: 16px;
-  transition: border-color 0.3s;
+  margin-bottom: 40px;
+  font-style: italic;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #667eea;
+/* ==================== SECTION STYLES ==================== */
+.section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+  animation: slideIn 0.5s ease-out;
+  transition: all 0.4s ease;
 }
 
-textarea {
-  min-height: 100px;
-  resize: vertical;
+.section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Section Headers */
+.section h3 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: 0;
+  padding: 25px 35px;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+}
+
+/* Decorative corner elements */
+.section::before,
+.section::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 3px solid #667eea;
+  z-index: 1;
+}
+
+.section::before {
+  top: 80px;
+  left: 25px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+}
+
+.section::after {
+  bottom: 25px;
+  right: 25px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 8px;
+}
+
+/* ==================== SELLER INFO SECTION ==================== */
+.seller-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Profile Section (Left) */
+.seller-profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-upload-area label:first-child {
+  display: block;
+  color: #1a1a2e;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .file-input-wrapper {
   position: relative;
-  overflow: hidden;
-  display: inline-block;
-  width: 100%;
 }
 
 .file-input-wrapper input[type="file"] {
   position: absolute;
-  left: -9999px;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .file-input-label {
-  display: block;
-  padding: 12px;
-  background: #f5f5f5;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .file-input-label:hover {
-  background: #e8e8e8;
-  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.file-input-label .icon {
+  font-size: 20px;
+}
+
+/* Profile Preview */
+.profile-preview-area {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 3px solid white;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.profile-preview-area::before {
+  content: 'SELLER';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: 4px solid white;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  z-index: 3;
+  transform: rotate(-15deg);
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 5px solid white;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s ease;
+}
+
+.preview-image:hover {
+  transform: scale(1.03);
+}
+
+.no-image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: white;
+  opacity: 0.7;
+}
+
+.no-image-placeholder span {
+  font-size: 64px;
+}
+
+.no-image-placeholder p {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Seller Details Section (Right) */
+.seller-details-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: 20px;
 }
 
-.btn {
-  padding: 15px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
+/* ==================== FORM ELEMENTS ==================== */
+.form-row {
+  display: grid;
+  gap: 20px;
 }
 
-.btn-primary {
+.form-row.two-column {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-field label {
+  display: block;
+  color: #1a1a2e;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+  font-family: inherit;
+  color: #333;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field small {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Calculated Field */
+.calculated {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+  border: 2px solid #667eea;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+}
+
+/* ==================== SECRET KEY SECTION ==================== */
+#seller-secret-key {
+  border: 3px solid #b71c1c;
+}
+
+#seller-secret-key h3 {
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+}
+
+#seller-secret-key::before,
+#seller-secret-key::after {
+  border-color: #b71c1c;
+  animation: securityPulse 2s ease-in-out infinite;
+}
+
+@keyframes securityPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    border-width: 3px;
+  }
+
+  50% {
+    opacity: 0.6;
+    border-width: 5px;
+  }
+}
+
+.secret-key-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.secret-key-content::before {
+  content: '🔐';
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 48px;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.secret-key-content input:focus {
+  border-color: #b71c1c;
+  box-shadow: 0 0 0 4px rgba(183, 28, 28, 0.1);
+}
+
+/* ==================== INVOICE INFO SECTION ==================== */
+.invoice-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==================== SUBMIT SECTION ==================== */
+.submit-section {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.btn-submit {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  width: 100%;
-  margin-top: 20px;
+  border: none;
+  padding: 20px 60px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-primary:hover {
+.btn-submit .icon {
+  font-size: 24px;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-submit:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 50px rgba(102, 126, 234, 0.5);
+}
+
+.btn-submit:hover::before {
+  width: 500px;
+  height: 500px;
+}
+
+.btn-submit:active {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+/* ==================== LOADING OVERLAY ==================== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
 }
 
-.loading {
-  display: none;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-content {
   text-align: center;
-  margin-top: 20px;
-}
-
-.loading.active {
-  display: block;
+  color: white;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #667eea;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
   animation: spin 1s linear infinite;
-  margin: 0 auto;
+  margin: 0 auto 20px;
 }
 
 @keyframes spin {
@@ -172,86 +517,135 @@ textarea {
   }
 }
 
-.preview-image {
-  max-width: 150px;
-  max-height: 150px;
-  margin-top: 10px;
-  border-radius: 8px;
-  display: none;
+.loading-content p {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
-.preview-image.active {
-  display: block;
-}
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1024px) {
+  .seller-content {
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+    padding: 35px;
+  }
 
-.calculated {
-  font-size: 24px;
-  color: #667eea;
-  font-weight: bold;
-  margin-top: 10px;
+  .profile-preview-area {
+    min-height: 300px;
+  }
 }
-
-/* Secret Key Field Styling */
-.form-group input[type="password"] {
-  width: 100%;
-  padding: 10px 12px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Focus state */
-.form-group input[type="password"]:focus {
-  border-color: #667eea;
-  /* Indigo accent */
-  box-shadow: 0 0 6px rgba(102, 126, 234, 0.4);
-  outline: none;
-}
-
-/* Hint text */
-.form-group .hint {
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 4px;
-  display: block;
-}
-
-/* Validation states */
-input.password-weak {
-  border-color: #e53935;
-  /* Red */
-  background-color: #ffebee;
-}
-
-input.password-strong {
-  border-color: #43a047;
-  /* Green */
-  background-color: #e8f5e9;
-}
-
-/* Confirm field mismatch */
-input.password-mismatch {
-  border-color: #f57c00;
-  /* Orange */
-  background-color: #fff3e0;
-}
-
-/* Labels */
-.form-group label {
-  font-weight: bold;
-  margin-bottom: 6px;
-  display: block;
-  color: #333;
-}
-
 
 @media (max-width: 768px) {
-  .row {
-    grid-template-columns: 1fr;
+  body {
+    padding: 20px 10px;
   }
 
   .container {
-    padding: 20px;
+    padding: 30px 20px;
+  }
+
+  .container h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .section h3 {
+    font-size: 18px;
+    padding: 20px 25px;
+  }
+
+  .section::before,
+  .section::after {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section::before {
+    top: 70px;
+    left: 15px;
+  }
+
+  .section::after {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .seller-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 25px 20px;
+  }
+
+  .profile-preview-area {
+    min-height: 280px;
+  }
+
+  .secret-key-content,
+  .invoice-content {
+    padding: 25px 20px;
+  }
+
+  .form-row.two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-submit {
+    width: 100%;
+    font-size: 16px;
+    padding: 18px 40px;
+  }
+
+  .secret-key-content::before {
+    font-size: 36px;
+    top: 15px;
+    right: 20px;
+  }
+
+  .calculated {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .section h3 {
+    font-size: 16px;
+    padding: 15px 20px;
+    letter-spacing: 1px;
+  }
+
+  .seller-content,
+  .secret-key-content,
+  .invoice-content {
+    padding: 20px 15px;
+  }
+
+  .profile-preview-area {
+    min-height: 250px;
+    width: 100%;
+  }
+
+  .file-input-label {
+    padding: 12px 18px;
+    font-size: 8px;
+  }
+
+  .btn-submit {
+    font-size: 14px;
+    letter-spacing: 1px;
   }
 }
