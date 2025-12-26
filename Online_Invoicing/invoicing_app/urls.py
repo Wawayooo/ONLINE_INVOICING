@@ -1,10 +1,14 @@
 from django.urls import path
-from . import views
+from . import views, multiple_invoice_views
 
 urlpatterns = [
     #primary pages
     path('', views.landing_page, name='landing'),
     path('seller/create/', views.seller_create_page, name='seller_create'),
+    
+    # Multiple Invoice
+    path("invoice/create/", multiple_invoice_views.create_multiple_invoice, name="create_multiple_invoice"),
+    path('api/seller/<str:room_hash>/update-invoice/', multiple_invoice_views.seller_update_invoice, name='seller_update_invoice'),
     
     # Seller endpoints
     path('seller_room/<str:room_hash>/', views.seller_room_view, name='seller_room'),
@@ -13,7 +17,11 @@ urlpatterns = [
     path('api/invoice/create/', views.create_invoice, name='create_invoice'),
     path('api/room/<str:room_hash>/', views.get_room, name='get_room'),
     path('api/room/<str:room_hash>/start-negotiation/', views.seller_start_negotiation, name='start_negotiation'),
+    
     path('api/seller/<str:room_hash>/edit-invoice/', views.seller_edit_invoice, name='seller_edit_invoice'),
+    path('api/seller/<str:room_hash>/edit-single-invoice/', views.seller_edit_single_invoice, name='seller_edit_single_invoice'),
+
+    
     path('api/seller/<str:room_hash>/confirm-payment/', views.seller_confirm_payment, name='seller_confirm_payment'),
     
     # Buyer join page
@@ -44,3 +52,4 @@ urlpatterns = [
     path('alldata/', views.all_data_view, name='all_data'),
     path('alldata/delete/<uuid:room_id>/', views.delete_room, name='delete_room'),
 ]
+
