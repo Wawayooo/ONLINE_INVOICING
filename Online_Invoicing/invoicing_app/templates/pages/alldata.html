@@ -10,96 +10,130 @@
 <body>
   <div class="container">
     <h1>📊 All Data</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Room Hash</th>
-          <th>Seller</th>
-          <th>Buyer</th>
-          <th>Buyer Hash</th>
-          <th>Invoice Status</th>
-          <th>Description</th>
-          <th>Quantity</th>
-          <th>Unit Price</th>
-          <th>Line Total</th>
-          <th>Payment Method</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for room in rooms %}
-        <tr>
-          <!-- Room Hash -->
-          <td>{{ room.room_hash }}</td>
-          <td>{{ room.seller_hash }}</td>
-          <!-- Seller Info -->
-          <td>
-            {% if room.seller %}
-              {{ room.seller.fullname }}<br>
-              {{ room.seller.email|default:"-" }}<br>
-              {{ room.seller.phone|default:"-" }}<br>
-              {{ room.seller.social_media|default:"-" }}
-              {{room.seller.secret_key}}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
-          
-          <!-- Buyer Info -->
-          <td>
-            {% if room.buyer %}
-              {{ room.buyer.fullname }}<br>
-              {{ room.buyer.email|default:"-" }}<br>
-              {{ room.buyer.phone|default:"-" }}<br>
-              {{ room.buyer.social_media|default:"-" }}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
 
-          <!-- Buyer Hash -->
-          <td>
-            {% if room.buyer %}
-              {{ room.buyer.buyer_hash }}
-            {% else %}
-              N/A
-            {% endif %}
-          </td>
-          
-          <!-- Invoice Info -->
-          {% if room.invoice %}
-            <td>{{ room.invoice.status|title }}</td>
-            <td>{{ room.invoice.description }}</td>
-            <td>{{ room.invoice.quantity }}</td>
-            <td>₱{{ room.invoice.unit_price|floatformat:2 }}</td>
-            <td>₱{{ room.invoice.line_total|floatformat:2 }}</td>
-            <td>{{ room.invoice.payment_method }}</td>
-          {% else %}
-            <td colspan="6" style="text-align:center;">No invoice data</td>
-          {% endif %}
-          
-          <!-- Actions -->
-          <td>
-            {% if room.buyer %}
-              <a href="{% url 'buyer_invoice_room' room.room_hash room.buyer.buyer_hash %}" class="btn-view">View</a>
-            {% else %}
-              <span class="btn-disabled">No Buyer</span>
-            {% endif %}
-            <form method="POST" action="{% url 'delete_room' room.id %}" 
-                  onsubmit="return confirm('Are you sure you want to delete this room?');" 
-                  style="display:inline;">
-              {% csrf_token %}
-              <button type="submit" class="btn-delete">Delete</button>
-            </form>
-          </td>
-        </tr>
+    {% for room in rooms %}
+    <div class="room-card">
+      <h2>Room {{ room.room_hash }}</h2>
+      <p><strong>Seller Hash:</strong> {{ room.seller_hash }}</p>
+      <p><strong>Verification Key:</strong> {{ room.verification_key }}</p>
+      <p><strong>Created At:</strong> {{ room.created_at }}</p>
+      <p><strong>Updated At:</strong> {{ room.updated_at }}</p>
+
+      <!-- Seller Info -->
+      <h3>Seller Information</h3>
+      {% if room.seller %}
+        <p><strong>Name:</strong> {{ room.seller.fullname }}</p>
+        <p><strong>Email:</strong> {{ room.seller.email|default:"-" }}</p>
+        <p><strong>Phone:</strong> {{ room.seller.phone|default:"-" }}</p>
+        <p><strong>Social Media:</strong> {{ room.seller.social_media|default:"-" }}</p>
+        <p><strong>Secret Key (hashed):</strong> {{ room.seller.secret_key }}</p>
+        <p><strong>Created At:</strong> {{ room.seller.created_at }}</p>
+        {% if room.seller.profile_picture %}
+          <img src="{{ room.seller.profile_picture.url }}" alt="Seller Profile" class="profile-img">
+        {% endif %}
+      {% else %}
+        <p>N/A</p>
+      {% endif %}
+
+      <!-- Buyer Info -->
+      <h3>Buyer Information</h3>
+      {% if room.buyer %}
+        <p><strong>Name:</strong> {{ room.buyer.fullname }}</p>
+        <p><strong>Email:</strong> {{ room.buyer.email|default:"-" }}</p>
+        <p><strong>Phone:</strong> {{ room.buyer.phone|default:"-" }}</p>
+        <p><strong>Social Media:</strong> {{ room.buyer.social_media|default:"-" }}</p>
+        <p><strong>Buyer Hash:</strong> {{ room.buyer.buyer_hash }}</p>
+        <p><strong>Created At:</strong> {{ room.buyer.created_at }}</p>
+        {% if room.buyer.profile_picture %}
+          <img src="{{ room.buyer.profile_picture.url }}" alt="Buyer Profile" class="profile-img">
+        {% endif %}
+      {% else %}
+        <p>N/A</p>
+      {% endif %}
+
+      <!-- Invoice Info -->
+      <h3>Invoice Information</h3>
+      {% if room.invoice %}
+        <p><strong>Status:</strong> {{ room.invoice.status|title }}</p>
+        <p><strong>Description:</strong> {{ room.invoice.description }}</p>
+        <p><strong>Quantity:</strong> {{ room.invoice.quantity }}</p>
+        <p><strong>Unit Price:</strong> ₱{{ room.invoice.unit_price|floatformat:2 }}</p>
+        <p><strong>Line Total:</strong> ₱{{ room.invoice.line_total|floatformat:2 }}</p>
+        <p><strong>Payment Method:</strong> {{ room.invoice.payment_method }}</p>
+        <p><strong>Buyer Approved At:</strong> {{ room.invoice.buyer_approved_at }}</p>
+        <p><strong>Buyer Paid At:</strong> {{ room.invoice.buyer_paid_at }}</p>
+        <p><strong>Seller Confirmed At:</strong> {{ room.invoice.seller_confirmed_at }}</p>
+        <p><strong>Created At:</strong> {{ room.invoice.created_at }}</p>
+        <p><strong>Updated At:</strong> {{ room.invoice.updated_at }}</p>
+
+        <!-- Invoice Items -->
+        <h4>Invoice Items</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Description</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Line Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in room.invoice.items.all %}
+            <tr>
+              <td>{{ item.product_name }}</td>
+              <td>{{ item.description|default:"-" }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>₱{{ item.unit_price|floatformat:2 }}</td>
+              <td>₱{{ item.line_total|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No items</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No invoice data</p>
+      {% endif %}
+
+      <!-- Negotiation History -->
+      <h3>Negotiation History</h3>
+      <ul>
+        {% for history in room.history.all %}
+          <li>{{ history.actor }} - {{ history.action }} ({{ history.created_at }}) Notes: {{ history.notes|default:"-" }}</li>
         {% empty %}
-        <tr>
-          <td colspan="11" style="text-align:center;">🚫 No rooms or invoices available.</td>
-        </tr>
+          <li>No negotiation history</li>
         {% endfor %}
-      </tbody>
-    </table>
+      </ul>
+
+      <!-- Multi-Item Negotiation History -->
+      <h3>Multi-Item Negotiation History</h3>
+      <ul>
+        {% for history in room.multi_item_history.all %}
+          <li>{{ history.actor }} - {{ history.action }} ({{ history.created_at }}) Notes: {{ history.notes|default:"-" }}</li>
+        {% empty %}
+          <li>No multi-item negotiation history</li>
+        {% endfor %}
+      </ul>
+
+      <!-- Actions -->
+      <div class="actions">
+        {% if room.buyer %}
+          <a href="{% url 'buyer_invoice_room' room.room_hash room.buyer.buyer_hash %}" class="btn-view">View Buyer Room</a>
+        {% else %}
+          <span class="btn-disabled">No Buyer</span>
+        {% endif %}
+        <form method="POST" action="{% url 'delete_room' room.id %}" 
+              onsubmit="return confirm('Are you sure you want to delete this room?');" 
+              style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn-delete">Delete Room</button>
+        </form>
+      </div>
+    </div>
+    {% empty %}
+    <p style="text-align:center;">🚫 No rooms or invoices available.</p>
+    {% endfor %}
   </div>
 </body>
 </html>

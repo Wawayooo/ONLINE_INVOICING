@@ -104,55 +104,72 @@
       </div>
 
       <!-- Invoice Information Landscape Preview-->
+      <!-- Invoice Information Landscape Preview-->
       <div class="invoice-card">
-      <div class="Invoice_Header"><h2>Invoice Details</h2></div>
-      <div class="Invoice_Notes">
-        <p><strong>Invoice Date:</strong> {{ invoice.invoice_date }}</p>
-        <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
-        <p><strong>Status:</strong> {{ invoice.status }}</p>
+        <div class="Invoice_Header"><h2>Invoice Details</h2></div>
+        <div class="Invoice_Notes">
+          <p><strong>Invoice Date:</strong> {{ invoice.invoice_date }}</p>
+          <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
+          <p><strong>Status:</strong> {{ invoice.status }}</p>
+        </div>
+
+        <!-- Items -->
+        <div class="Invoice_Items">
+          <h3 style="color: green;">SUCCESSFUL TRANSACTION</h3>
+
+          {% if invoice.items.count > 0 %}
+            <!-- Multi-item table -->
+            <table class="invoice-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Line Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in invoice.items.all %}
+                <tr>
+                  <td>{{ item.product_name }}</td>
+                  <td>{{ item.description|default:"-" }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>₱{{ item.unit_price|floatformat:2 }}</td>
+                  <td>₱{{ item.line_total|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          <!-- Grand Total -->
+          <div class="Invoice_Total">
+            <p><strong>Grand Total:</strong> ₱{{ invoice.total_amount }}</p>
+          </div>
+          {% else %}
+            <!-- Single-item invoice block -->
+            <div class="single-item-card">
+              <h3>Item</h3>
+              <div class="single-item-row">
+                <span class="label">Product:</span>
+                <span class="value">{{ invoice.description }}</span>
+              </div>
+              <div class="single-item-row">
+                <span class="label">Quantity:</span>
+                <span class="value">{{ invoice.quantity }}</span>
+              </div>
+              <div class="single-item-row">
+                <span class="label">Unit Price:</span>
+                <span class="value">₱{{ invoice.unit_price|floatformat:2 }}</span>
+              </div>
+              <div class="single-item-row total">
+                <span class="label">Line Total:</span>
+                <span class="value" id="inv_line_total">₱{{ invoice.line_total|floatformat:2 }}</span>
+              </div>
+            </div>
+          {% endif %}
+        </div>
       </div>
 
-      <!-- Items Table -->
-      <div class="Invoice_Items">
-        <h3>Items</h3>
-        <table class="invoice-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Description</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Line Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if invoice.items.count > 0 %}
-              {% for item in invoice.items.all %}
-              <tr>
-                <td>{{ item.product_name }}</td>
-                <td>{{ item.description|default:"-" }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>₱{{ item.unit_price|floatformat:2 }}</td>
-                <td>₱{{ item.line_total|floatformat:2 }}</td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr>
-                <td>{{ invoice.description }}</td>
-                <td>-</td>
-                <td>{{ invoice.quantity }}</td>
-                <td>₱{{ invoice.unit_price|floatformat:2 }}</td>
-                <td>₱{{ invoice.line_total|floatformat:2 }}</td>
-              </tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Grand Total -->
-      <div class="Invoice_Total">
-        <p><strong>Grand Total:</strong> ₱{{ invoice.total_amount }}</p>
-      </div>
     </div>
 
     </div>
