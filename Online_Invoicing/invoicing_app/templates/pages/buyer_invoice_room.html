@@ -16,6 +16,19 @@
     <div class="spinner"></div>
     <p>Updating invoice, please wait...</p>
   </div>
+
+  <div id="draftModal" class="modal" style="justify-content: center; align-items: center;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeDraftNotification()">&times;</span>
+      <div class="modal-body">
+        <h2>📄 Draft Invoice</h2>
+        <p>You can now <strong>Approve</strong> or <strong>Disapprove</strong> the invoice.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" onclick="closeDraftNotification()" style="padding: 5px 13px;">OK</button>
+      </div>
+    </div>
+  </div>
   
   <div class="container">
     <div id="notification" class="notification" style="display:none;"></div>
