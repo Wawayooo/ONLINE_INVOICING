@@ -9,6 +9,8 @@
   overflow: hidden;
   border: 3px solid transparent;
   background-clip: padding-box;
+  height: 200px;
+  filter: drop-shadow(2px 4px 6px #667eea);
 }
 
 /* Animated border effect */
@@ -355,7 +357,9 @@
 
   .body_type {
     padding: 14px 15px;
-    height: 178px;
+    height: 155px;
+    position: relative;
+    top: 18px;
   }
 
   .typing-container::before,
