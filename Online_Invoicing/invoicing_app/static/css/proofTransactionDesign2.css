@@ -387,7 +387,7 @@ h1 {
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 20px;
+    padding: 0px;
   }
 
   .qr-info-box {
@@ -472,10 +472,13 @@ h1 {
   h1 {
     text-align: center;
     color: #667eea;
-    font-size: 22px;
-    margin-bottom: 30px;
+    font-size: 26px;
+    margin-bottom: 18px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     font-family: emoji;
+    position: relative;
+    top: 33px;
+    z-index: 1000;
   }
 
   .qr-section {
@@ -486,8 +489,8 @@ h1 {
   }
 
   .room-info {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 25px;
+    background: linear-gradient(197deg, #fbfdff 0%, #c3cfe2 100%);
+    padding: 10px;
     border-radius: 15px;
     margin-bottom: 30px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
