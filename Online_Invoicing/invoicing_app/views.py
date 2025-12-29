@@ -255,48 +255,56 @@ logger = logging.getLogger(__name__)
 @require_http_methods(["POST"])
 def seller_authenticate_view(request):
     raw_secret_key = request.POST.get("secret_key")
-    
     if not raw_secret_key:
-        return JsonResponse({
-            "success": False, 
-            "error": "Secret key is required"
-        }, status=400)
+        return JsonResponse({"success": False, "error": "Secret key is required"}, status=400)
 
     try:
         from .models import Seller
-        
-        # Get all sellers with their rooms
-        sellers = Seller.objects.select_related('room').exclude(secret_key__isnull=True)
-        
-        # Check each seller's hashed key
+        sellers = Seller.objects.exclude(secret_key__isnull=True)
+
         for seller in sellers:
             if check_password(raw_secret_key, seller.secret_key):
-                room = seller.room
-                
-                # Store seller info in session for later use
+                # Store seller ID only
                 request.session['authenticated_seller_id'] = seller.id
-                request.session['authenticated_room_hash'] = room.room_hash
-                
-                logger.info(f"✓ Authentication successful: {seller.fullname}")
-                
+                logger.info(f"✓ Secret key authenticated: {seller.fullname}")
+
                 return JsonResponse({
                     "success": True,
-                    "redirect_url": f"/seller_room/{room.room_hash}/"
+                    "next_step": "room_hash_required"
                 })
-        
-        # No match found
+
         logger.warning("✗ Invalid secret key attempt")
-        return JsonResponse({
-            "success": False, 
-            "error": "Invalid secret key"
-        }, status=401)
-            
+        return JsonResponse({"success": False, "error": "Invalid secret key"}, status=401)
+
     except Exception as e:
         logger.exception(f"Authentication error: {str(e)}")
-        return JsonResponse({
-            "success": False, 
-            "error": "Server error occurred"
-        }, status=500)
+        return JsonResponse({"success": False, "error": "Server error occurred"}, status=500)
+    
+@require_http_methods(["POST"])
+def seller_room_authenticate_view(request):
+    room_hash = request.POST.get("room_hash")
+    seller_id = request.session.get("authenticated_seller_id")
+
+    if not seller_id:
+        return JsonResponse({"success": False, "error": "No seller authenticated"}, status=403)
+    if not room_hash:
+        return JsonResponse({"success": False, "error": "Room hash is required"}, status=400)
+
+    try:
+        from .models import Seller
+        seller = Seller.objects.select_related('room').filter(id=seller_id, room__room_hash=room_hash).first()
+
+        if seller:
+            request.session['authenticated_room_hash'] = room_hash
+            logger.info(f"✓ Room hash verified for seller: {seller.fullname}")
+            return JsonResponse({"success": True, "redirect_url": f"/seller_room/{room_hash}/"})
+
+        logger.warning("✗ Invalid room hash attempt")
+        return JsonResponse({"success": False, "error": "Invalid room hash"}, status=401)
+
+    except Exception as e:
+        logger.exception(f"Room authentication error: {str(e)}")
+        return JsonResponse({"success": False, "error": "Server error occurred"}, status=500)
 
 @api_view(['POST'])
 def buyer_approve_invoice(request, room_hash):
