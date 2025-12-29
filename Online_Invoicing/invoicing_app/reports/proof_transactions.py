@@ -125,7 +125,8 @@ def build_proof_transaction_pdf(response, data, request=None):
         label_value(c, "Description", invoice.get("description", ""), margin_x, y); y -= 14
         label_value(c, "Quantity", invoice.get("quantity", ""), margin_x, y); y -= 14
         label_value(c, "Unit Price", format_amount(invoice.get("unit_price")), margin_x, y); y -= 14
-        label_value(c, "Total Amount", format_amount(invoice.get("line_total")), margin_x, y); y -= 14
+        total = invoice.get("quantity", 0) * invoice.get("unit_price", 0)
+        label_value(c, "Total Amount", format_amount(total), margin_x, y); y -= 14
 
     # ================= QR =================
     if "room_hash" in data:
