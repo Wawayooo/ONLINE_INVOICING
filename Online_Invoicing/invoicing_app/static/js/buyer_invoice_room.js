@@ -111,30 +111,59 @@ function handleInvoiceStatus(invoice) {
   const statusLabel = document.getElementById('invoiceActionStatus');
 
   // Reset
-  [approveBtn, disapproveBtn, markPaidForm, statusLabel].forEach(el => el.style.display = 'none');
+  [approveBtn, disapproveBtn, markPaidForm, statusLabel].forEach(el => {
+    if (el) el.style.display = 'none';
+  });
 
   switch (invoice.status) {
     case 'draft':
-      approveBtn.style.display = 'inline-block';
-      disapproveBtn.style.display = 'inline-block';
+      if (approveBtn) approveBtn.style.display = 'inline-block';
+      if (disapproveBtn) disapproveBtn.style.display = 'inline-block';
+
+      // 🚨 Notify user
+      showDraftNotification();
       break;
+
     case 'negotiating':
-      statusLabel.textContent = 'DISAPPROVED';
-      statusLabel.className = 'disapproved-label';
-      statusLabel.style.display = 'block';
+      if (statusLabel) {
+        statusLabel.textContent = 'DISAPPROVED';
+        statusLabel.className = 'disapproved-label';
+        statusLabel.style.display = 'block';
+      }
       break;
+
     case 'pending':
-      statusLabel.textContent = 'APPROVED';
-      statusLabel.className = 'approved-label';
-      statusLabel.style.display = 'block';
-      paymentField.value = invoice.payment_method;
-      markPaidForm.style.display = 'block';
+      if (statusLabel) {
+        statusLabel.textContent = 'APPROVED';
+        statusLabel.className = 'approved-label';
+        statusLabel.style.display = 'block';
+      }
+      if (paymentField) paymentField.value = invoice.payment_method;
+      if (markPaidForm) markPaidForm.style.display = 'block';
       break;
+
     case 'unconfirmed_payment':
-      statusLabel.textContent = 'PAID (Awaiting Seller Confirmation)';
-      statusLabel.className = 'paid-label';
-      statusLabel.style.display = 'block';
+      if (statusLabel) {
+        statusLabel.textContent = 'PAID (Awaiting Seller Confirmation)';
+        statusLabel.className = 'paid-label';
+        statusLabel.style.display = 'block';
+      }
       break;
+  }
+}
+
+// Helper function for draft notification
+function showDraftNotification() {
+  const modal = document.getElementById('draftModal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function closeDraftNotification() {
+  const modal = document.getElementById('draftModal');
+  if (modal) {
+    modal.style.display = 'none';
   }
 }
 
