@@ -136,7 +136,6 @@ async function submitInvoiceForm(formElement) {
   }
 }
 
-
 function toggleSellerFormEditable(invoiceStatus) {
   const notice = document.getElementById('formLockNotice');
   const updateBtn = document.getElementById('updateInvoiceBtn');
@@ -175,6 +174,27 @@ function toggleSellerFormEditable(invoiceStatus) {
   const invoiceForm = document.getElementById('invoiceForm');
   if (sellerForm) lockForm(sellerForm, editable);
   if (invoiceForm) lockForm(invoiceForm, editable);
+
+  // 🚨 Show modal notification if status is negotiating
+  if (invoiceStatus === 'negotiating') {
+    showNegotiationModal();
+  }
+}
+
+// Helper function to show modal
+function showNegotiationModal() {
+  const modal = document.getElementById('negotiationModal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+
+function closeNegotiationModal() {
+  const modal = document.getElementById('negotiationModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
 }
 
 /**
