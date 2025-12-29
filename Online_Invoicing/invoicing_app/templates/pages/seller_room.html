@@ -135,6 +135,16 @@
       <p>Updating invoice, please wait...</p>
     </div>
 
+    <!-- Modal Structure -->
+    <div id="negotiationModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeNegotiationModal()">&times;</span>
+        <h2>💬 Negotiation Started</h2>
+        <p>The invoice is now in <strong>negotiation status</strong>. You can update the details freely.</p>
+        <button class="primary-btn" onclick="closeNegotiationModal()">Got it</button>
+      </div>
+    </div>
+
     <!-- Loading Modal -->
     <div id="loadingModal" class="loading-modal" style="display:none;">
       <div class="loading-content">
@@ -145,7 +155,7 @@
     </div>
 
     <!-- Buyer Paid Info -->
-    <div id="buyerPaidInfo" style="display:none; margin-top:2rem; padding:1rem; border:2px solid #b71c1c; border-radius:8px; background:#fff3f3;">
+    <div id="buyerPaidInfo" style="display:none;">
         <h2 style="color:white; font-family: monospace;">INVOICE STATUS: BUYER ALREADY PAID</h2>
         <div class="Buyer_ID">
           <div id="buyerDetails">
