@@ -13,6 +13,8 @@ urlpatterns = [
     # Seller endpoints
     path('seller_room/<str:room_hash>/', views.seller_room_view, name='seller_room'),
     path("seller_authenticate/", views.seller_authenticate_view, name="seller_authenticate"),
+
+    path("seller_room_authenticate/", views.seller_room_authenticate_view, name="seller_room_authenticate"),
     
     path('api/invoice/create/', views.create_invoice, name='create_invoice'),
     path('api/room/<str:room_hash>/', views.get_room, name='get_room'),
