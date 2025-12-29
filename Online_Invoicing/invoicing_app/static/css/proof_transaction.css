@@ -861,9 +861,188 @@ h1 {
   }
 }
 
+/* Single-item card */
+.single-item-card {
+  border: 1px solid #e6e9ef;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(180deg, #fafbff, #ffffff);
+  margin-top: 1rem;
+  box-shadow: 0 6px 14px rgba(20, 20, 40, 0.06);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.single-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(20, 20, 40, 0.08);
+}
+
+.single-item-card h3 {
+  margin-bottom: 0.8rem;
+  font-size: 2.5rem;
+  color: #667eea;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+  padding-bottom: 0.4rem;
+}
+
+/* Rows inside single-item */
+.single-item-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.single-item-row .label {
+  font-weight: 600;
+  color: #334155;
+  font-size: 26px;
+  font-family: math;
+}
+
+.single-item-row .value {
+  color: #1f2937;
+  font-size: 23px;
+  font-family: cursive;
+}
+
+/* Highlight total row */
+.single-item-row.total {
+  background: #9bfbb5;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  font-weight: 700;
+}
+
 
 /* ==================== RESPONSIVE DESIGN ==================== */
 /* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 768px) {
+
+  /* General container adjustments */
+  .proof-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.8rem;
+  }
+
+  /* Seller and Buyer cards stack vertically */
+  .seller-card,
+  .buyer-card,
+  .invoice-card {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(20, 20, 40, 0.06);
+  }
+
+  /* Info sections inside cards */
+  .seller-Info,
+  .Buyer_Info,
+  .Invoice_Notes {
+    margin-bottom: 0.8rem;
+  }
+
+  /* Images centered and smaller */
+  .Seller_Img,
+  .Buyer_Img {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.6rem;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Invoice table becomes scrollable */
+  .Invoice_Items {
+    overflow-x: auto;
+  }
+
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  /* Single-item card adjustments */
+  .single-item-card {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .single-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .single-item-row .label {
+    margin-bottom: 0.2rem;
+    font-size: 10px;
+  }
+
+  .single-item-row .value {
+    font-size: 12px;
+  }
+
+  .single-item-row.total {
+    text-align: left;
+    padding: 0.5rem;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .single-item-card h3 {
+    font-size: 18px;
+  }
+
+  /* Grand total highlight */
+  .Invoice_Total {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 0.8rem;
+    padding: 0.6rem;
+    background: linear-gradient(90deg, #8aeead, #6dd1ac);
+    border-radius: 8px;
+  }
+
+  .Invoice_Total strong {
+    color: #005a17;
+    font-size: 10px;
+    position: relative;
+    right: 18px;
+    bottom: 6px;
+  }
+
+  .Invoice_Total p {
+    color: black;
+  }
+
+  #inv_line_total {
+    position: relative;
+    color: #00651d;
+    font-size: 15px;
+  }
+}
+
 
 /* Tablet and small desktop screens */
 @media (max-width: 1024px) {
@@ -1013,7 +1192,9 @@ h1 {
 
   .btn-primary {
     padding: 15px 35px;
-    font-size: 8px;
+    font-size: 18px;
     filter: drop-shadow(2px 4px 6px black);
+    width: 100%;
+    border-radius: 10px;
   }
 }
