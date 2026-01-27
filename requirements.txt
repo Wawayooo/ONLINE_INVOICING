@@ -1,8 +1,23 @@
+# Core Django framework
 django==4.2.5
+
+# Django REST Framework for APIs
 djangorestframework==3.14.0
+
+# PostgreSQL adapter (binary build works well on PythonAnywhere)
 psycopg2-binary==2.9.6
+
+# Production WSGI server
 gunicorn==20.1.0
+
+# CORS headers middleware for cross-domain requests
 django-cors-headers==4.3.0
+
+# Environment variable management
 python-dotenv==1.0.0
+
+# Image processing
 Pillow==10.0.0
-reportlab-4.4.9
+
+# PDF generation
+reportlab==4.4.9
