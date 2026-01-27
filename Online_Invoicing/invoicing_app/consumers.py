@@ -8,15 +8,13 @@ class NegotiationConsumer(AsyncWebsocketConsumer):
         self.room_hash = self.scope['url_route']['kwargs']['room_hash']
         self.room_group_name = f'negotiation_{self.room_hash}'
 
-        # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
         await self.accept()
-
-        # Send current room state
+        
         room_data = await self.get_room_data()
         await self.send(text_data=json.dumps({
             'type': 'room_state',
@@ -24,7 +22,6 @@ class NegotiationConsumer(AsyncWebsocketConsumer):
         }))
 
     async def disconnect(self, close_code):
-        # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -34,7 +31,6 @@ class NegotiationConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         message_type = data.get('type')
 
-        # Broadcast to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -44,7 +40,6 @@ class NegotiationConsumer(AsyncWebsocketConsumer):
         )
 
     async def negotiation_update(self, event):
-        # Send message to WebSocket
         await self.send(text_data=json.dumps(event['message']))
 
     @database_sync_to_async
