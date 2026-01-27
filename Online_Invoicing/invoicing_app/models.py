@@ -11,17 +11,14 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 
 def generate_room_hash():
-    """Generate a unique irreversible hashed room ID"""
     unique_string = f"{uuid.uuid4()}{secrets.token_hex(16)}{timezone.now().isoformat()}"
     return hashlib.sha256(unique_string.encode()).hexdigest()[:16]
 
 def generate_buyer_room_hash():
-    """Generate a unique irreversible hashed room ID"""
     unique_string = f"{uuid.uuid4()}{secrets.token_hex(16)}{timezone.now().isoformat()}"
     return hashlib.sha256(unique_string.encode()).hexdigest()[:16]
 
 def generate_verification_key():
-    """Generate a unique verification key for invoice access"""
     return secrets.token_urlsafe(32)
 
 class Room(models.Model):
@@ -112,7 +109,6 @@ class Invoice(models.Model):
     payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='draft')
     
-    # Tracking fields
     buyer_approved_at = models.DateTimeField(null=True, blank=True)
     buyer_paid_at = models.DateTimeField(null=True, blank=True)
     seller_confirmed_at = models.DateTimeField(null=True, blank=True)
@@ -121,12 +117,10 @@ class Invoice(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        # Auto-calculate line total
         self.line_total = self.quantity * self.unit_price
         super().save(*args, **kwargs)
         
     def total_amount(self): 
-        """Sum of all line items""" 
         return sum(item.line_total for item in self.items.all())
 
     def __str__(self):
