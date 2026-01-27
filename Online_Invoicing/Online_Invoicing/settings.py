@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ffvdn)t8rx*@x8)6=229g=6d-6p(s*0p9g-k%57bgu%y0s6upw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nontaxinvoiceproof.pythonanywhere.com']
 
 
 # Application definition
@@ -63,6 +63,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://kt2980zx-8000.asse.devtunnels.ms',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'nontaxinvoiceproof.pythonanywhere.com',
 ]
 
 # For dev tunnels, you might need:
@@ -93,14 +94,12 @@ WSGI_APPLICATION = 'Online_Invoicing.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# settings.py
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Invoicing_DataBase',
-        'USER': 'keith_user',
-        'PASSWORD': '113728cortes',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',   # Database backend
+        'NAME': BASE_DIR / 'db.sqlite3',          # Database file location
     }
 }
 
