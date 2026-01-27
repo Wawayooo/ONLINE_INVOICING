@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ffvdn)t8rx*@x8)6=229g=6d-6p(s*0p9g-k%57bgu%y0s6upw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['nontaxinvoiceproof.pythonanywhere.com']
+ALLOWED_HOSTS = ['https://nontaxinvoiceproof.pythonanywhere.com']
 
 
 # Application definition
@@ -63,7 +63,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://kt2980zx-8000.asse.devtunnels.ms',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'nontaxinvoiceproof.pythonanywhere.com',
+    'https://nontaxinvoiceproof.pythonanywhere.com',
 ]
 
 # For dev tunnels, you might need:
