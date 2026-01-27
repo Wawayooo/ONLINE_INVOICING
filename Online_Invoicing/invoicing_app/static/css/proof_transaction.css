@@ -1,4 +1,3 @@
-/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +11,6 @@ body {
   padding: 20px;
 }
 
-/* ==================== LOADING MODAL STYLES ==================== */
 .loading-modal {
   position: fixed;
   top: 0;
@@ -142,7 +140,6 @@ body {
   }
 }
 
-/* ==================== MAIN CONTAINER ==================== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -172,7 +169,6 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ==================== ROOM INFO - ID CARD STYLE ==================== */
 .room-info {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   padding: 0;
@@ -263,7 +259,6 @@ h1 {
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* ==================== PROOF BLOCKS - LANDSCAPE ID CARD STYLE ==================== */
 .proof-wrapper {
   display: flex;
   flex-direction: column;
@@ -271,7 +266,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* ==================== SELLER BLOCK - LANDSCAPE ==================== */
 .proof-block-seller {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-radius: 20px;
@@ -432,7 +426,6 @@ h1 {
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
 }
 
-/* ==================== BUYER BLOCK - LANDSCAPE ==================== */
 .proof-block-buyer {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-radius: 20px;
@@ -594,7 +587,6 @@ h1 {
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
 }
 
-/* ==================== INVOICE BLOCK - LANDSCAPE ==================== */
 .proof-block-invoice {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-radius: 20px;
@@ -718,7 +710,6 @@ h1 {
   letter-spacing: 0.5px;
 }
 
-/* ==================== DOWNLOAD SECTION ==================== */
 .download-section {
   text-align: center;
   padding: 30px 0;
@@ -819,7 +810,6 @@ h1 {
   color: #764ba2;
 }
 
-/* 📱 Mobile-friendly styles */
 @media (max-width: 600px) {
 
   .invoice-table,
@@ -834,7 +824,6 @@ h1 {
 
   .invoice-table thead {
     display: none;
-    /* hide headers on mobile */
   }
 
   .invoice-table tr {
@@ -861,7 +850,6 @@ h1 {
   }
 }
 
-/* Single-item card */
 .single-item-card {
   border: 1px solid #e6e9ef;
   border-radius: 12px;
@@ -885,7 +873,6 @@ h1 {
   padding-bottom: 0.4rem;
 }
 
-/* Rows inside single-item */
 .single-item-row {
   display: flex;
   justify-content: space-between;
@@ -906,7 +893,6 @@ h1 {
   font-family: cursive;
 }
 
-/* Highlight total row */
 .single-item-row.total {
   background: #9bfbb5;
   border-radius: 8px;
@@ -914,13 +900,7 @@ h1 {
   font-weight: 700;
 }
 
-
-/* ==================== RESPONSIVE DESIGN ==================== */
-/* ==================== RESPONSIVE DESIGN ==================== */
-
 @media (max-width: 768px) {
-
-  /* General container adjustments */
   .proof-wrapper {
     display: flex;
     flex-direction: column;
@@ -928,7 +908,6 @@ h1 {
     padding: 0.8rem;
   }
 
-  /* Seller and Buyer cards stack vertically */
   .seller-card,
   .buyer-card,
   .invoice-card {
@@ -941,14 +920,12 @@ h1 {
     box-shadow: 0 4px 12px rgba(20, 20, 40, 0.06);
   }
 
-  /* Info sections inside cards */
   .seller-Info,
   .Buyer_Info,
   .Invoice_Notes {
     margin-bottom: 0.8rem;
   }
 
-  /* Images centered and smaller */
   .Seller_Img,
   .Buyer_Img {
     display: flex;
@@ -963,7 +940,6 @@ h1 {
     object-fit: cover;
   }
 
-  /* Invoice table becomes scrollable */
   .Invoice_Items {
     overflow-x: auto;
   }
@@ -980,7 +956,6 @@ h1 {
     text-align: left;
   }
 
-  /* Single-item card adjustments */
   .single-item-card {
     padding: 0.8rem;
     font-size: 0.9rem;
@@ -1014,7 +989,6 @@ h1 {
     font-size: 18px;
   }
 
-  /* Grand total highlight */
   .Invoice_Total {
     text-align: center;
     font-size: 1rem;
@@ -1043,8 +1017,6 @@ h1 {
   }
 }
 
-
-/* Tablet and small desktop screens */
 @media (max-width: 1024px) {
 
   .proof-block-seller,
@@ -1072,10 +1044,8 @@ h1 {
   }
 }
 
-/* Mobile screens */
 @media (max-width: 768px) {
 
-  /* Mobile Landscape Cards */
   .proof-block-seller,
   .proof-block-buyer {
     grid-template-columns: 1fr 140px;
@@ -1145,7 +1115,6 @@ h1 {
     filter: drop-shadow(0px 1px 2px black);
   }
 
-  /* Invoice Block Mobile */
   .proof-block-invoice {
     min-height: auto;
   }

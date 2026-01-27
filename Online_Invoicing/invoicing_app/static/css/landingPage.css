@@ -271,27 +271,22 @@ h1 {
 @media (max-width:768px) {
   .modal-content {
     width: 90%;
-    /* make modal almost full width */
     margin: 20% auto;
-    /* center vertically with more margin */
     padding: 20px;
   }
 
   .modal-options {
     flex-direction: column;
-    /* stack options vertically */
     gap: 15px;
   }
 
   .option-card {
     width: 100%;
-    /* full width cards */
     padding: 15px;
   }
 
   .option-icon {
     font-size: 32px;
-    /* slightly smaller icons */
     margin-bottom: 8px;
   }
 
@@ -305,7 +300,6 @@ h1 {
 
   .modal-buttons .btn {
     width: 100%;
-    /* buttons span full card width */
     margin-top: 10px;
   }
 

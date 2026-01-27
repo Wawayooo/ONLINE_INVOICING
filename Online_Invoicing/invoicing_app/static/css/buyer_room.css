@@ -1,4 +1,3 @@
-/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -15,7 +14,6 @@ body {
   justify-content: center;
 }
 
-/* Container Styles */
 .container {
   max-width: 600px;
   width: 100%;
@@ -54,7 +52,6 @@ h2 {
   border-bottom: 3px solid #667eea;
 }
 
-/* Buyer Section */
 #buyerSection {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
   padding: 30px;
@@ -70,7 +67,6 @@ h2 {
   border-color: #667eea;
 }
 
-/* Form Styles */
 #buyerForm {
   width: 100%;
 }
@@ -114,7 +110,6 @@ h2 {
   background: #f8f9ff;
 }
 
-/* Preview Image */
 .preview-image {
   width: 120px;
   height: 120px;
@@ -130,7 +125,6 @@ h2 {
   display: block;
 }
 
-/* Button Styles */
 .btn {
   padding: 14px 30px;
   font-size: 16px;
@@ -159,7 +153,6 @@ h2 {
   transform: translateY(-1px);
 }
 
-/* Modal Styles */
 .modal {
   display: none;
   position: fixed;
@@ -258,7 +251,6 @@ h2 {
   box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
 }
 
-/* Error Messages */
 #hashError,
 #lockoutMsg {
   color: #b71c1c;
@@ -270,7 +262,6 @@ h2 {
   border-left: 4px solid #b71c1c;
 }
 
-/* Occupied Modal Specific Styles */
 #occupiedModal .modal-content {
   border-color: #b71c1c;
 }
@@ -280,7 +271,6 @@ h2 {
   font-size: 32px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .container {
     padding: 20px;

@@ -1,4 +1,3 @@
-/* ==================== TYPING ANIMATION SECTION ==================== */
 .body_type {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   padding: 40px 30px;
@@ -13,7 +12,6 @@
   filter: drop-shadow(2px 4px 6px #667eea);
 }
 
-/* Animated border effect */
 .body_type::before {
   content: '';
   position: absolute;
@@ -42,7 +40,6 @@
   }
 }
 
-/* Glowing background effect */
 .body_type::after {
   content: '';
   position: absolute;
@@ -70,7 +67,6 @@
   }
 }
 
-/* Typing container */
 .typing-container {
   position: relative;
   z-index: 2;
@@ -82,7 +78,6 @@
   padding: 20px;
 }
 
-/* Typing text styling */
 #typing {
   font-family: 'Courier New', Courier, monospace;
   font-size: 24px;
@@ -114,7 +109,6 @@
   }
 }
 
-/* Blinking cursor effect */
 #typing::after {
   content: '|';
   position: absolute;
@@ -139,7 +133,6 @@
   }
 }
 
-/* Decorative corner elements */
 .typing-container::before,
 .typing-container::after {
   content: '';
@@ -178,7 +171,6 @@
   }
 }
 
-/* Lock icon decoration */
 .body_type::before {
   content: '🔒';
   position: absolute;
@@ -202,7 +194,6 @@
   }
 }
 
-/* Shield icon decoration */
 .typing-container::before {
   content: '🛡️';
   position: absolute;
@@ -217,7 +208,6 @@
   height: auto;
 }
 
-/* Flame particles effect */
 .body_type .particle {
   position: absolute;
   width: 4px;
@@ -229,7 +219,6 @@
   opacity: 0;
 }
 
-/* Generate multiple particles with different positions */
 .body_type .particle:nth-child(1) {
   left: 10%;
   animation-delay: 0s;
@@ -275,7 +264,6 @@
   }
 }
 
-/* Scanline effect */
 .body_type::before {
   content: '';
   position: absolute;
@@ -298,7 +286,6 @@
   }
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   #typing {
     font-size: 20px;
