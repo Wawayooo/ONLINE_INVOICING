@@ -54,11 +54,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",  # your frontend
-    "http://localhost:8000",  # optional, if you use localhost
-    "https://kt2980zx-8000.asse.devtunnels.ms",
+# settings.py
+
+# Make sure these are set correctly
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to read the cookie
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = [
+    'https://kt2980zx-8000.asse.devtunnels.ms',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
+
+# For dev tunnels, you might need:
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 
 ROOT_URLCONF = 'Online_Invoicing.urls'
 

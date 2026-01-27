@@ -168,3 +168,35 @@ class NegotiationHistory(models.Model):
 
     def __str__(self):
         return f"{self.actor} - {self.action} at {self.created_at}"
+
+class MultiItemNegotiationHistory(models.Model):
+    ACTION_CHOICES = [
+        ('created', 'Invoice Created'),
+        ('edited_invoice', 'Invoice Edited'),
+        ('edited_item', 'Invoice Item Edited'),
+        ('added_item', 'Invoice Item Added'),
+        ('removed_item', 'Invoice Item Removed'),
+        ('approved', 'Buyer Approved'),
+        ('disapproved', 'Buyer Disapproved'),
+        ('paid', 'Buyer Marked as Paid'),
+        ('confirmed', 'Seller Confirmed Payment'),
+    ]
+
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="multi_item_history")
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="multi_item_history", null=True, blank=True)
+    item = models.ForeignKey('InvoiceItem', on_delete=models.SET_NULL, null=True, blank=True, related_name="multi_item_history")
+
+    action = models.CharField(max_length=50, choices=ACTION_CHOICES)
+    actor = models.CharField(max_length=10)  # 'seller' or 'buyer'
+    notes = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        if self.item:
+            return f"{self.actor} - {self.action} on Item {self.item.product_name} at {self.created_at}"
+        elif self.invoice:
+            return f"{self.actor} - {self.action} on Invoice {self.invoice.id} at {self.created_at}"
+        return f"{self.actor} - {self.action} at {self.created_at}"
