@@ -1,17 +1,11 @@
-// ============================================
-// CONFIGURATION
-// ============================================
 const CONFIG = {
-    API_BASE: "https://kt2980zx-8000.asse.devtunnels.ms",
+    API_BASE: "https://nontaxinvoiceproof.pythonanywhere.com",
     MAX_BUYER_ATTEMPTS: 3,
     MAX_SECRET_ATTEMPTS: 2,
     MAX_ROOM_ATTEMPTS: 2,
     LOCK_DURATION_SECONDS: 30
 };
 
-// ============================================
-// STATE MANAGEMENT
-// ============================================
 const state = {
     buyerFailedAttempts: 0,
     secretAttempts: 0,
@@ -20,20 +14,12 @@ const state = {
     isLoading: false
 };
 
-// ============================================
-// DOM ELEMENTS
-// ============================================
 const elements = {
     buyerBtn: document.getElementById('buyerBtn'),
     sellerBtn: document.getElementById('sellerGoBtn'),
     sellerInput: document.getElementById('sellerSecretInput')
 };
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-// CSRF Token Management
 function getCookie(name) {
     if (!document.cookie) return null;
     
@@ -52,7 +38,6 @@ function getCSRFToken() {
     return metaToken?.value || getCookie('csrftoken');
 }
 
-// Key Validation
 function isStrongKey(key) {
     if (key.length < 8) return false;
     
@@ -66,7 +51,6 @@ function isStrongKey(key) {
     return Object.values(rules).every(passed => passed);
 }
 
-// Extract Room Hash from Input
 function extractRoomHash(input) {
     try {
         const url = new URL(input, window.location.origin);
@@ -78,11 +62,6 @@ function extractRoomHash(input) {
     }
 }
 
-// ============================================
-// UI COMPONENTS
-// ============================================
-
-// Loading Overlay
 function createLoadingOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'authLoadingOverlay';
@@ -187,7 +166,6 @@ function hideLoading() {
     }
 }
 
-// Room Hash Popup
 function showRoomHashPopup() {
     if (document.getElementById('roomHashPopup')) return;
 
@@ -348,10 +326,6 @@ function showRoomHashPopup() {
     submitBtn.addEventListener('click', () => handleRoomHashSubmit(input));
 }
 
-// ============================================
-// LOCK MANAGEMENT
-// ============================================
-
 function lockFields(messagePrefix = 'Locked') {
     state.isLocked = true;
     elements.sellerInput.disabled = true;
@@ -380,10 +354,6 @@ function unlockFields(originalText = 'Go to Seller Room') {
     elements.sellerBtn.textContent = originalText;
     elements.sellerInput.value = '';
 }
-
-// ============================================
-// BUYER AUTHENTICATION
-// ============================================
 
 function showBuyerInputPopup() {
     if (document.getElementById('buyerInputPopup')) return;
@@ -648,14 +618,12 @@ async function handleBuyerRoomSubmit(input) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Checking...';
         
-        // Close the input popup
         const inputPopup = document.getElementById('buyerInputPopup');
         if (inputPopup) {
             inputPopup.style.animation = 'fadeOut 0.2s ease';
             setTimeout(() => inputPopup.remove(), 200);
         }
         
-        // Show loading overlay
         setTimeout(() => showBuyerLoading(), 250);
 
         const response = await fetch(`${CONFIG.API_BASE}/api/room/${roomHash}/`);
@@ -673,7 +641,6 @@ async function handleBuyerRoomSubmit(input) {
             state.buyerFailedAttempts++;
             updateBuyerAttemptsUI();
         } else {
-            // Success - redirect (keep loading visible during redirect)
             window.location.href = `/buyer_room/${data.room_hash}/`;
         }
 
@@ -718,10 +685,6 @@ async function handleBuyerJoin() {
 
     showBuyerInputPopup();
 }
-
-// ============================================
-// SELLER AUTHENTICATION - STEP 1: SECRET KEY
-// ============================================
 
 async function handleSecretKeySubmit(secretKey) {
     const csrftoken = getCSRFToken();
@@ -783,10 +746,6 @@ function handleSecretKeyFailure(status, data) {
         alert(data.error || "Server error occurred. Please try again.");
     }
 }
-
-// ============================================
-// SELLER AUTHENTICATION - STEP 2: ROOM HASH
-// ============================================
 
 async function handleRoomHashSubmit(input) {
     if (state.isLocked || state.isLoading) return;
@@ -865,14 +824,8 @@ function handleRoomHashFailure(status, data, input) {
     }
 }
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
-
-// Buyer Button
 elements.buyerBtn?.addEventListener('click', handleBuyerJoin);
 
-// Seller Button
 elements.sellerBtn?.addEventListener('click', () => {
     if (state.isLocked || state.isLoading) return;
 
@@ -897,16 +850,11 @@ elements.sellerBtn?.addEventListener('click', () => {
     handleSecretKeySubmit(secretKey);
 });
 
-// Seller Input - Enter Key
 elements.sellerInput?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !state.isLocked && !state.isLoading) {
         elements.sellerBtn.click();
     }
 });
-
-// ============================================
-// INITIALIZATION
-// ============================================
 
 console.log('✅ Authentication system initialized');
 console.log(`📊 Config: Max attempts - Buyer: ${CONFIG.MAX_BUYER_ATTEMPTS}, Secret: ${CONFIG.MAX_SECRET_ATTEMPTS}, Room: ${CONFIG.MAX_ROOM_ATTEMPTS}`);

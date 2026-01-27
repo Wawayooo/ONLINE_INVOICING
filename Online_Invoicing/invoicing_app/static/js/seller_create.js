@@ -1,13 +1,10 @@
 import { validateInvoiceForm } from './invoice_detectors.js';
 
 //const API_BASE = 'http://localhost:8000';
-const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
-// ===== INIT PAGE =====
+const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 
-// Set today's date as default
 document.getElementById('invoiceDate').valueAsDate = new Date();
 
-// Preview profile picture
 document.getElementById('sellerProfilePic').addEventListener('change', function (e) {
   const file = e.target.files[0];
   if (file) {
@@ -22,7 +19,6 @@ document.getElementById('sellerProfilePic').addEventListener('change', function 
   }
 });
 
-// Calculate line total
 function calculateTotal() {
   const qty = parseFloat(document.getElementById('quantity').value) || 0;
   const price = parseFloat(document.getElementById('unitPrice').value) || 0;
@@ -32,17 +28,14 @@ function calculateTotal() {
 document.getElementById('quantity').addEventListener('input', calculateTotal);
 document.getElementById('unitPrice').addEventListener('input', calculateTotal);
 
-// ===== FORM SUBMISSION =====
 document.getElementById('invoiceForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const submitBtn = document.getElementById('submitBtn');
   const loading = document.getElementById('loading');
 
-  // Collect form data
   const formData = new FormData(this);
 
-  // Validate fields
   const errors = validateInvoiceForm(formData);
   if (Object.keys(errors).length > 0) {
     let msg = "Please fix the following errors:\n";
@@ -53,7 +46,6 @@ document.getElementById('invoiceForm').addEventListener('submit', async function
     return;
   }
 
-  // Disable button and show loading
   submitBtn.disabled = true;
   loading.classList.add('active');
 

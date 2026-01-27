@@ -1,24 +1,19 @@
 //const API_BASE = 'http://localhost:8000';
-const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
+const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 
-// Extract roomHash from URL path: /seller_room/<room_hash>/
 const pathParts = window.location.pathname.split('/').filter(Boolean);
-const roomHash = pathParts[1];  // this is the room hash
+const roomHash = pathParts[1];
 
-// Display room hash and shareable link
 document.getElementById('roomHash').textContent = roomHash;
 const shareableInput = document.getElementById('shareableLink');
 
-// Confirm Payment
 document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
-  // Extra confirmation layer
   const confirmed = window.confirm("Are you sure you want to confirm this payment?");
-  if (!confirmed) return; // stop if user cancels
+  if (!confirmed) return;
 
   const loadingModal = document.getElementById('loadingModal');
   const confirmBtn = document.getElementById('confirmPaymentBtn');
 
-  // Show loading modal + disable button
   if (loadingModal) loadingModal.style.display = 'flex';
   if (confirmBtn) confirmBtn.disabled = true;
 
@@ -31,7 +26,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async () 
       alert("Payment confirmed! Invoice finalized.");
       await loadRoomData();
 
-      // Redirect to proof of transaction
       const proofUrl = result.redirect_url?.startsWith('http')
         ? result.redirect_url
         : `${window.location.origin}${result.redirect_url}`;
@@ -43,16 +37,13 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async () 
     console.error(err);
     alert("Network error while confirming payment.");
   } finally {
-    // Hide loading modal + re-enable button
     if (loadingModal) loadingModal.style.display = 'none';
     if (confirmBtn) confirmBtn.disabled = false;
   }
 });
 
-// Generate correct shareable link (seller only shares room link, not buyer hash)
 shareableInput.value = `${window.location.origin}/buyer_room/${roomHash}/`;
 
-// Clipboard copy
 document.getElementById('copyBtn').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(shareableInput.value);
@@ -62,11 +53,6 @@ document.getElementById('copyBtn').addEventListener('click', async () => {
     alert("Failed to copy link. Please copy manually.");
   }
 });
-
-/**
- * Toggle seller/invoice form editability based on invoice status
- */
-// Attach handler once at startup
 
 async function submitInvoiceForm(formElement) {
   const confirmed = window.confirm("Are you sure you want to update this invoice?");
@@ -82,14 +68,11 @@ async function submitInvoiceForm(formElement) {
   const updateBtn = document.getElementById('updateInvoiceBtn');
   const loadingModal = document.getElementById('loadingModal');
 
-  // Show loading + disable button before request
   if (loadingModal) loadingModal.style.display = 'flex';
   if (updateBtn) updateBtn.disabled = true;
 
-  // Decide endpoint + payload
   let url, payload;
   if (items.length > 1) {
-    // Multi-item invoice
     url = `${API_BASE}/api/seller/${roomHash}/edit-invoice/`;
     payload = {
       invoice_date: document.getElementById('invoiceDate').value,
@@ -98,7 +81,6 @@ async function submitInvoiceForm(formElement) {
       items: items
     };
   } else {
-    // Single-item invoice
     const item = items[0];
     url = `${API_BASE}/api/seller/${roomHash}/edit-single-invoice/`;
     payload = {
@@ -175,13 +157,11 @@ function toggleSellerFormEditable(invoiceStatus) {
   if (sellerForm) lockForm(sellerForm, editable);
   if (invoiceForm) lockForm(invoiceForm, editable);
 
-  // 🚨 Show modal notification if status is negotiating
   if (invoiceStatus === 'negotiating') {
     showNegotiationModal();
   }
 }
 
-// Helper function to show modal
 function showNegotiationModal() {
   const modal = document.getElementById('negotiationModal');
   if (modal) {
@@ -197,9 +177,6 @@ function closeNegotiationModal() {
   }
 }
 
-/**
- * Collect items from form fields
- */
 function collectItems() {
   const items = [];
   document.querySelectorAll('#itemsContainer .item-block').forEach(block => {
@@ -208,7 +185,6 @@ function collectItems() {
     const quantity = parseFloat(block.querySelector('[name="quantity[]"]').value) || 0;
     const unit_price = parseFloat(block.querySelector('[name="unit_price[]"]').value) || 0;
     
-    // Only add items with valid data
     if (product && quantity > 0 && unit_price > 0) {
       items.push({
         product_name: product,
@@ -221,14 +197,6 @@ function collectItems() {
   return items;
 }
 
-/**
- * Submit invoice form with items
- */
-
-
-/**
- * Handle form submissions
- */
 document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   await submitInvoiceForm(e.target);
@@ -239,9 +207,6 @@ document.getElementById('sellerForm').addEventListener('submit', async (e) => {
   await submitInvoiceForm(e.target);
 });
 
-/**
- * Recalculate totals for all items
- */
 function recalcTotals() {
   let grandTotal = 0;
   document.querySelectorAll('#itemsContainer .item-block').forEach(block => {
@@ -254,9 +219,6 @@ function recalcTotals() {
   document.getElementById('grandTotal').textContent = '₱' + grandTotal.toFixed(2);
 }
 
-/**
- * Create a new item block
- */
 function createItemBlock(itemData = null) {
   const block = document.createElement("div");
   block.classList.add("item-block");
@@ -266,7 +228,6 @@ function createItemBlock(itemData = null) {
   const quantityValue = itemData?.quantity || 1;
   const unitPriceValue = itemData?.unit_price || 0;
   
-  // Calculate line total and ensure it's a number
   let lineTotal = 0;
   if (itemData?.line_total !== undefined && itemData?.line_total !== null) {
     lineTotal = parseFloat(itemData.line_total);
@@ -274,7 +235,6 @@ function createItemBlock(itemData = null) {
     lineTotal = quantityValue * unitPriceValue;
   }
   
-  // Ensure lineTotal is a valid number
   if (isNaN(lineTotal)) {
     lineTotal = 0;
   }
@@ -308,9 +268,6 @@ function createItemBlock(itemData = null) {
   return block;
 }
 
-/**
- * Add item button handler
- */
 document.getElementById('addItemBtn').addEventListener('click', () => {
   const itemsContainer = document.getElementById('itemsContainer');
   const newBlock = createItemBlock();
@@ -318,16 +275,12 @@ document.getElementById('addItemBtn').addEventListener('click', () => {
   recalcTotals();
 });
 
-/**
- * Delegate remove buttons and input changes
- */
 const itemsContainer = document.getElementById('itemsContainer');
 
 itemsContainer.addEventListener('click', e => {
   if (e.target.classList.contains('btn-remove-item')) {
     const itemBlocks = document.querySelectorAll('#itemsContainer .item-block');
     
-    // Prevent removing the last item
     if (itemBlocks.length <= 1) {
       alert("You must have at least one item in the invoice.");
       return;
@@ -344,9 +297,6 @@ itemsContainer.addEventListener('input', e => {
   }
 });
 
-/**
- * Fetch room data and populate forms
- */
 async function loadRoomData() {
   try {
     const response = await fetch(`${API_BASE}/api/room/${roomHash}/`);
@@ -355,7 +305,6 @@ async function loadRoomData() {
     const data = await response.json();
     console.log("Room data loaded:", data);
 
-    // Redirect if invoice finalized
     if (data.invoice?.status === 'finalized') {
       const modal = document.getElementById('loadingModal');
       if (modal) modal.style.display = 'flex';
@@ -401,7 +350,6 @@ function populateInvoiceFields(data) {
   itemsContainer.innerHTML = "";
   let grandTotal = 0;
 
-  // Decide invoice type based on description
   const isMultiItem = invoice.description?.trim().toLowerCase() === 'multi-item invoice';
   const isSingleItem = !isMultiItem && invoice.description;
 
@@ -486,7 +434,6 @@ function showBuyerPaidInfo(buyer) {
   }
 }
 
-// Initial load
 document.addEventListener('DOMContentLoaded', loadRoomData);
 
 

@@ -1,25 +1,16 @@
 //const API_BASE = 'http://localhost:8000';
-const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
-
-
-// Extract roomHash from URL path: /seller_room/<room_hash>/
+const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 
 const pathParts = window.location.pathname.split('/').filter(Boolean);
-// URL: /seller_room/<room_hash>/
-const roomHash = pathParts[1];  // this is the room hash
+const roomHash = pathParts[1];
 
-
-// Display room hash and shareable link
 document.getElementById('roomHash').textContent = roomHash;
 const shareableInput = document.getElementById('shareableLink');
 
-// If buyerHash exists (stored after join)
 const buyerHash = localStorage.getItem('buyer_hash');
 
-// Confirm Payment
 document.getElementById('confirmPaymentBtn').addEventListener('click', async () => {
   try {
-    // Always build API URL relative to current origin
     const apiUrl = `${window.location.origin}/api/seller/${roomHash}/confirm-payment/`;
 
     const res = await fetch(apiUrl, { method: 'POST' });
@@ -28,19 +19,14 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async () 
     if (res.ok && result.invoice_status === 'finalized') {
       alert("Payment confirmed! Invoice finalized.");
 
-      // Refresh UI with updated invoice status
       loadRoom();
 
-      // After confirmation, allow PDF export or redirect
       const proofUrl = result.redirect_url?.startsWith('http')
         ? result.redirect_url
         : `${window.location.origin}${result.redirect_url}`;
 
-      // If you want to redirect immediately:
       window.location.href = proofUrl;
 
-      // Or if you want to trigger your export logic:
-      // exportProofOfTransaction(proofUrl);
     } else {
       alert(result.error || "Failed to confirm payment.");
     }
@@ -51,14 +37,12 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async () 
 });
 
 
-// Generate correct shareable link
 if (buyerHash) {
   shareableInput.value = `${window.location.origin}/buyer_invoice_room/${roomHash}/${buyerHash}/`;
 } else {
   shareableInput.value = `${window.location.origin}/buyer_room/${roomHash}/`;
 }
 
-// Clipboard copy
 document.getElementById('copyBtn').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(shareableInput.value);
@@ -69,9 +53,6 @@ document.getElementById('copyBtn').addEventListener('click', async () => {
   }
 });
 
-/**
- * Toggle seller/invoice form editability based on invoice status
- */
 function toggleSellerFormEditable(invoiceStatus) {
   const notice = document.getElementById('formLockNotice');
   const updateBtn = document.getElementById('updateInvoiceBtn');
@@ -113,30 +94,20 @@ function toggleSellerFormEditable(invoiceStatus) {
   if (invoiceForm) lockForm(invoiceForm, editable);
 }
 
-/**
- * Submit invoice form
- */
 document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   await submitInvoiceForm(e.target);
 });
 
-/**
- * Submit seller form
- */
 document.getElementById('sellerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   await submitInvoiceForm(e.target);
 });
 
-/**
- * Shared invoice submission logic
- */
 async function submitInvoiceForm(formElement) {
   const formData = new FormData(formElement);
 
   try {
-    // Use correct endpoint from urls.py
     const response = await fetch(`${API_BASE}/api/seller/${roomHash}/edit-invoice/`, {
       method: 'PUT',
       body: formData
@@ -159,9 +130,6 @@ async function submitInvoiceForm(formElement) {
   }
 }
 
-/**
- * Fetch room data and populate forms
- */
 async function loadRoomData() {
   try {
     const response = await fetch(`${API_BASE}/api/room/${roomHash}/`);
@@ -169,7 +137,6 @@ async function loadRoomData() {
 
     const data = await response.json();
 
-    // Populate seller fields
     if (data.seller) {
       document.getElementById('sellerFullname').value = data.seller.fullname || '';
       document.getElementById('sellerEmail').value = data.seller.email || '';
@@ -186,7 +153,6 @@ async function loadRoomData() {
       }
     }
 
-    // Populate invoice fields
     if (data.invoice) {
       document.getElementById('invoiceDate').value = data.invoice.invoice_date.slice(0,10);
       document.getElementById('dueDate').value = data.invoice.due_date ? data.invoice.due_date.slice(0,10) : '';
@@ -205,9 +171,6 @@ async function loadRoomData() {
   }
 }
 
-/**
- * Render invoice summary
- */
 function showInvoice(invoice) {
   const container = document.getElementById('invoiceDetailsContainer');
   if (container) {
@@ -224,32 +187,22 @@ function showInvoice(invoice) {
   }
 
   if (invoice.status === 'draft') {
-    // Approve/Disapprove
   } else if (invoice.status === 'negotiating') {
-    // Disapproved
   } else if (invoice.status === 'pending') {
-    // Approved + Mark Paid
   } else if (invoice.status === 'unconfirmed_payment') {
-    // Paid awaiting seller
   } else if (invoice.status === 'finalized') {
-    // 🚀 Redirect buyer or seller to proof_transaction
     window.location.href = `/proof_transaction/${roomHash}/`;
   }
 }
 
 
-/**
- * Calculate line total
- */
 function calculateTotal() {
   const qty = parseFloat(document.getElementById('quantity').value) || 0;
   const price = parseFloat(document.getElementById('unitPrice').value) || 0;
   document.getElementById('lineTotal').textContent = '₱' + (qty * price).toFixed(2);
 }
 
-// Event listeners for live calculation
 document.getElementById('quantity').addEventListener('input', calculateTotal);
 document.getElementById('unitPrice').addEventListener('input', calculateTotal);
 
-// Initial load
 loadRoomData();

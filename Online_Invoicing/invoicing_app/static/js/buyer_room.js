@@ -1,16 +1,12 @@
 
-const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
+const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 //const API_BASE = 'http://localhost:8000';
 const roomHash = window.location.pathname.split('/').filter(Boolean).pop();
 
-// State variables (declare once)
 let attempts = 0;
 let locked = false;
 let countdownTimer = null;
 
-/**
- * Join room form submission
- */
 document.getElementById('buyerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -27,9 +23,8 @@ document.getElementById('buyerForm').addEventListener('submit', async (e) => {
     if (response.ok) {
       alert("You have successfully joined this room!");
       localStorage.setItem('buyer_hash', data.buyer_hash);
-      window.location.href = data.redirect_url; // redirect to invoice room
+      window.location.href = data.redirect_url;
     } else if (response.status === 403) {
-      // Room already occupied
       showOccupiedModal();
     } else {
       alert(data.error || "Failed to join the room.");
@@ -40,25 +35,17 @@ document.getElementById('buyerForm').addEventListener('submit', async (e) => {
   }
 });
 
-/**
- * Show occupied modal
- */
+
 function showOccupiedModal() {
   document.getElementById('buyerForm').style.pointerEvents = 'none';
   document.getElementById('buyerForm').style.opacity = 0.5;
   document.getElementById('occupiedModal').style.display = 'block';
 }
 
-/**
- * Show hash modal
- */
 function showHashModal() {
   document.getElementById('hashModal').style.display = 'block';
 }
 
-/**
- * Verify buyer info against backend serializer data
- */
 async function verifyBuyerInfo() {
   try {
     const res = await fetch(`${API_BASE}/api/room/${roomHash}/`);
@@ -77,14 +64,11 @@ async function verifyBuyerInfo() {
         phone === (data.buyer.phone || '') &&
         social === (data.buyer.social_media || '')
       ) {
-        // Info matches → show hash modal
         showHashModal();
       } else {
-        // Info mismatch → show occupied modal
         showOccupiedModal();
       }
     } else {
-      // No buyer assigned yet → show occupied modal
       showOccupiedModal();
     }
   } catch (err) {
@@ -93,18 +77,14 @@ async function verifyBuyerInfo() {
   }
 }
 
-/**
- * Verify buyer hash inside modal
- */
 document.getElementById('verifyHashBtn').addEventListener('click', () => {
   if (locked) return;
 
   const enteredHash = document.getElementById('buyerHashInput').value.trim();
-  const storedHash = localStorage.getItem('buyer_hash'); // saved after join
+  const storedHash = localStorage.getItem('buyer_hash');
   const errorMsg = document.getElementById('hashError');
 
   if (enteredHash === storedHash) {
-    // Correct hash → redirect
     window.location.href = `/buyer_invoice_room/${roomHash}/${enteredHash}/`;
   } else {
     attempts++;
@@ -117,9 +97,6 @@ document.getElementById('verifyHashBtn').addEventListener('click', () => {
   }
 });
 
-/**
- * Lockout function (after 2 failed attempts)
- */
 function lockout() {
   locked = true;
   const input = document.getElementById('buyerHashInput');
@@ -150,9 +127,6 @@ function lockout() {
   }, 1000);
 }
 
-/**
- * Hook buyer form to verify info before showing hash modal
- */
 document.getElementById('buyerForm').addEventListener('submit', (e) => {
   e.preventDefault();
   verifyBuyerInfo();

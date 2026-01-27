@@ -1,5 +1,3 @@
-// invoice_detectors.js
-
 export const detectors = {
 
   seller_fullname: (value) => {
@@ -9,33 +7,32 @@ export const detectors = {
   },
 
   seller_email: (value) => {
-    if (!value) return null; // optional
+    if (!value) return null; 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) return "Invalid email format.";
     return null;
   },
 
   seller_phone: (value) => {
-    if (!value) return null; // optional
+    if (!value) return null; 
     const phoneRegex = /^[\d+\-\s]{7,15}$/;
     if (!phoneRegex.test(value)) return "Invalid phone number format.";
     return null;
   },
 
   seller_social_media: (value) => {
-    if (!value) return null; // optional
+    if (!value) return null; 
 
-    // Require "(FB)" or "(IG)" in the input
     if (!value.includes("(FB)") && !value.includes("(IG)")) {
       return "Social media must include (FB) or (IG).";
     }
 
-    return null; // valid
+    return null;
   },
 
 
   seller_profile_picture: (file) => {
-    if (!file) return null; // optional
+    if (!file) return null; 
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) return "Only JPEG or PNG images allowed.";
     if (file.size > 2 * 1024 * 1024) return "File size must be < 2MB.";
@@ -51,7 +48,7 @@ export const detectors = {
   },
 
   due_date: (value, invoiceDate) => {
-    if (!value) return null; // optional
+    if (!value) return null;
     const due = new Date(value);
     const invoice = new Date(invoiceDate);
     if (due < invoice) return "Due date cannot be before invoice date.";
@@ -99,7 +96,6 @@ export const detectors = {
 
 };
 
-// Helper to run all detectors
 export function validateInvoiceForm(formData) {
   const errors = {};
 

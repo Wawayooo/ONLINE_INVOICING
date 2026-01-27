@@ -1,11 +1,8 @@
-const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms";
+const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 const pathParts = window.location.pathname.split('/');
-const roomHash = pathParts[2];   // /buyer_invoice_room/<room_hash>/<buyer_hash>/
+const roomHash = pathParts[2]; 
 const buyerHash = pathParts[3];
 
-/* ===============================
-   Notifications
-   =============================== */
 function showNotification(message, type = 'success') {
   const notif = document.getElementById('notification');
   notif.textContent = message;
@@ -14,9 +11,6 @@ function showNotification(message, type = 'success') {
   setTimeout(() => notif.style.display = 'none', 3000);
 }
 
-/* ===============================
-   Invoice Rendering
-   =============================== */
 function renderInvoiceItems(invoice) {
   const table = document.getElementById("itemsTable");
   const body = document.getElementById("itemsBody");
@@ -30,7 +24,6 @@ function renderInvoiceItems(invoice) {
   const hasItemsArray = Array.isArray(invoice.items) && invoice.items.length > 0;
 
   if (isMultiItemDesc && hasItemsArray) {
-    // Multi-item invoice
     table.style.display = "table";
     card.style.display = "none";
 
@@ -48,13 +41,11 @@ function renderInvoiceItems(invoice) {
     });
 
   } else {
-    // Single-item invoice (no items array; use flat fields)
     table.style.display = "none";
     card.style.display = "block";
 
     const qty = Number(invoice.quantity ?? 1);
     const unit = Number(invoice.unit_price ?? 0);
-    // SingleInvoiceSerializer does NOT include line_total; use total_amount or compute
     const line = invoice.total_amount != null ? Number(invoice.total_amount) : qty * unit;
 
     document.getElementById("singleDescription").textContent = invoice.description || '-';
@@ -71,7 +62,6 @@ function renderInvoiceItems(invoice) {
 }
 
 function showInvoice(invoice) {
-  // Header
   const header = document.getElementById('invoiceHeader');
   header.innerHTML = `
     <p><strong>Invoice Date:</strong> ${invoice.invoice_date}</p>
@@ -80,17 +70,11 @@ function showInvoice(invoice) {
     <p><strong>Status:</strong> ${invoice.status}</p>
   `;
 
-  // Items (handles both shapes)
   renderInvoiceItems(invoice);
 
-  // Status
   handleInvoiceStatus(invoice);
 }
 
-
-/* ===============================
-   Seller Rendering
-   =============================== */
 function renderSellerInfo(seller) {
   if (!seller) return;
   document.getElementById('sellerProfile').src = seller.profile_picture || '';
@@ -100,9 +84,6 @@ function renderSellerInfo(seller) {
   document.getElementById('sellerSocial').textContent = seller.social_media || 'N/A';
 }
 
-/* ===============================
-   Invoice Status Handling
-   =============================== */
 function handleInvoiceStatus(invoice) {
   const approveBtn = document.getElementById('approveBtn');
   const disapproveBtn = document.getElementById('disapproveBtn');
@@ -110,7 +91,6 @@ function handleInvoiceStatus(invoice) {
   const paymentField = document.getElementById('paymentMethod');
   const statusLabel = document.getElementById('invoiceActionStatus');
 
-  // Reset
   [approveBtn, disapproveBtn, markPaidForm, statusLabel].forEach(el => {
     if (el) el.style.display = 'none';
   });
@@ -120,7 +100,6 @@ function handleInvoiceStatus(invoice) {
       if (approveBtn) approveBtn.style.display = 'inline-block';
       if (disapproveBtn) disapproveBtn.style.display = 'inline-block';
 
-      // 🚨 Notify user
       showDraftNotification();
       break;
 
@@ -152,7 +131,6 @@ function handleInvoiceStatus(invoice) {
   }
 }
 
-// Helper function for draft notification
 function showDraftNotification() {
   const modal = document.getElementById('draftModal');
   if (modal) {
@@ -167,9 +145,6 @@ function closeDraftNotification() {
   }
 }
 
-/* ===============================
-   API Calls
-   =============================== */
 async function loadRoom() {
   try {
     const res = await fetch(`${API_BASE}/api/room/${roomHash}/`);
@@ -196,7 +171,6 @@ async function updateInvoiceStatus(action) {
     'mark-paid': `${API_BASE}/api/buyer/${roomHash}/mark-paid/`
   };
 
-  // Confirmation dialog
   let confirmMessage = '';
   if (action === 'approve') confirmMessage = "Are you sure you want to APPROVE this invoice?";
   if (action === 'disapprove') confirmMessage = "Are you sure you want to DISAPPROVE this invoice?";
@@ -205,11 +179,9 @@ async function updateInvoiceStatus(action) {
   const confirmed = window.confirm(confirmMessage);
   if (!confirmed) return;
 
-  // Show loading screen
   const loadingModal = document.getElementById('loadingModal');
   if (loadingModal) loadingModal.style.display = 'flex';
 
-  // Disable buttons while processing
   const approveBtn = document.getElementById('approveBtn');
   const disapproveBtn = document.getElementById('disapproveBtn');
   const markPaidBtn = document.getElementById('markPaidBtn');
@@ -236,25 +208,16 @@ async function updateInvoiceStatus(action) {
     console.error(err);
     alert("Network error");
   } finally {
-    // Hide loading screen
     if (loadingModal) loadingModal.style.display = 'none';
 
-    // Re-enable buttons
     [approveBtn, disapproveBtn, markPaidBtn].forEach(btn => {
       if (btn) btn.disabled = false;
     });
   }
 }
 
-/* ===============================
-   Event Listeners
-   =============================== */
 document.getElementById('approveBtn').addEventListener('click', () => updateInvoiceStatus('approve'));
 document.getElementById('disapproveBtn').addEventListener('click', () => updateInvoiceStatus('disapprove'));
 document.getElementById('markPaidBtn').addEventListener('click', () => updateInvoiceStatus('mark-paid'));
 
-
-/* ===============================
-   Initial Load
-   =============================== */
 loadRoom();

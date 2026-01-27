@@ -1,5 +1,3 @@
-
-// Show Proof with loading screen
 function showProofTransaction() {
   showLoadingScreen(() => {
     document.getElementById('workflowSection').style.display = 'none';
@@ -8,8 +6,6 @@ function showProofTransaction() {
     setTimeout(() => proof.classList.add('show'), 50);
   });
 }
-
-// Show Proof with loading screen
 function showProofTransaction() {
   showLoadingScreen(() => {
     document.getElementById('workflowSection').style.display = 'none';
