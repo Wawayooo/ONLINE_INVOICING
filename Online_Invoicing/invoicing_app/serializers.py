@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from .models import Room, Seller, Buyer, Invoice, NegotiationHistory, InvoiceItem
 
-# ===============================
-# SELLER CREATES INVOICE
-# ===============================
 class CreateInvoiceSerializer(serializers.Serializer):
     seller_fullname = serializers.CharField(max_length=255)
     seller_email = serializers.EmailField(required=False, allow_blank=True)
@@ -11,7 +8,6 @@ class CreateInvoiceSerializer(serializers.Serializer):
     seller_social_media = serializers.CharField(required=False, allow_blank=True)
     seller_profile_picture = serializers.ImageField(required=False, allow_null=True)
 
-    # 🔑 Secret key fields
     seller_secret_key = serializers.CharField(write_only=True)
     seller_secret_key_confirm = serializers.CharField(write_only=True)
 
@@ -23,7 +19,6 @@ class CreateInvoiceSerializer(serializers.Serializer):
     payment_method = serializers.CharField(max_length=100)
 
     def validate(self, data):
-        # Check secret key strength
         import re
         strong_regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$')
         if not strong_regex.match(data['seller_secret_key']):
@@ -31,7 +26,6 @@ class CreateInvoiceSerializer(serializers.Serializer):
                 "seller_secret_key": "Secret key must be at least 8 characters and include uppercase, lowercase, number, and special character."
             })
 
-        # Check confirmation
         if data['seller_secret_key'] != data['seller_secret_key_confirm']:
             raise serializers.ValidationError({
                 "seller_secret_key_confirm": "Secret key confirmation does not match."
@@ -39,21 +33,12 @@ class CreateInvoiceSerializer(serializers.Serializer):
 
         return data
 
-# ===============================
-# BUYER JOINS ROOM
-# ===============================
 class BuyerJoinSerializer(serializers.Serializer):
     fullname = serializers.CharField(max_length=255)
     email = serializers.EmailField(required=False, allow_blank=True)
     phone = serializers.CharField(required=False, allow_blank=True)
     social_media = serializers.CharField(required=False, allow_blank=True)
     profile_picture = serializers.ImageField(required=False, allow_null=True)
-
-
-# ===============================
-# INVOICE SERIALIZER
-# ===============================
-# =============MULTI INVOICE SERIALIZER==================
 
 class InvoiceItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,25 +68,17 @@ class InvoiceSerializer(serializers.ModelSerializer):
         return sum(item.line_total for item in obj.items.all())
 
     def update(self, instance, validated_data):
-        # Pop out items data
         items_data = validated_data.pop('items', None)
-
-        # Update invoice fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        # Update items if provided
         if items_data is not None:
-            # Clear existing items and recreate (simplest approach)
             instance.items.all().delete()
             for item_data in items_data:
                 InvoiceItem.objects.create(invoice=instance, **item_data)
 
         return instance
-
-    
-# =============SINGLE INVOICE SERIALIZER==================
 
 class SingleInvoiceSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
@@ -121,12 +98,7 @@ class SingleInvoiceSerializer(serializers.ModelSerializer):
         read_only_fields = ['status']
 
     def get_total_amount(self, obj):
-        return obj.quantity * obj.unit_price
-
-
-# ===============================
-# SELLER SERIALIZER
-# ===============================        
+        return obj.quantity * obj.unit_price  
 
 class SellerSerializer(serializers.ModelSerializer):
     profile_picture = serializers.ImageField(use_url=True)
@@ -136,29 +108,16 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = ['fullname', 'email', 'phone', 'social_media', 'profile_picture']
 
 
-
-# ===============================
-# BUYER SERIALIZER
-# ===============================
 class BuyerSerializer(serializers.ModelSerializer):
     profile_picture = serializers.ImageField(use_url=True)
     class Meta:
         model = Buyer
         fields = ['buyer_hash', 'fullname', 'email', 'phone', 'social_media', 'profile_picture']
 
-
-# ===============================
-# NEGOTIATION HISTORY
-# ===============================
 class NegotiationHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = NegotiationHistory
         fields = ['action', 'actor', 'notes', 'created_at']
-
-
-# ===============================
-# ROOM DETAIL (MAIN RESPONSE)
-# ===============================
 
 class RoomDetailSerializer(serializers.ModelSerializer):
     seller = SellerSerializer(read_only=True)
