@@ -38,14 +38,12 @@
     <p>Don't share this hash with anyone — for your security.</p>
     <p><strong>Buyer Hash:</strong> {{ buyer_hash }}</p>
 
-    <!-- Unauthorized message -->
     <div class="unauthorized" style="display:none;">
       🚫 You are not authorized to view this invoice.
     </div>
 
     {% if not unauthorized %}
       <div class="side-by-side">
-        <!-- Single Item Card (hidden by default) -->
         <div id="singleItemCard" style="display:none;" class="single-item-card">
           <h3>Invoice Item</h3>
           <div class="item-field">
@@ -55,21 +53,18 @@
             <strong>Quantity:</strong> <span id="singleQuantity"></span>
           </div>
           <div class="item-field">
-            <strong>Unit Price:</strong> ₱<span id="singleUnitPrice"></span>
+            <strong>Unit Price:</strong> <span id="singleUnitPrice"></span>
           </div>
           <div class="item-field total">
-            <strong>Line Total:</strong> ₱<span id="singleLineTotal"></span>
+            <strong>Line Total:</strong> <span id="singleLineTotal"></span>
           </div>
         </div>
 
-        <!-- Invoice Info (Left) -->
         <div class="invoice-form">
           <h2>Invoice Details</h2>
 
-          <!-- Invoice header fields -->
           <div id="invoiceHeader"></div>
 
-          <!-- Items table -->
           <h3>Invoice Items</h3>
           <table id="itemsTable">
             <thead>
@@ -82,24 +77,20 @@
               </tr>
             </thead>
             <tbody id="itemsBody">
-              <!-- Populated dynamically -->
             </tbody>
           </table>
 
-          <!-- Grand total -->
           <div class="form-group">
             <label><strong>Grand Total:</strong></label>
             <div id="grandTotal">₱0.00</div>
           </div>
 
-          <!-- Actions -->
           <div class="actions">
             <button class="btn btn-success" id="approveBtn">Approve</button>
             <button class="btn btn-danger" id="disapproveBtn">Disapprove</button>
             <span id="invoiceActionStatus" style="display:none;"></span>
           </div>
 
-          <!-- Hidden Mark Paid Form -->
           <div id="markPaidForm" style="display:none; margin-top:1rem;">
             <label for="paymentMethod"><strong>Payment Method:</strong></label>
             <input type="text" id="paymentMethod" readonly>
@@ -107,10 +98,12 @@
           </div>
         </div>
 
-        <!-- Seller Info (Right) -->
         <div class="seller-form">
           <h2>Seller Information</h2>
-          <img id="sellerProfile" src="" alt="Seller Profile" class="profile-image">
+          <img id="sellerProfile" 
+            src="{% if seller.profile_picture %}{{ seller.profile_picture.url }}{% else %}/media/default_img.png{% endif %}" 
+            alt="Seller Profile" 
+            class="profile-image">
           <p><strong>Name:</strong> <span id="sellerName"></span></p>
           <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
           <p><strong>Phone:</strong> <span id="sellerPhone"></span></p>

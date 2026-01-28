@@ -12,7 +12,6 @@
   <div class="container">
     <h1>📄 Seller Room</h1>
 
-    <!-- Room Info -->
     <div class="room-info">
       <p><strong>Room Hash:</strong> <span id="roomHash"></span></p>
       <p>
@@ -23,9 +22,8 @@
     </div>
 
     <div class="form-wrapper">
-      <!-- Seller Information -->
-      <form id="sellerForm" class="form-section seller-section">
-        <h2>Seller Information</h2>
+      <form id="sellerForm" class="form-section seller-section" style="display: flex;">
+        <h2>Your Information</h2>
         <div class="form-group">
           <label for="sellerFullname">Full Name *</label>
           <input type="text" id="sellerFullname" name="seller_fullname" required>
@@ -42,14 +40,21 @@
           <label for="sellerSocial">Social Media Handle</label>
           <input type="text" id="sellerSocial" name="seller_social_media" placeholder="@username">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="id_of_form" style="display:flex; justify-content: center; flex-wrap: wrap; width: 400px; align-self: center; margin: 15px">
           <label>Profile Picture</label>
           <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
-          <img id="sellerPreview" class="preview-image" alt="Preview">
+          
+          <div class="image-section">
+            <img id="sellerPreview" 
+              src="{% if seller.preview_image %}{{ seller.preview_image.url }}{% else %}{% static 'default_img.png' %}{% endif %}" 
+              alt="Preview" 
+              class="preview-image">
+
+          </div>
+
         </div>
       </form>
 
-      <!-- Invoice Details -->
       <form id="invoiceForm" class="form-section invoice-section">
         <h2>Invoice Details</h2>
         <div class="form-group inline">
@@ -75,11 +80,9 @@
           </select>
         </div>
 
-        <!-- Editable Items for Multi-Items -->
         <div class="multi-item-invoice">
           <h3>Invoice Details</h3>
           <div id="itemsContainer">
-            <!-- Example item block -->
             <div class="item-block">
               <div class="form-group">
                 <label>Product</label>
@@ -107,20 +110,16 @@
             </div>
           </div>
 
-          <!-- Add Item button -->
           <button type="button" id="addItemBtn" class="btn">➕ Add Item</button>
 
-          <!-- Grand Total -->
           <div class="form-group">
             <label>Grand Total</label>
             <div id="grandTotal">₱0.00</div>
           </div>
         </div>
 
-        <!-- Update Invoice -->
         <button id="updateInvoiceBtn" type="submit" class="btn btn-primary">Update Invoice</button>
 
-        <!-- Notices -->
         <div id="formLockNotice" style="display:none;" class="notice">
           Form is locked until buyer disapproves.
         </div>
@@ -135,7 +134,6 @@
       <p>Updating invoice, please wait...</p>
     </div>
 
-    <!-- Modal Structure -->
     <div id="negotiationModal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeNegotiationModal()">&times;</span>
@@ -145,7 +143,6 @@
       </div>
     </div>
 
-    <!-- Loading Modal -->
     <div id="loadingModal" class="loading-modal" style="display:none;">
       <div class="loading-content">
         <div class="spinner"></div>
@@ -154,7 +151,6 @@
       </div>
     </div>
 
-    <!-- Buyer Paid Info -->
     <div id="buyerPaidInfo" style="display:none;">
         <h2 style="color:white; font-family: monospace;">INVOICE STATUS: BUYER ALREADY PAID</h2>
         <div class="Buyer_ID">
@@ -165,7 +161,12 @@
             <p><strong>Social Media:</strong> <span id="buyerSocial"></span></p>
           </div>
           <div id="BuyerImage">
-            <img id="buyerProfilePic" class="profile-image" alt="Buyer Profile Picture">
+
+            <img id="buyerProfilePic" 
+              src="{% if buyer.profile_picture %}{{ buyer.profile_picture.url }}{% else %}/media/default_img.webp{% endif %}" 
+              alt="Buyer Profile Picture" 
+              class="profile-image">
+
           </div>
         </div>
         <button id="confirmPaymentBtn" class="btn btn-success" style="margin-top:1rem;">

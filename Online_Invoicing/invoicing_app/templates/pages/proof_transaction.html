@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{% static 'css/typing_label.css' %}">
 </head>
 <body>
-  <!-- Loading Modal -->
   <div id="loadingModal" class="loading-modal">
     <div class="loading-content">
       <div class="loading-spinner">
@@ -26,7 +25,6 @@
     </div>
   </div>
 
-  <!-- Main Content (Hidden Initially) -->
   <div class="container" id="mainContent" style="display: none;">
     <h1>📄 Proof of Transaction</h1>
 
@@ -37,7 +35,6 @@
         <div class="typing-container" id="typing"></div>
       </div>
       
-      <!-- QR Code Section -->
       <div class="qr-section">
         <div class="qr-container">
           <div class="qr-header">
@@ -59,19 +56,13 @@
               <span class="info-icon">✅</span>
               <span class="info-text">Tamper-Proof</span>
             </div>
-            <div class="info-item">
-              <span class="info-icon">🔗</span>
-              <span class="info-text">Blockchain Secured</span>
-            </div>
           </div>
           <button id="copyLinkBtn" class="copy-link-btn">📋 Copy Verification Link</button>
         </div>
       </div>
     </div>
 
-    <!-- Proof of Transaction Section Landscape Preview-->
     <div class="proof-wrapper">
-      <!-- Seller Information -->
       <div class="seller-card">
         <div class="seller-Info">
           <h2>Seller Information</h2>
@@ -87,7 +78,6 @@
         </div>
       </div>
 
-      <!-- Buyer Information Landscape Preview-->
       <div class="buyer-card">
         <div class="Buyer_Info">
           <h2>Buyer Information</h2>
@@ -103,8 +93,6 @@
         </div>
       </div>
 
-      <!-- Invoice Information Landscape Preview-->
-      <!-- Invoice Information Landscape Preview-->
       <div class="invoice-card">
         <div class="Invoice_Header"><h2>Invoice Details</h2></div>
         <div class="Invoice_Notes">
@@ -113,12 +101,10 @@
           <p><strong>Status:</strong> {{ invoice.status }}</p>
         </div>
 
-        <!-- Items -->
         <div class="Invoice_Items">
           <h3 style="color: green;">SUCCESSFUL TRANSACTION</h3>
 
           {% if invoice.items.count > 0 %}
-            <!-- Multi-item table -->
             <table class="invoice-table">
               <thead>
                 <tr>
@@ -141,12 +127,10 @@
                 {% endfor %}
               </tbody>
             </table>
-          <!-- Grand Total -->
           <div class="Invoice_Total">
             <p><strong>Grand Total:</strong> ₱{{ invoice.total_amount }}</p>
           </div>
           {% else %}
-            <!-- Single-item invoice block -->
             <div class="single-item-card">
               <h3>Item</h3>
               <div class="single-item-row">
