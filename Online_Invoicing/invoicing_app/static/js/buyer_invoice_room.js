@@ -1,4 +1,6 @@
-const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+//const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+const API_BASE = "https://kt2980zx-8000.asse.devtunnels.ms/";
+
 const pathParts = window.location.pathname.split('/');
 const roomHash = pathParts[2]; 
 const buyerHash = pathParts[3];
@@ -108,6 +110,7 @@ function handleInvoiceStatus(invoice) {
         statusLabel.textContent = 'DISAPPROVED';
         statusLabel.className = 'disapproved-label';
         statusLabel.style.display = 'block';
+        statusLabel.style.background = 'red';
       }
       break;
 
@@ -116,6 +119,7 @@ function handleInvoiceStatus(invoice) {
         statusLabel.textContent = 'APPROVED';
         statusLabel.className = 'approved-label';
         statusLabel.style.display = 'block';
+        statusLabel.style.background = 'green';
       }
       if (paymentField) paymentField.value = invoice.payment_method;
       if (markPaidForm) markPaidForm.style.display = 'block';
@@ -126,6 +130,8 @@ function handleInvoiceStatus(invoice) {
         statusLabel.textContent = 'PAID (Awaiting Seller Confirmation)';
         statusLabel.className = 'paid-label';
         statusLabel.style.display = 'block';
+        statusLabel.style.background = 'black';
+        statusLabel.style.color = 'white';
       }
       break;
   }

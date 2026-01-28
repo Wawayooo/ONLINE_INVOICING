@@ -1,7 +1,7 @@
 import { validateInvoiceForm } from './invoice_detectors.js';
 
-//const API_BASE = 'http://localhost:8000';
-const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+const API_BASE = 'https://kt2980zx-8000.asse.devtunnels.ms';
+//const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 
 document.getElementById('invoiceDate').valueAsDate = new Date();
 

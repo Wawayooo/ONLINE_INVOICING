@@ -1,5 +1,5 @@
-//const API_BASE = 'http://localhost:8000';
-const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+const API_BASE = 'https://kt2980zx-8000.asse.devtunnels.ms';
+//const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
 
 const pathParts = window.location.pathname.split('/').filter(Boolean);
 const roomHash = pathParts[1];
@@ -303,7 +303,6 @@ async function loadRoomData() {
     if (!response.ok) throw new Error("Room not found");
 
     const data = await response.json();
-    console.log("Room data loaded:", data);
 
     if (data.invoice?.status === 'finalized') {
       const modal = document.getElementById('loadingModal');
@@ -354,9 +353,7 @@ function populateInvoiceFields(data) {
   const isSingleItem = !isMultiItem && invoice.description;
 
   if (isMultiItem) {
-    console.log("Loading multi-item invoice with", invoice.items.length, "items");
     invoice.items.forEach((item, index) => {
-      console.log(`Item ${index + 1}:`, item);
       const block = createItemBlock(item);
       itemsContainer.appendChild(block);
       grandTotal += parseFloat(item.line_total || 0);
@@ -378,7 +375,6 @@ function populateInvoiceFields(data) {
     hideSingleItemButtons(block);
     toggleInvoiceDivs('single');
   } else {
-    console.log("No items found, creating empty block");
     const emptyBlock = createItemBlock();
     itemsContainer.appendChild(emptyBlock);
   }

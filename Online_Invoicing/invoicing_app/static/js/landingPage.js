@@ -1,5 +1,6 @@
 const CONFIG = {
-    API_BASE: "https://nontaxinvoiceproof.pythonanywhere.com",
+    //API_BASE: "https://nontaxinvoiceproof.pythonanywhere.com",
+    API_BASE: "https://kt2980zx-8000.asse.devtunnels.ms",
     MAX_BUYER_ATTEMPTS: 3,
     MAX_SECRET_ATTEMPTS: 2,
     MAX_ROOM_ATTEMPTS: 2,
