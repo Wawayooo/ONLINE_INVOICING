@@ -19,7 +19,6 @@
       <p><strong>Created At:</strong> {{ room.created_at }}</p>
       <p><strong>Updated At:</strong> {{ room.updated_at }}</p>
 
-      <!-- Seller Info -->
       <h3>Seller Information</h3>
       {% if room.seller %}
         <p><strong>Name:</strong> {{ room.seller.fullname }}</p>
@@ -35,7 +34,6 @@
         <p>N/A</p>
       {% endif %}
 
-      <!-- Buyer Info -->
       <h3>Buyer Information</h3>
       {% if room.buyer %}
         <p><strong>Name:</strong> {{ room.buyer.fullname }}</p>
@@ -51,7 +49,6 @@
         <p>N/A</p>
       {% endif %}
 
-      <!-- Invoice Info -->
       <h3>Invoice Information</h3>
       {% if room.invoice %}
         <p><strong>Status:</strong> {{ room.invoice.status|title }}</p>
@@ -66,7 +63,6 @@
         <p><strong>Created At:</strong> {{ room.invoice.created_at }}</p>
         <p><strong>Updated At:</strong> {{ room.invoice.updated_at }}</p>
 
-        <!-- Invoice Items -->
         <h4>Invoice Items</h4>
         <table>
           <thead>
@@ -96,7 +92,6 @@
         <p>No invoice data</p>
       {% endif %}
 
-      <!-- Negotiation History -->
       <h3>Negotiation History</h3>
       <ul>
         {% for history in room.history.all %}
@@ -106,7 +101,6 @@
         {% endfor %}
       </ul>
 
-      <!-- Multi-Item Negotiation History -->
       <h3>Multi-Item Negotiation History</h3>
       <ul>
         {% for history in room.multi_item_history.all %}
@@ -116,7 +110,6 @@
         {% endfor %}
       </ul>
 
-      <!-- Actions -->
       <div class="actions">
         {% if room.buyer %}
           <a href="{% url 'buyer_invoice_room' room.room_hash room.buyer.buyer_hash %}" class="btn-view">View Buyer Room</a>

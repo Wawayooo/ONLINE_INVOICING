@@ -28,9 +28,7 @@
   <div class="container" id="mainContent" style="display: none;">
     <h1>📄 Proof of Transaction</h1>
 
-    <div class="room-info">
-      <!--<p>“Bound By Truth & Guarded Flame, No Hand May Alter, For All Is Sealed In Steadfast Security.”</p>-->
-      
+    <div class="room-info">      
       <div class="body_type">
         <div class="typing-container" id="typing"></div>
       </div>
@@ -158,7 +156,6 @@
 
     </div>
 
-    <!-- Download Proof Button -->
     <div class="download-section">
     <a href="{% url 'proof_of_transaction_pdf' room_hash %}" 
       class="btn btn-primary" target="_blank">
@@ -182,9 +179,8 @@
       const loadingModal = document.getElementById('loadingModal');
       const mainContent = document.getElementById('mainContent');
 
-      // Build shareable link dynamically based on current origin
-      const roomHash = "{{ room_hash }}";   // pass from Django
-      const buyerHash = "{{ buyer_hash|default:'' }}"; // optional
+      const roomHash = "{{ room_hash }}"; 
+      const buyerHash = "{{ buyer_hash|default:'' }}";
       let shareableLink;
 
       const origin = window.location.origin.replace(/\/$/, '');
@@ -195,7 +191,6 @@
       }
 
 
-      // Hide modal and show content after 2 seconds
       setTimeout(function() {
         loadingModal.style.opacity = '0';
         setTimeout(function() {
@@ -203,15 +198,13 @@
           mainContent.style.display = 'block';
           mainContent.style.animation = 'fadeInUp 0.6s ease-out';
 
-          // Generate QR Code after content is displayed
           generateQRCode();
         }, 300);
       }, 2000);
 
-      // Generate QR Code
       function generateQRCode() {
         const qrcodeContainer = document.getElementById("qrcode");
-        qrcodeContainer.innerHTML = ''; // Clear any existing QR code
+        qrcodeContainer.innerHTML = '';
 
         new QRCode(qrcodeContainer, {
           text: shareableLink,
@@ -223,7 +216,6 @@
         });
       }
 
-      // Copy link functionality
       document.getElementById('copyLinkBtn').addEventListener('click', function() {
         navigator.clipboard.writeText(shareableLink).then(function() {
           const btn = document.getElementById('copyLinkBtn');
@@ -249,9 +241,8 @@
       if (index < text.length) {
         typingElement.textContent += text.charAt(index);
         index++;
-        setTimeout(typeEffect, 80); // typing speed (ms per letter)
+        setTimeout(typeEffect, 80);
       } else {
-        // Finished typing, wait 3 seconds then reset
         setTimeout(() => {
           typingElement.textContent = "";
           index = 0;
@@ -260,7 +251,6 @@
       }
     }
 
-    // Start typing loop
     typeEffect();
   </script>
 </body>

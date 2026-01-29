@@ -12,12 +12,10 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <!-- Seller Info -->
         <div class="section" id="seller-info">
             <h3>Seller Information</h3>
             
             <div class="seller-content">
-                <!-- Left: Profile Image -->
                 <div class="seller-profile-section">
                     <div class="profile-upload-area">
                         <label>Profile Picture</label>
@@ -32,7 +30,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Seller Details -->
                 <div class="seller-details-section">
                     <div class="form-row">
                         <div class="form-field full-width">
@@ -62,7 +59,6 @@
             </div>
         </div>
 
-        <!-- Secret Key -->
         <div class="section" id="seller-secret-key">
           <h3>Seller Secret Key</h3>
           
@@ -83,7 +79,6 @@
           </div>
         </div>
 
-        <!-- Invoice Info -->
         <div class="section" id="invoice-info">
             <h3>Invoice Information</h3>
 
@@ -115,7 +110,6 @@
             </div>
         </div>
 
-        <!-- Invoice Items -->
         <div class="section" id="invoice-items">
             <h3>Invoice Items</h3>
 
@@ -132,7 +126,6 @@
             </div>
         </div>
 
-        <!-- Submit -->
         <div class="submit-section">
             <button type="submit" class="btn-submit">Create Invoice</button>
         </div>
@@ -185,7 +178,7 @@
         `;
         container.appendChild(itemDiv);
         document.getElementById("items-count").value = index + 1;
-        updateGrandTotal(); // refresh grand total
+        updateGrandTotal();
     }
 
     function updateLineTotal(el) {
@@ -224,7 +217,6 @@
         const container = document.getElementById("items-container");
         document.getElementById("items-count").value = container.children.length;
         
-        // Update item numbers
         Array.from(container.children).forEach((item, index) => {
             const header = item.querySelector('h4');
             if (header) {
@@ -233,7 +225,6 @@
         });
     }
 
-    // Profile image preview
     document.getElementById('sellerProfilePic').addEventListener('change', function(event) {
         const file = event.target.files[0];
         const preview = document.getElementById('sellerPreview');

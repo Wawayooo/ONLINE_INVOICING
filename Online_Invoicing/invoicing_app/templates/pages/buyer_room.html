@@ -7,9 +7,8 @@
   <title>Buyer Room</title>
   <link rel="stylesheet" href="{% static 'css/buyer_room.css' %}">
   <style>
-    /* Simple modal styles */
     .modal {
-      display: none; /* hidden by default */
+      display: none;
       position: fixed;
       z-index: 1000;
       left: 0; top: 0;
@@ -46,10 +45,8 @@
   <div class="container">
     <h1>🛒 Buyer Room</h1>
 
-    <!-- Buyer Form Section -->
     <div id="buyerSection">
       <h2>Your Information</h2>
-      <!-- No method/action: handled by JS -->
       <form id="buyerForm" enctype="multipart/form-data">
         <div class="form-group">
           <label for="buyerFullname">Full Name *</label>
@@ -77,7 +74,6 @@
     </div>
   </div>
 
-  <!-- Occupied Modal -->
   <div id="occupiedModal" class="modal">
     <div class="modal-content">
       <h2>🚫 Room Occupied</h2>
@@ -85,7 +81,6 @@
     </div>
   </div>
 
-  <!-- Buyer Hash Verification Modal -->
   <div id="hashModal" class="modal">
     <div class="modal-content">
       <h2>🔑 Enter Buyer Hash</h2>
