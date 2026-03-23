@@ -923,6 +923,57 @@ body {
   align-self: center;
 }
 
+.buyer_joined_modal {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 12px;
+  z-index: 1000;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  animation: fadeInUp 0.4s ease;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.buyer_joined_modal_content {
+  padding: 16px;
+  text-align: left;
+}
+
+.buyer_joined_modal h2 {
+  font-size: 16px;
+  margin: 0;
+  color: #333333;
+}
+
+.close-btn {
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+  color: #888888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #333333;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 20px;

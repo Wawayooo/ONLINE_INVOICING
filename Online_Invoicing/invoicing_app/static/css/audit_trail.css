@@ -1,0 +1,127 @@
+.audit-trail-section {
+  background: #f9fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.audit-trail-section h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.audit-trail-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 1rem;
+  border-left: 4px solid #667eea;
+  padding-left: 0.5rem;
+}
+
+.audit-trail-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.audit-trail-section li {
+  background: #fff;
+  margin-bottom: 0.8rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.audit-trail-section li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.audit-trail-section li span.actor {
+  font-weight: 600;
+  color: #11998e;
+}
+
+.audit-trail-section li span.action {
+  font-weight: 500;
+  color: #667eea;
+}
+
+.audit-trail-section li span.date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.3rem;
+}
+
+.audit-trail-section li span.notes {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.Single_Item,
+.Multi_Item {
+  margin-bottom: 2rem;
+}
+
+.Single_Item ul li {
+  border-left: 4px solid #38ef7d;
+}
+
+.Multi_Item ul li {
+  border-left: 4px solid #ff9f43;
+}
+
+.btn_primary_back {
+  background: black;
+  color: white;
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  font-size: 12px;
+  margin-bottom: 30px;
+}
+
+.btn_primary_back {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn_primary_back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn_primary_back:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn_primary_back:active {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .btn_primary_back {
+    font-size: 8px;
+    top: 7px;
+    left: 7px;
+  }
+}
