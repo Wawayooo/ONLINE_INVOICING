@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views, multiple_invoice_views
+from . import views, multiple_invoice_views, encrypted_data_views
 
 urlpatterns = [
+    #path('', views.informative_page, name='informative_page'),
     path('', views.landing_page, name='landing'),
     path('seller/create/', views.seller_create_page, name='seller_create'),
     
@@ -41,8 +42,23 @@ urlpatterns = [
     path('api/invoice/update/<str:room_hash>/', views.update_invoice, name='update_invoice'),    
     
     path('proof_transaction/<str:room_hash>/pdf/', views.proof_of_transaction_pdf, name='proof_of_transaction_pdf'),
+    
+    path('invoice/<str:room_hash>/encrypt/', 
+         encrypted_data_views.create_encrypted_invoice, 
+         name='create_encrypted_invoice'),
+    
+    path('encrypted-invoice/<uuid:id>/', 
+     encrypted_data_views.view_encrypted_invoice, 
+     name='view_encrypted_invoice'),
+    
+    path('api/decrypt-invoice/<str:room_hash>/', 
+         encrypted_data_views.decrypt_invoice_api, 
+         name='decrypt_invoice_api'),
+    
+    path('api/encrypted-invoice-status/<str:room_hash>/', 
+         encrypted_data_views.encrypted_invoice_status, 
+         name='encrypted_invoice_status'),
 
     path('alldata/', views.all_data_view, name='all_data'),
     path('alldata/delete/<uuid:room_id>/', views.delete_room, name='delete_room'),
 ]
-
