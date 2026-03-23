@@ -60,7 +60,6 @@ class Seller(models.Model):
             self.room.save(update_fields=["seller_hash"])
 
     def check_secret_key(self, raw_key: str) -> bool:
-        """Verify the seller's secret key against the stored hash."""
         if not self.secret_key:
             return False
         return check_password(raw_key, self.secret_key)
@@ -194,3 +193,48 @@ class MultiItemNegotiationHistory(models.Model):
         elif self.invoice:
             return f"{self.actor} - {self.action} on Invoice {self.invoice.id} at {self.created_at}"
         return f"{self.actor} - {self.action} at {self.created_at}"
+
+class EncryptedInvoiceRecord(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name="encrypted_invoice")
+    
+    encrypted_seller_data = models.TextField()
+    encrypted_buyer_data = models.TextField()
+    encrypted_invoice_data = models.TextField()
+    encrypted_items_data = models.TextField()
+    
+    data_hash = models.CharField(max_length=64) 
+    verification_signature = models.CharField(max_length=128)
+    
+    finalized_at = models.DateTimeField(auto_now_add=True)
+    last_verified_at = models.DateTimeField(null=True, blank=True)
+    verification_count = models.IntegerField(default=0)
+    
+    is_active = models.BooleanField(default=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Encrypted Invoice Record"
+        verbose_name_plural = "Encrypted Invoice Records"
+
+    def __str__(self):
+        return f"Encrypted Invoice for Room {self.room.room_hash} - Finalized at {self.finalized_at}"
+    
+    def generate_data_hash(self):
+        """Generate SHA-256 hash of all encrypted data for integrity verification"""
+        combined_data = f"{self.encrypted_seller_data}{self.encrypted_buyer_data}{self.encrypted_invoice_data}{self.encrypted_items_data}"
+        return hashlib.sha256(combined_data.encode()).hexdigest()
+    
+    def verify_integrity(self):
+        """Verify that the encrypted data hasn't been tampered with"""
+        current_hash = self.generate_data_hash()
+        return current_hash == self.data_hash
+    
+    def increment_verification(self):
+        """Track verification attempts"""
+        self.verification_count += 1
+        self.last_verified_at = timezone.now()
+        self.save(update_fields=['verification_count', 'last_verified_at'])
