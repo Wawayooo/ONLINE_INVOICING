@@ -59,6 +59,6 @@ urlpatterns = [
          encrypted_data_views.encrypted_invoice_status, 
          name='encrypted_invoice_status'),
 
-    path('alldata/', views.all_data_view, name='all_data'),
-    path('alldata/delete/<uuid:room_id>/', views.delete_room, name='delete_room'),
+    #path('alldata/', views.all_data_view, name='all_data'),
+    #path('alldata/delete/<uuid:room_id>/', views.delete_room, name='delete_room'),
 ]
