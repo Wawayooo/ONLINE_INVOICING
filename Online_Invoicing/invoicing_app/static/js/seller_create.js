@@ -2,6 +2,7 @@ import { validateInvoiceForm } from './invoice_detectors.js';
 
 //const API_BASE = 'https://kt2980zx-8000.asse.devtunnels.ms';
 const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+//const API_BASE = "http://127.0.0.1:8000";
 
 document.getElementById('invoiceDate').valueAsDate = new Date();
 
@@ -48,6 +49,7 @@ document.getElementById('invoiceForm').addEventListener('submit', async function
 
   submitBtn.disabled = true;
   loading.classList.add('active');
+  document.getElementById('loading').style.display = 'flex';
 
   try {
     const response = await fetch(`${API_BASE}/api/invoice/create/`, {
@@ -62,14 +64,14 @@ document.getElementById('invoiceForm').addEventListener('submit', async function
     } else {
       console.error('Invoice creation failed:', data);
       alert('Error creating invoice. Check console for details.');
-      submitBtn.disabled = false;
-      loading.classList.remove('active');
     }
 
   } catch (error) {
     console.error('Network error:', error);
     alert('Network error: ' + error.message);
+  } finally {
     submitBtn.disabled = false;
     loading.classList.remove('active');
+    document.getElementById('loading').style.display = 'none';
   }
 });

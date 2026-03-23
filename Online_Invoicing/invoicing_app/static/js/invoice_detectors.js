@@ -1,8 +1,7 @@
 export const detectors = {
 
   seller_fullname: (value) => {
-    if (!value || value.trim().length < 2) return "Full name must be at least 2 characters.";
-    if (!/^[a-zA-Z\s.'-]+$/.test(value)) return "Full name contains invalid characters.";
+    if (!value || value.trim().length < 5) return "Full name must be at least 5 characters.";
     return null;
   },
 
@@ -23,13 +22,8 @@ export const detectors = {
   seller_social_media: (value) => {
     if (!value) return null; 
 
-    if (!value.includes("(FB)") && !value.includes("(IG)")) {
-      return "Social media must include (FB) or (IG).";
-    }
-
     return null;
   },
-
 
   seller_profile_picture: (file) => {
     if (!file) return null; 

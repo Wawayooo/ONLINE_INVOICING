@@ -1,22 +1,33 @@
-document.querySelector("form").addEventListener("submit", function(e) {
-      const key = document.getElementById("sellerSecretKey").value;
-      const confirmKey = document.getElementById("sellerSecretKeyConfirm").value;
+const { hide } = require("yargs");
 
-      if (key !== confirmKey) {
-        e.preventDefault();
-        alert("Secret keys do not match. Please re-enter.");
-      }
-    });
+function showLoading() {
+  document.getElementById("loading").style.display = "flex";
+}
+
+function hideLoading() {
+  document.getElementById("loading").style.display = "none";
+}
+
+document.querySelector("form").addEventListener("submit", function(e) {
+  const key = document.getElementById("sellerSecretKey").value;
+  const confirmKey = document.getElementById("sellerSecretKeyConfirm").value;
+
+  if (key !== confirmKey) {
+    e.preventDefault();
+    alert("Secret keys do not match. Please re-enter.");
+  }
+});
 
 document.addEventListener("DOMContentLoaded", function() {
   const form = document.querySelector("form");
 
   form.addEventListener("submit", function(e) {
+    showLoading();
     let errors = [];
 
     const fullname = form.querySelector("[name='seller_fullname']").value.trim();
-    if (!/^[A-Za-z\s]+$/.test(fullname)) {
-      errors.push("Full Name must contain only letters and spaces.");
+    if (!/^[A-Za-z\s.-]+$/.test(fullname)) {
+      errors.push("Full Name must contain only letters, spaces, periods, or hyphens.");
     }
 
     const email = form.querySelector("[name='seller_email']").value.trim();
@@ -78,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (errors.length > 0) {
       e.preventDefault();
+      hideLoading();
       alert("Please correct the following:\n\n" + errors.join("\n"));
     }
   });

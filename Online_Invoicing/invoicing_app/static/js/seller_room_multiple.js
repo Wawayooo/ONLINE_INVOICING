@@ -1,5 +1,6 @@
 //const API_BASE = 'https://kt2980zx-8000.asse.devtunnels.ms';
 const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
+//const API_BASE = "http://127.0.0.1:8000";
 
 const pathParts = window.location.pathname.split('/').filter(Boolean);
 const roomHash = pathParts[1];
@@ -194,7 +195,6 @@ function showInvoice(invoice) {
     window.location.href = `/proof_transaction/${roomHash}/`;
   }
 }
-
 
 function calculateTotal() {
   const qty = parseFloat(document.getElementById('quantity').value) || 0;

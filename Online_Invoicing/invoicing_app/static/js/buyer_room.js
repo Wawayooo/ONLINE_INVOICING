@@ -1,12 +1,13 @@
-
+//const API_BASE = "http://127.0.0.1:8000";
 const API_BASE = "https://nontaxinvoiceproof.pythonanywhere.com";
-//const API_BASE = 'https://kt2980zx-8000.asse.devtunnels.ms';
+
 const roomHash = window.location.pathname.split('/').filter(Boolean).pop();
 
 let attempts = 0;
 let locked = false;
 let countdownTimer = null;
 
+// Single submit handler — tries to join first
 document.getElementById('buyerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -21,11 +22,12 @@ document.getElementById('buyerForm').addEventListener('submit', async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      alert("You have successfully joined this room!");
+      // Successful first-time join — no occupied modal, just redirect
       localStorage.setItem('buyer_hash', data.buyer_hash);
       window.location.href = data.redirect_url;
     } else if (response.status === 403) {
-      showOccupiedModal();
+      // Room is occupied — verify if this is the existing buyer trying to re-enter
+      await verifyBuyerInfo();
     } else {
       alert(data.error || "Failed to join the room.");
     }
@@ -35,17 +37,7 @@ document.getElementById('buyerForm').addEventListener('submit', async (e) => {
   }
 });
 
-
-function showOccupiedModal() {
-  document.getElementById('buyerForm').style.pointerEvents = 'none';
-  document.getElementById('buyerForm').style.opacity = 0.5;
-  document.getElementById('occupiedModal').style.display = 'block';
-}
-
-function showHashModal() {
-  document.getElementById('hashModal').style.display = 'block';
-}
-
+// Only called when 403 is returned — checks if user is the existing buyer
 async function verifyBuyerInfo() {
   try {
     const res = await fetch(`${API_BASE}/api/room/${roomHash}/`);
@@ -58,14 +50,17 @@ async function verifyBuyerInfo() {
       const phone = document.getElementById('buyerPhone').value.trim();
       const social = document.getElementById('buyerSocial').value.trim();
 
-      if (
+      const isExistingBuyer =
         fullname === data.buyer.fullname &&
         email === (data.buyer.email || '') &&
         phone === (data.buyer.phone || '') &&
-        social === (data.buyer.social_media || '')
-      ) {
+        social === (data.buyer.social_media || '');
+
+      if (isExistingBuyer) {
+        // Buyer recognizes themselves — prompt for hash to re-enter
         showHashModal();
       } else {
+        // Someone else trying to join an occupied room
         showOccupiedModal();
       }
     } else {
@@ -73,8 +68,18 @@ async function verifyBuyerInfo() {
     }
   } catch (err) {
     console.error(err);
-    alert("Failed to verify buyer info");
+    alert("Failed to verify buyer info.");
   }
+}
+
+function showOccupiedModal() {
+  document.getElementById('buyerForm').style.pointerEvents = 'none';
+  document.getElementById('buyerForm').style.opacity = 0.5;
+  document.getElementById('occupiedModal').style.display = 'block';
+}
+
+function showHashModal() {
+  document.getElementById('hashModal').style.display = 'block';
 }
 
 document.getElementById('verifyHashBtn').addEventListener('click', () => {
@@ -126,8 +131,3 @@ function lockout() {
     }
   }, 1000);
 }
-
-document.getElementById('buyerForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  verifyBuyerInfo();
-});
