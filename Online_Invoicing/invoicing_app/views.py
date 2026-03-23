@@ -27,6 +27,8 @@ from django.contrib.auth.hashers import check_password, make_password
 from decimal import Decimal, InvalidOperation
 from django.db import transaction
 
+def informative_page(request):
+    return render(request, 'pages/informative_page.html')
 
 def landing_page(request):
     return render(request, 'pages/landing_page.html')
@@ -90,9 +92,17 @@ def get_room(request, room_hash):
 
 def seller_room_view(request, room_hash):
     room = get_object_or_404(Room, room_hash=room_hash)
+    invoice_status = None
+
+    if room.invoice:
+        invoice_status = room.invoice.status
+
     return render(request, 'seller_room.html', {
         'room_hash': room_hash,
-        'room': room
+        'room': room,
+        'invoice_status': invoice_status,
+        'invoice': room.invoice,
+        'is_buyer_assigned': room.is_buyer_assigned,
     })
 
 @api_view(['POST'])
@@ -130,7 +140,7 @@ def proof_of_transaction_pdf(request, room_hash):
     serializer = RoomDetailSerializer(room)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="proof_transaction_{room.room_hash}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="Your_Proof_of_Transaction.pdf"'
 
     return build_proof_transaction_pdf(response, serializer.data)
 
@@ -159,17 +169,19 @@ def buyer_invoice_room_view(request, room_hash, buyer_hash):
 def proof_transaction_view(request, room_hash):
     room = get_object_or_404(Room, room_hash=room_hash)
     buyer = getattr(room, 'buyer', None)
-     
+
     context = {
-        'room_hash': room_hash,
-        'buyer_hash': buyer.buyer_hash,
+        'room_id': str(room.id),  
+        'room_hash': room_hash,    
+        'buyer_hash': buyer.buyer_hash if buyer else None,
         'seller': room.seller,
         'buyer': room.buyer,
         'invoice': room.invoice,
         'shareable_link': request.build_absolute_uri(),
+        'history': room.history.all(),
+        'multi_item_history': room.multi_item_history.all(),
     }
     return render(request, 'proof_transaction.html', context)
-
 
 
 def generate_buyer_room_hash():
@@ -552,20 +564,6 @@ def download_invoice_pdf(request, room_hash):
         'room_hash': room_hash,
         'verification_key': room.verification_key
     })
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
