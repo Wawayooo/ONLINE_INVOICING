@@ -21,8 +21,25 @@
     <div class="modal-content">
       <span class="close-btn" onclick="closeDraftNotification()">&times;</span>
       <div class="modal-body">
-        <h2>📄 Draft Invoice</h2>
+        <h2>📄 Invoice Status: <strong style="color: #100b0a;">Draft</strong></h2>
         <p>You can now <strong>Approve</strong> or <strong>Disapprove</strong> the invoice.</p>
+        <div class="hash_sec" style="margin-top: 1rem; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+          <p>
+            <p style="font-size: 10px; color: #048625;">Copy this hash to visit the page again.</p>
+            <strong>PassKey:</strong> 
+            <span id="buyerHash">{{ buyer_hash }}</span>
+            <button 
+              type="button" 
+              id="copyBtn"
+              style="margin-left: 8px; padding: 2px 6px; font-size: 0.8em; cursor: pointer;"
+            >
+              Copy
+            </button>
+            <span id="copyMsg" style="margin-left: 6px; font-size: 0.8em; color: green; display: none;">
+              ✔ Copied!
+            </span>
+          </p>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="primary-btn" onclick="closeDraftNotification()" style="padding: 5px 13px;">OK</button>
@@ -47,7 +64,7 @@
         <div id="singleItemCard" style="display:none;" class="single-item-card">
           <h3>Invoice Item</h3>
           <div class="item-field">
-            <strong>Description:</strong> <span id="singleDescription"></span>
+            <strong>Info:</strong> <span id="singleDescription"></span>
           </div>
           <div class="item-field">
             <strong>Quantity:</strong> <span id="singleQuantity"></span>
@@ -63,9 +80,10 @@
         <div class="invoice-form">
           <h2>Invoice Details</h2>
 
-          <div id="invoiceHeader"></div>
+          <div id="invoiceHeader">
+            <h3>Invoice Items</h3>
+          </div>
 
-          <h3>Invoice Items</h3>
           <table id="itemsTable" style="overflow: auto;">
             <thead>
               <tr>
@@ -98,10 +116,10 @@
           </div>
         </div>
 
-        <div class="seller-form">
+        <div class="seller-form" style="max-height: 690px; overflow: auto;">
           <h2>Seller Information</h2>
           <img id="sellerProfile" 
-            src="{% if seller.profile_picture %}{{ seller.profile_picture.url }}{% else %}/media/default_img.png{% endif %}" 
+            src="{% if seller.profile_picture %}{{ seller.profile_picture.url }}{% else %}{% static 'default_img.png' %}{% endif %}" 
             alt="Seller Profile" 
             class="profile-image">
           <p><strong>Name:</strong> <span id="sellerName"></span></p>
@@ -114,5 +132,21 @@
   </div>
 
   <script src="{% static 'js/buyer_invoice_room.js' %}"></script>
+  
+  <script>
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      const hashText = document.getElementById('buyerHash').textContent;
+      try {
+        await navigator.clipboard.writeText(hashText);
+        const msg = document.getElementById('copyMsg');
+        msg.style.display = 'inline';
+        setTimeout(() => {
+          msg.style.display = 'none';
+        }, 2000); // hide after 2 seconds
+      } catch (err) {
+        alert('Failed to copy hash: ' + err);
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,140 +1,604 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Invoicing For Non-Taxable Transaction</title>
-  <!--<link rel="icon" type="image/png" href="{% static 'images/favicon.png'%}">-->
-  <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
-</head>
-
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Printable E-Invoicing System</title>
+    <!--<link rel="preconnect" href="https://fonts.googleapis.com">-->
+    <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landing_page_css.css' %}">
+  </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <h1>📄 Create Invoice for Non-Taxable Proof of Transaction</h1>
-      <p class="subtitle">
-        Create, negotiate, and finalize invoices without creating an account.<br>
-        Simple, fast, and secure transactions between sellers and buyers.
+
+<div id="scroll-bar"></div>
+
+<nav id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-mark">📄</div>
+    <span class="logo-text">Online Printable <span class="logo-accent">E-Invoicing</span> System</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#invoice-types">Invoice Types</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#access-panel">Access Room</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#access-panel" class="btn-ghost-nav">Access Room</a>
+    <button class="btn btn-primary" id="openInvoiceModalNav">Create Invoice</button>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section id="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid-deco"></div>
+  <div class="hero-layout">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Non-Taxable Buy &amp; Sell Transactions · Philippines
+      </div>
+      <h1 class="hero-h1">
+        Printable Invoices<br>
+        <span class="grad-text">Without an Account,</span><br>
+        Done in Seconds
+      </h1>
+      <p class="hero-p">
+        Generate, share, negotiate, and finalize professional invoices for
+        <strong>informal and non-taxable transactions</strong> — no registration required.
+        Backed by QR code verification and a tamper-evident audit trail.
       </p>
-    </div>
-
-    <div class="cards" id="sellerRoomDiv">
-        {% csrf_token %}
-        <input type="password" id="sellerSecretInput" placeholder="Enter your secret key">
-        <button class="btn btn-seller" id="sellerGoBtn">Go to Seller Room</button>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon">🏪</div>
-        <h2>I'm a Seller</h2>
-        <p>Create an invoice, set your terms, and share a secure link with your buyer to start negotiation.</p>
-        <a class="btn btn-seller" id="openInvoiceModal">Create Invoice</a>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-hero" id="openInvoiceModalHero">Create Invoice Now</button>
+        <a href="#how-it-works" class="btn-outline-hero">See How It Works</a>
       </div>
-
-      <div class="card" id="buyerCard">
-        <div class="card-icon">🛒</div>
-        <h2>I'm a Buyer</h2>
-        <p>Received a link from a seller? Paste here or Click the link they shared with you to view and negotiate the invoice.</p>
-        <div class="btn btn-buyer" id="buyerBtn">Enter Room</div>
-      </div>
-    </div>
-
-    <!-- Hidden Modal for Invoice Type Selection -->
-    <div id="invoiceModal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" id="closeModal">&times;</span>
-        <h2>📑 Select Invoice Type</h2>
-        <p class="modal-subtitle">Choose the type of invoice you want to create:</p>
-
-        <div class="modal-options">
-          <!-- Single Item Invoice -->
-          <div class="option-card">
-            <div class="option-icon">🛍️</div>
-            <h3>Single-Item Invoice</h3>
-            <p>Best for selling one product or service (e.g., 10 hours of consulting, 1 laptop).</p>
-            <button onclick="window.location.href='/seller/create/'" class="btn btn-seller">Create Single-Item</button>
-          </div>
-
-          <!-- Multiple Item Invoice -->
-          <div class="option-card">
-            <div class="option-icon">📦</div>
-            <h3>Multiple-Item Invoice</h3>
-            <p>Perfect for wholesale or sari-sari store sales with many products in one invoice.</p>
-            <button onclick="window.location.href='/invoice/create/'" class="btn btn-seller">Create Multiple-Item</button>
-          </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-n">5</span>
+          <span class="stat-l">Invoice Statuses</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">2</span>
+          <span class="stat-l">Invoice Types</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">QR</span>
+          <span class="stat-l">Verification Built-In</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">0</span>
+          <span class="stat-l">Accounts Needed</span>
         </div>
       </div>
     </div>
 
-    <div class="features">
-      <div class="feature">
-        <div class="feature-icon">🔒</div>
-        <h3>No Account Needed</h3>
-        <p>Start transactions immediately without registration</p>
+    <div class="hero-right">
+      <div class="hero-invoices">
+        <div class="invoice-float invoice-a">
+          <span class="invoice-tag">Single-Item Invoice</span>
+          <img src="{% static 'images/single_invoice.png' %}" alt="Single-Item Finalized Invoice" class="invoice-img" />
+        </div>
+        <div class="invoice-float invoice-b">
+          <span class="invoice-tag">Multi-Item Invoice</span>
+          <img src="{% static 'images/multi_invoice.png' %}" alt="Multi-Item Finalized Invoice" class="invoice-img" />
+        </div>
       </div>
-
-      <div class="feature">
-        <div class="feature-icon">🤝</div>
-        <h3>Real-time Negotiation</h3>
-        <p>Instant updates as both parties review and negotiate</p>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon">✅</div>
-        <h3>Secure & Verified</h3>
-        <p>QR codes and verification keys ensure authenticity</p>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon">🔗</div>
-        <h3>One Buyer Per Room</h3>
-        <p>First buyer to join gets exclusive access</p>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon">💰</div>
-        <h3>Payment Transaction</h3>
-        <p>This Will Be Outside our System's Responsibility</p>
-      </div>
-
-      <div class="feature">
-        <div class="feature-icon">📥</div>
-        <h3>Downloadable PDFs</h3>
-        <p>Get professional invoices with QR verification</p>
-      </div>
-    </div>
-
-    <div class="demo-link">
-      <p>Powered by Django REST Framework & Real-time WebSocket</p>
     </div>
   </div>
+</section>
 
-  <script src="{% static 'js/landingPage.js' %}"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const openBtn = document.getElementById("openInvoiceModal");
-      const modal = document.getElementById("invoiceModal");
-      const closeBtn = document.getElementById("closeModal");
+<div class="marquee-strip">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
 
-      openBtn.addEventListener("click", function(event) {
-        event.preventDefault();
-        modal.style.display = "block";
-      });
+<section id="how-it-works">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">Three Steps From<br><span class="grad-text">Draft to Finalized</span></h2>
+      <p class="section-sub">No registration. No setup. Create an invoice, share it with your buyer, and finalize once payment is confirmed.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step-card reveal">
+        <div class="step-num grad-bg">1</div>
+        <div class="step-icon">📝</div>
+        <h3>Seller Creates Invoice</h3>
+        <p>Choose single-item or multi-item. Enter description, price, quantity, and buyer details. Save as Draft instantly.</p>
+        <span class="step-chip">Status: Draft</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card reveal d1">
+        <div class="step-num grad-bg">2</div>
+        <div class="step-icon">🤝</div>
+        <h3>Share &amp; Negotiate</h3>
+        <p>Share the room link with your buyer. Review, propose changes, and agree on terms before moving forward.</p>
+        <span class="step-chip">Status: Negotiating → Pending</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card reveal d2">
+        <div class="step-num grad-bg">3</div>
+        <div class="step-icon">✅</div>
+        <h3>Finalize &amp; Download</h3>
+        <p>Once payment is confirmed by the seller, the invoice is locked with a QR code. Download the printable PDF receipt.</p>
+        <span class="step-chip">Status: Finalized</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-      closeBtn.addEventListener("click", function() {
-        modal.style.display = "none";
-      });
+<section id="invoice-types">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">Invoice Types</div>
+      <h2 class="section-title">Two Invoice Formats,<br><span class="grad-text">One for Every Transaction</span></h2>
+      <p class="section-sub">Whether you are selling a single item or multiple products, there is a format designed for your needs.</p>
+    </div>
+    <div class="type-grid">
 
-      window.addEventListener("click", function(event) {
-        if (event.target === modal) {
-          modal.style.display = "none";
-        }
-      });
-    });
-  </script>
+      <div class="type-card reveal-l">
+        <span class="type-badge">Single-Item</span>
+        <div class="type-icon">🛍️</div>
+        <h3>Single-Item Invoice</h3>
+        <p>Best for one product or service. Shows product description, quantity, unit price, and total with full seller and buyer details.</p>
+        <ul class="type-list">
+          <li><span class="chk">✓</span>One product or service description</li>
+          <li><span class="chk">✓</span>Quantity × Unit Price = Total</li>
+          <li><span class="chk">✓</span>Full seller and buyer information</li>
+          <li><span class="chk">✓</span>Payment method and transaction date</li>
+          <li><span class="chk">✓</span>QR code for online verification</li>
+          <li><span class="chk">✓</span>Printable and downloadable PDF</li>
+        </ul>
+        <div class="type-preview">
+          <img src="{% static 'images/single_invoice.png' %}" alt="Single-Item Invoice Preview" />
+        </div>
+        <button onclick="window.location.href='/seller/create/'" class="btn btn-primary type-cta">Create Single-Item Invoice</button>
+      </div>
+
+      <div class="type-card reveal-r">
+        <span class="type-badge type-badge-gold">Multi-Item</span>
+        <div class="type-icon">📦</div>
+        <h3>Multi-Item Invoice</h3>
+        <p>Perfect for sari-sari stores or any transaction with multiple products listed with an itemized breakdown in one invoice.</p>
+        <ul class="type-list">
+          <li><span class="chk">✓</span>Unlimited product line items</li>
+          <li><span class="chk">✓</span>Description, Quantity, Unit, and Amount per item</li>
+          <li><span class="chk">✓</span>Automatic total computation</li>
+          <li><span class="chk">✓</span>Full seller and buyer information</li>
+          <li><span class="chk">✓</span>QR code for online verification</li>
+          <li><span class="chk">✓</span>Printable and downloadable PDF</li>
+        </ul>
+        <div class="type-preview">
+          <img src="{% static 'images/multi_invoice.png' %}" alt="Multi-Item Invoice Preview" />
+        </div>
+        <button onclick="window.location.href='/invoice/create/'" class="btn btn-primary type-cta">Create Multi-Item Invoice</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="access-panel">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">Access Your Room</div>
+      <h2 class="section-title">Already Have<br><span class="grad-text">an Invoice Room?</span></h2>
+      <p class="section-sub">Enter your secret key to return to your seller room, or enter a room hash to join as a buyer.</p>
+    </div>
+    <div class="access-grid">
+
+      <div class="access-card access-seller reveal-l">
+        <div class="access-icon">🏪</div>
+        <h3>Seller Room Access</h3>
+        <p>Enter your secret key to return to your existing invoice room and manage your active transaction.</p>
+        <div class="cards" id="sellerRoomDiv">
+          {% csrf_token %}
+          <input type="password" id="sellerSecretInput" class="access-input" placeholder="Enter your secret key">
+          <button class="btn btn-primary" id="sellerGoBtn">Go to Seller Room</button>
+        </div>
+      </div>
+
+      <div class="access-card access-buyer reveal-r">
+        <div class="access-icon">🛒</div>
+        <h3>Buyer Room Access</h3>
+        <p>Received a link from a seller? Enter the room hash or paste the full link to view and confirm the invoice.</p>
+        <button class="btn btn-green" id="buyerBtn">Enter Buyer Room</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">Key Features</div>
+      <h2 class="section-title">Built for Transparency<br><span class="grad-text">and Accountability</span></h2>
+      <p class="section-sub">Every feature is designed to reduce disputes and protect both parties in informal selling transactions.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔒</div>
+        <h3>No Account Required</h3>
+        <p>Start immediately — no registration, no email verification. Just fill in the details and share the room link.</p>
+      </div>
+      <div class="feature-card reveal d1">
+        <div class="feature-icon">🤝</div>
+        <h3>Real-Time Negotiation</h3>
+        <p>Both parties see live updates as the invoice is reviewed. Changes are proposed and agreed on before finalization.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon">✅</div>
+        <h3>QR Code Verification</h3>
+        <p>Finalized invoices include a unique QR code that links to the official online verification page for authenticity checks.</p>
+      </div>
+      <div class="feature-card reveal d1">
+        <div class="feature-icon">🔗</div>
+        <h3>One Buyer Per Room</h3>
+        <p>The first buyer to join the room gets exclusive access. No unauthorized third parties can enter the transaction room.</p>
+      </div>
+      <div class="feature-card reveal d2">
+        <div class="feature-icon">🔍</div>
+        <h3>Immutable Audit Trail</h3>
+        <p>Every action taken on the invoice is permanently recorded — a tamper-evident history for dispute resolution.</p>
+      </div>
+      <div class="feature-card reveal d3">
+        <div class="feature-icon">📥</div>
+        <h3>Downloadable PDF</h3>
+        <p>Get a professional, print-ready PDF invoice with the QR verification code included on every finalized document.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">Invoice Workflow</div>
+      <h2 class="section-title">5 Statuses, Full<br><span class="grad-text">Transparency at Every Stage</span></h2>
+      <p class="section-sub">Every invoice moves through a clearly defined workflow so both the seller and buyer always know exactly where the transaction stands.</p>
+    </div>
+
+    <div class="workflow-track reveal">
+      <div class="wf-step">
+        <div class="wf-circle wf-draft">📝</div>
+        <div class="wf-name">Draft</div>
+        <div class="wf-desc">Seller is preparing the invoice</div>
+      </div>
+      <div class="wf-line"></div>
+      <div class="wf-step">
+        <div class="wf-circle wf-negotiating">🤝</div>
+        <div class="wf-name">Negotiating</div>
+        <div class="wf-desc">Shared with buyer for review</div>
+      </div>
+      <div class="wf-line"></div>
+      <div class="wf-step">
+        <div class="wf-circle wf-pending">⏳</div>
+        <div class="wf-name">Pending</div>
+        <div class="wf-desc">Agreed — awaiting payment</div>
+      </div>
+      <div class="wf-line"></div>
+      <div class="wf-step">
+        <div class="wf-circle wf-unconfirmed">❓</div>
+        <div class="wf-name">Unconfirmed</div>
+        <div class="wf-desc">Payment sent, being verified</div>
+      </div>
+      <div class="wf-line"></div>
+      <div class="wf-step">
+        <div class="wf-circle wf-finalized">✅</div>
+        <div class="wf-name">Finalized</div>
+        <div class="wf-desc">Confirmed + QR code issued</div>
+      </div>
+    </div>
+
+    <div class="wf-cards">
+      <div class="wf-card reveal">
+        <div class="wf-num wf-c-draft">01</div>
+        <h4>Draft</h4>
+        <p>The seller is creating the invoice. It can still be edited freely before sharing with the buyer.</p>
+      </div>
+      <div class="wf-card reveal d1">
+        <div class="wf-num wf-c-negotiating">02</div>
+        <h4>Negotiating</h4>
+        <p>Shared with the buyer. Either party can propose changes and discuss terms before agreeing.</p>
+      </div>
+      <div class="wf-card reveal d2">
+        <div class="wf-num wf-c-pending">03</div>
+        <h4>Pending</h4>
+        <p>Both parties have agreed on all terms. The invoice is now waiting for the buyer to send payment.</p>
+      </div>
+      <div class="wf-card reveal d1">
+        <div class="wf-num wf-c-unconfirmed">04</div>
+        <h4>Unconfirmed</h4>
+        <p>The buyer has submitted proof of payment. The seller is verifying the received amount.</p>
+      </div>
+      <div class="wf-card reveal d2">
+        <div class="wf-num wf-c-finalized">05</div>
+        <h4>Finalized</h4>
+        <p>Payment confirmed. Invoice is permanently locked, QR code generated, and PDF is available for download.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="section-wrap">
+    <div class="section-center">
+      <div class="section-eyebrow">Pricing</div>
+      <h2 class="section-title">Simple, Transparent<br><span class="grad-text">Pricing for Everyone</span></h2>
+      <p class="section-sub">Start for free every day. Upgrade when you need more — no hidden fees, no contracts.</p>
+    </div>
+
+    <div class="pricing-daily reveal">
+      <div class="daily-header">
+        <div class="daily-icon">🆓</div>
+        <div class="daily-info">
+          <h3>Free Daily Allowance</h3>
+          <p>Every day you get a set number of free invoice creations — no subscription required.</p>
+        </div>
+        <div class="daily-badge">Resets Every Day</div>
+      </div>
+      <div class="daily-limits">
+        <div class="daily-item">
+          <div class="daily-item-icon">🛍️</div>
+          <div class="daily-item-body">
+            <div class="daily-item-label">Single-Item Invoice</div>
+            <div class="daily-item-val">3 free per day</div>
+          </div>
+          <div class="daily-item-chip free-chip">Free</div>
+        </div>
+        <div class="daily-divider"></div>
+        <div class="daily-item">
+          <div class="daily-item-icon">📦</div>
+          <div class="daily-item-body">
+            <div class="daily-item-label">Multi-Item Invoice</div>
+            <div class="daily-item-val">1 free per day</div>
+          </div>
+          <div class="daily-item-chip free-chip">Free</div>
+        </div>
+        <div class="daily-divider"></div>
+        <div class="daily-item daily-item-extra">
+          <div class="daily-item-icon">➕</div>
+          <div class="daily-item-body">
+            <div class="daily-item-label">Additional Invoice (Single or Multi)</div>
+            <div class="daily-item-val">Beyond the free daily limit</div>
+          </div>
+          <div class="daily-item-chip paid-chip">₱7 each</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-note reveal d1">
+      <span class="note-icon">💡</span>
+      Need to create more invoices today? Pay ₱7 per extra invoice — or subscribe for unlimited access at a much better rate.
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal-l">
+        <div class="price-plan-tag">Pay-Per-Use</div>
+        <div class="price-icon">🧾</div>
+        <div class="price-amount">
+          <span class="price-currency">₱</span>
+          <span class="price-num">7</span>
+          <span class="price-per">/ extra invoice</span>
+        </div>
+        <p class="price-desc">For occasional sellers who exceed the daily free limit. No commitment — pay only when needed.</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="pf-check">✓</span>Applies after free daily limit is used</li>
+          <li><span class="pf-check">✓</span>Single-Item and Multi-Item both ₱7</li>
+          <li><span class="pf-check">✓</span>No subscription required</li>
+          <li><span class="pf-check">✓</span>QR code verification included</li>
+          <li><span class="pf-check">✓</span>Printable PDF included</li>
+          <li><span class="pf-x">✗</span>Limited to daily top-up only</li>
+        </ul>
+        <button class="btn btn-primary price-cta" id="openInvoiceModalPricing">Create Invoice</button>
+      </div>
+
+      <div class="price-card price-featured reveal">
+        <div class="price-popular-badge">BEST VALUE</div>
+        <div class="price-plan-tag">Weekly</div>
+        <div class="price-icon">📅</div>
+        <div class="price-amount">
+          <span class="price-currency">₱</span>
+          <span class="price-num">49</span>
+          <span class="price-per">/ week</span>
+        </div>
+        <p class="price-desc">7 days of unlimited invoice creation. Perfect for active sellers during busy sale periods.</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="pf-check">✓</span>Unlimited Single-Item invoices</li>
+          <li><span class="pf-check">✓</span>Unlimited Multi-Item invoices</li>
+          <li><span class="pf-check">✓</span>No daily creation limits</li>
+          <li><span class="pf-check">✓</span>QR code verification included</li>
+          <li><span class="pf-check">✓</span>Printable PDF included</li>
+          <li><span class="pf-check">✓</span>Valid for 7 consecutive days</li>
+        </ul>
+        <button class="btn btn-primary price-cta">Subscribe Weekly</button>
+        <div class="price-savings">Save vs ₱7/invoice — break even at just 7 invoices</div>
+      </div>
+
+      <div class="price-card price-monthly reveal-r">
+        <div class="price-plan-tag">Monthly</div>
+        <div class="price-icon">🗓️</div>
+        <div class="price-amount">
+          <span class="price-currency">₱</span>
+          <span class="price-num">199</span>
+          <span class="price-per">/ month</span>
+        </div>
+        <p class="price-desc">30 days of unlimited invoice creation. Best for regular sellers and sari-sari store owners.</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="pf-check">✓</span>Unlimited Single-Item invoices</li>
+          <li><span class="pf-check">✓</span>Unlimited Multi-Item invoices</li>
+          <li><span class="pf-check">✓</span>No daily creation limits</li>
+          <li><span class="pf-check">✓</span>QR code verification included</li>
+          <li><span class="pf-check">✓</span>Printable PDF included</li>
+          <li><span class="pf-check">✓</span>Valid for 30 consecutive days</li>
+        </ul>
+        <button class="btn btn-primary price-cta">Subscribe Monthly</button>
+        <div class="price-savings">Only ₱6.63/day — lowest cost for high-volume sellers</div>
+      </div>
+    </div>
+
+    <div class="pricing-compare reveal">
+      <div class="compare-title">How the Plans Compare</div>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Free Daily</th>
+              <th>Pay-Per-Use</th>
+              <th class="col-featured">Weekly ₱49</th>
+              <th>Monthly ₱199</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Single-Item Invoices</td>
+              <td>3 / day</td>
+              <td>₱7 each</td>
+              <td class="col-featured">Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Multi-Item Invoices</td>
+              <td>1 / day</td>
+              <td>₱7 each</td>
+              <td class="col-featured">Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>QR Verification</td>
+              <td><span class="tbl-yes">✓</span></td>
+              <td><span class="tbl-yes">✓</span></td>
+              <td class="col-featured"><span class="tbl-yes">✓</span></td>
+              <td><span class="tbl-yes">✓</span></td>
+            </tr>
+            <tr>
+              <td>Printable PDF</td>
+              <td><span class="tbl-yes">✓</span></td>
+              <td><span class="tbl-yes">✓</span></td>
+              <td class="col-featured"><span class="tbl-yes">✓</span></td>
+              <td><span class="tbl-yes">✓</span></td>
+            </tr>
+            <tr>
+              <td>Daily Reset</td>
+              <td><span class="tbl-yes">✓</span></td>
+              <td><span class="tbl-no">✗</span></td>
+              <td class="col-featured"><span class="tbl-no">✗</span></td>
+              <td><span class="tbl-no">✗</span></td>
+            </tr>
+            <tr>
+              <td>Cost per Extra Invoice</td>
+              <td class="tbl-muted">—</td>
+              <td class="tbl-highlight">₱7</td>
+              <td class="col-featured tbl-muted">None</td>
+              <td class="tbl-muted">None</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cta-banner">
+  <div class="section-wrap">
+    <div class="cta-inner reveal">
+      <div class="cta-eyebrow">Get Started</div>
+      <h2 class="cta-title">Ready to Create Your First Invoice?</h2>
+      <p class="cta-sub">No account. No setup. Fill in the details and share the room link with your buyer in seconds.</p>
+      <div class="cta-actions">
+        <button class="btn btn-white" id="openInvoiceModalCTA">Create Invoice Now</button>
+        <a href="#how-it-works" class="btn-outline-white">Learn More</a>
+      </div>
+      <p class="cta-note">Powered by Django REST Framework &amp; Real-Time WebSocket</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="section-wrap footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <div class="logo-mark">📄</div>
+        <span class="logo-text footer-logo-text">Online Printable <span class="logo-accent">E-Invoicing</span> System</span>
+      </div>
+      <p class="footer-brand-desc">A web-based invoicing platform for informal, non-taxable transactions in the Philippines. Designed for transparency, accountability, and dispute reduction.</p>
+    </div>
+    <div class="footer-links-wrap">
+      <div class="footer-col">
+        <h4>System</h4>
+        <ul>
+          <li><a href="#invoice-types">Single-Item Invoice</a></li>
+          <li><a href="#invoice-types">Multi-Item Invoice</a></li>
+          <li><a href="#workflow">Invoice Workflow</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#features">Features</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Access</h4>
+        <ul>
+          <li><a href="#access-panel">Seller Room</a></li>
+          <li><a href="#access-panel">Buyer Room</a></li>
+          <li><a href="/seller/create/">Create Single-Item</a></li>
+          <li><a href="/invoice/create/">Create Multi-Item</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Scope &amp; Disclaimer</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Online Printable E-Invoicing System. For informal, non-taxable transactions only. Not a substitute for official BIR receipts.</p>
+  </div>
+</footer>
+
+<div id="invoiceModal" class="modal">
+  <div class="modal-box">
+    <span class="modal-close" id="closeModal">&times;</span>
+    <div class="modal-icon">📑</div>
+    <h2>Select Invoice Type</h2>
+    <p class="modal-sub">Choose the type of invoice you want to create:</p>
+    <div class="modal-options">
+      <div class="option-card">
+        <div class="option-icon">🛍️</div>
+        <h3>Single-Item Invoice</h3>
+        <p>Best for selling one product or service (e.g., 10 hours of consulting, 1 laptop).</p>
+        <div class="option-preview">
+          <img src="{% static 'images/single_invoice.png' %}" alt="Single-Item Invoice" />
+        </div>
+        <button onclick="window.location.href='/seller/create/'" class="btn btn-primary">Create Single-Item</button>
+      </div>
+      <div class="option-card">
+        <div class="option-icon">📦</div>
+        <h3>Multi-Item Invoice</h3>
+        <p>Perfect for wholesale or sari-sari store sales with multiple products in one invoice.</p>
+        <div class="option-preview">
+          <img src="{% static 'images/multi_invoice.png' %}" alt="Multi-Item Invoice" />
+        </div>
+        <button onclick="window.location.href='/invoice/create/'" class="btn btn-primary">Create Multi-Item</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/landingPage.js' %}"></script>
+<script src="{% static 'js/landingPageUI.js' %}"></script>
 
 </body>
 </html>

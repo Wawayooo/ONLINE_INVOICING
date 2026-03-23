@@ -1,0 +1,385 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 Encrypted Proof of Transaction</title>
+  <link rel="stylesheet" href="{% static 'css/encrypt_data.css' %}">
+</head>
+<body>
+  <div id="decryptingModal" class="modal">
+    <div class="modal-content">
+      <div class="decrypt-animation">
+        <div class="lock-container">
+          <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="5" y="11" width="14" height="10" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <div class="unlock-animation"></div>
+        </div>
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+      <h2 class="decrypt-text">Decrypting Invoice Data</h2>
+      <p class="decrypt-subtext">Verifying room hash and decrypting encrypted data...</p>
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+      <div class="decrypt-steps">
+        <div class="step" id="step1">
+          <span class="step-icon">⏳</span>
+          <span class="step-text">Verifying room hash...</span>
+        </div>
+        <div class="step" id="step2">
+          <span class="step-icon">⏳</span>
+          <span class="step-text">Checking data integrity...</span>
+        </div>
+        <div class="step" id="step3">
+          <span class="step-icon">⏳</span>
+          <span class="step-text">Decrypting invoice data...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <header class="page-header">
+      <a href="/" class="home-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Home
+      </a>
+      <h1>🔐 Encrypted Proof of Transaction</h1>
+      <div class="security-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Tamper-Resistant
+      </div>
+    </header>
+
+    <div id="encryptedView" class="encrypted-view">
+      <div class="info-card glass-effect">
+        <div class="card-icon">🔒</div>
+        <h2>Secure Invoice Storage</h2>
+        <p>This invoice has been encrypted and stored securely. The data is tamper-resistant and can only be accessed with the correct room hash.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-content">
+            <span class="stat-label">Finalized</span>
+            <span class="stat-value" id="finalizedDate">{{ finalized_at|date:"M d, Y" }}</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔍</div>
+          <div class="stat-content">
+            <span class="stat-label">Verifications</span>
+            <span class="stat-value" id="verificationCount">{{ verification_count }}</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <span class="stat-label">Integrity</span>
+            <span class="stat-value integrity-status">Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="encrypted-preview">
+        <h3>🔐 Encrypted Data Preview</h3>
+        <div class="encrypted-data-grid">
+          <div class="encrypted-block">
+            <div class="block-header">
+              <span class="block-icon">👤</span>
+              <span class="block-title">Seller Data</span>
+            </div>
+            <div class="encrypted-text">{{ encrypted_data.seller }}</div>
+          </div>
+          <div class="encrypted-block">
+            <div class="block-header">
+              <span class="block-icon">🛒</span>
+              <span class="block-title">Buyer Data</span>
+            </div>
+            <div class="encrypted-text">{{ encrypted_data.buyer }}</div>
+          </div>
+          <div class="encrypted-block">
+            <div class="block-header">
+              <span class="block-icon">📄</span>
+              <span class="block-title">Invoice Data</span>
+            </div>
+            <div class="encrypted-text">{{ encrypted_data.invoice }}</div>
+          </div>
+          <div class="encrypted-block">
+            <div class="block-header">
+              <span class="block-icon">📦</span>
+              <span class="block-title">Items Data</span>
+            </div>
+            <div class="encrypted-text">{{ encrypted_data.items }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="verification-info">
+        <h3>🛡️ Security Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Data Hash (SHA-256):</span>
+            <span class="info-value hash-value">{{ data_hash }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Verification Signature:</span>
+            <span class="info-value hash-value">{{ verification_signature|slice:":32" }}...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="decrypt-section">
+        <div class="decrypt-card glass-effect">
+          <h3>🔓 Decrypt Invoice</h3>
+          <p>Enter the room hash to decrypt and view the invoice details</p>
+          <div class="input-group">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                id="roomHashInput"
+                placeholder="Enter 16-character room hash"
+                maxlength="16"
+                autocomplete="off"
+              >
+              <div class="input-icon">🔑</div>
+            </div>
+            <button id="decryptBtn" class="decrypt-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="5" y="11" width="14" height="10" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              Decrypt &amp; Verify
+            </button>
+          </div>
+          <div id="errorMessage" class="error-message"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="decryptedView" class="decrypted-view" style="display: none;">
+      <div class="success-banner">
+        <div class="success-icon">✅</div>
+        <div class="success-content">
+          <h3>Successfully Decrypted</h3>
+          <p>Invoice data has been verified and decrypted successfully</p>
+        </div>
+      </div>
+
+      <div class="typing-container" id="typingEffect"></div>
+
+      <div class="proof-wrapper">
+
+        <div class="seller-card">
+          <div class="seller-Info">
+            <h2>Seller Information</h2>
+            <p><strong>Name:</strong> <span id="sellerName"></span></p>
+            <p><strong>Email:</strong> <span id="sellerEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="sellerPhone"></span></p>
+            <p><strong>Social:</strong> <span id="sellerSocial"></span></p>
+          </div>
+          <div class="Seller_Img">
+            <img id="sellerImage" src="" alt="Seller" style="display:none;">
+          </div>
+        </div>
+
+        <div class="buyer-card">
+          <div class="Buyer_Info">
+            <h2>Buyer Information</h2>
+            <p><strong>Name:</strong> <span id="buyerName"></span></p>
+            <p><strong>Email:</strong> <span id="buyerEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="buyerPhone"></span></p>
+            <p><strong>Social:</strong> <span id="buyerSocial"></span></p>
+          </div>
+          <div class="Buyer_Img">
+            <img id="buyerImage" src="" alt="Buyer" style="display:none;">
+          </div>
+        </div>
+
+        <div class="invoice-card">
+          <div class="invoice-header">
+            <h2>Invoice Details</h2>
+            <div class="status-badge success">
+              <span class="badge-icon">✓</span>
+              SUCCESSFUL TRANSACTION
+            </div>
+          </div>
+
+          <div class="invoice-meta">
+            <div class="meta-item">
+              <span class="meta-label">Invoice Date</span>
+              <span class="meta-value" id="invoiceDate"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Due Date</span>
+              <span class="meta-value" id="dueDate"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Payment Method</span>
+              <span class="meta-value" id="paymentMethod"></span>
+            </div>
+          </div>
+
+          <div class="invoice-items">
+            <h3>SUCCESSFUL TRANSACTION</h3>
+            <table class="items-table" id="itemsTable">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Line Total</th>
+                </tr>
+              </thead>
+              <tbody id="itemsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="invoice-total">
+            <div class="total-row">
+              <span class="total-label">Grand Total:</span>
+              <span class="total-value" id="grandTotal">₱0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metadata-card">
+          <h3>📊 Verification Metadata</h3>
+          <div class="metadata-grid">
+            <div class="metadata-item">
+              <span class="metadata-icon">📅</span>
+              <div class="metadata-content">
+                <span class="metadata-label">Finalized At</span>
+                <span class="metadata-value" id="metaFinalized"></span>
+              </div>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-icon">🔍</span>
+              <div class="metadata-content">
+                <span class="metadata-label">Total Verifications</span>
+                <span class="metadata-value" id="metaVerifications"></span>
+              </div>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-icon">🕒</span>
+              <div class="metadata-content">
+                <span class="metadata-label">Last Verified</span>
+                <span class="metadata-value" id="metaLastVerified"></span>
+              </div>
+            </div>
+            <div class="metadata-item">
+              <span class="metadata-icon">🔐</span>
+              <div class="metadata-content">
+                <span class="metadata-label">Data Hash</span>
+                <span class="metadata-value hash-value" id="metaHash"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="audit-trail-section">
+            <h1>TRANSACTION — AUDIT TRAIL</h1>
+
+            <div class="audit-trail-table-wrapper">
+              <div class="audit-section-label">
+                <div class="audit-section-label-bar">Single-Item / Service History</div>
+              </div>
+              <table class="audit-trail-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Actor</th>
+                    <th>Action</th>
+                    <th>Date &amp; Time</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for h in history %}
+                  <tr>
+                    <td class="audit-row-index">{{ forloop.counter }}</td>
+                    <td class="td-actor">{{ h.actor }}</td>
+                    <td class="td-action">{{ h.action }}</td>
+                    <td class="td-date">{{ h.created_at }}</td>
+                    <td class="td-notes">{{ h.notes|default:"—" }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr class="audit-empty-row">
+                    <td colspan="5">No Negotiation History on Record</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="audit-trail-table-wrapper">
+              <div class="audit-section-label">
+                <div class="audit-section-label-bar multi">Multi-Item Negotiation History</div>
+              </div>
+              <table class="audit-trail-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Actor</th>
+                    <th>Action</th>
+                    <th>Date &amp; Time</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for h in multi_item_history %}
+                  <tr>
+                    <td class="audit-row-index">{{ forloop.counter }}</td>
+                    <td class="td-actor">{{ h.actor }}</td>
+                    <td class="td-action">{{ h.action }}</td>
+                    <td class="td-date">{{ h.created_at }}</td>
+                    <td class="td-notes">{{ h.notes|default:"—" }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr class="audit-empty-row">
+                    <td colspan="5">No Multi-Item Negotiation History on Record</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button type="button"
+                  class="action-btn primary"
+                  onclick="window.location.href='{% url 'proof_of_transaction_pdf' room_hash %}'">
+            ⬇️ Download Invoice
+          </button>
+          <button id="resetBtn" class="action-btn secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            Lock Again
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const roomHash = '{{ room_hash }}';
+    const apiEndpoint = `/api/decrypt-invoice/${roomHash}/`;
+  </script>
+  <script src="{% static 'js/encrypted_invoice.js' %}"></script>
+</body>
+</html>

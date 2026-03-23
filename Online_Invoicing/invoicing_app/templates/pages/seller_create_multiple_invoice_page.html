@@ -5,10 +5,13 @@
     <title>Create Invoice</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/seller_create_multiple_invoice_page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/seller_create.css' %}">
 </head>
 <body>
 <div class="container">
-    <h1>Create Multiple Item Invoice</h1>
+    <!--<a style="background: black; font-size: 12px; text-decoration: none;" href="{% url 'landing' %}" class="btn-submit"> ⮜ Back </a>-->
+    <h1>📄 Create Multi-Item Invoice</h1>
+    <p class="subtitle">Fill in the details to create a new invoice</p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -34,18 +37,18 @@
                     <div class="form-row">
                         <div class="form-field full-width">
                             <label>Full Name *</label>
-                            <input type="text" name="seller_fullname" required>
+                            <input type="text" name="seller_fullname" placeholder="Ex: Christopher Cortes" required>
                         </div>
                     </div>
 
                     <div class="form-row two-column">
                         <div class="form-field">
                             <label>Email</label>
-                            <input type="email" name="seller_email">
+                            <input type="email" name="seller_email" placeholder="Ex: example@gmail.com">
                         </div>
                         <div class="form-field">
                             <label>Phone</label>
-                            <input type="text" name="seller_phone">
+                            <input type="text" name="seller_phone" placeholder="Ex: 0912-345-1477">
                         </div>
                     </div>
 
@@ -66,13 +69,13 @@
               <div class="form-row two-column">
                   <div class="form-field">
                       <label for="sellerSecretKey">Secret Key *</label>
-                      <input type="password" id="sellerSecretKey" name="seller_secret_key" required>
+                      <input type="password" id="sellerSecretKey" name="seller_secret_key" placeholder="Must Contain Upper and Lowercase, and Special character" required>
                       <small>⚠️ Required to access your seller room</small>
                   </div>
 
                   <div class="form-field">
                       <label for="sellerSecretKeyConfirm">Confirm Secret Key *</label>
-                      <input type="password" id="sellerSecretKeyConfirm" name="seller_secret_key_confirm" required>
+                      <input type="password" id="sellerSecretKeyConfirm" name="seller_secret_key_confirm" placeholder="Re-enter the Key" required>
                       <small>Re-enter your secret key</small>
                   </div>
               </div>
@@ -101,7 +104,6 @@
                             <option value="">Select Payment Method</option>
                             <option value="cash">Cash</option>
                             <option value="gcash">GCash</option>
-                            <option value="paypal">PayPal</option>
                             <option value="bank_transfer">Bank Transfer</option>
                             <option value="other">Other</option>
                         </select>
@@ -127,9 +129,18 @@
         </div>
 
         <div class="submit-section">
-            <button type="submit" class="btn-submit">Create Invoice</button>
+            <button type="submit" class="btn-submit">
+                <span class="icon">🔗</span>
+                <span class="text">Create Invoice</span>
+            </button>
         </div>
     </form>
+    <div class="loading-overlay" id="loading" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Creating your invoice...</p>
+        </div>
+    </div>
 </div>
 <script src="{% static 'js/seller_create_multiple_invoice_page.js' %}"></script>
   <script>
@@ -147,24 +158,24 @@
                 <div class="form-row">
                     <div class="form-field full-width">
                         <label>Product Name *</label>
-                        <input type="text" name="items-${index}-product_name" required>
+                        <input type="text" name="items-${index}-product_name" placeholder="Ex: White Rice" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-field full-width">
                         <label>Description</label>
-                        <textarea name="items-${index}-description" rows="3"></textarea>
+                        <textarea placeholder="Ex: Per kilo of Rice" name="items-${index}-description" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-row two-column">
                     <div class="form-field">
                         <label>Quantity *</label>
-                        <input type="number" name="items-${index}-quantity" min="1" required 
+                        <input placeholder="Enter the Quantity" type="number" name="items-${index}-quantity" min="1" required 
                               oninput="updateLineTotal(this)">
                     </div>
                     <div class="form-field">
                         <label>Unit Price *</label>
-                        <input type="number" step="0.01" name="items-${index}-unit_price" required 
+                        <input placeholder="Enter the Price" type="number" step="0.01" name="items-${index}-unit_price" required 
                               oninput="updateLineTotal(this)">
                     </div>
                 </div>

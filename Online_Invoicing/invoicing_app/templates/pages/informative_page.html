@@ -1,0 +1,1373 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- ============================================================
+     Online Printable E-Invoicing — Online Printable E‑Invoicing System
+     For informal, non‑taxable buy‑and‑sell transactions (PH)
+     
+     Design Theme:
+       Primary Gradient : #667eea → #764ba2
+       Background       : #ffffff
+       Text             : #1a1a2e
+     
+     Sections:
+       1. Navigation
+       2. Hero (with 3D Three.js invoice + scroll animation)
+       3. Marquee / Trust Strip
+       4. System Overview (what it is)
+       5. For Who (Freelancer vs Sari-Sari)
+       6. Invoice Workflow (5-status tracker)
+       7. Features
+       8. How It Works (step-by-step)
+       9. Seller Form Preview
+      10. Buyer Confirmation Preview
+      11. QR Verification Preview
+      12. Audit Trail Preview
+      13. Pricing
+      14. Testimonials
+      15. Compliance Badges
+      16. CTA Banner
+      17. Footer
+============================================================ -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Printable E-Invoicing — Online E‑Invoicing for Every Filipino</title>
+
+<link rel="stylesheet" href="{% static 'css/informative_page.css' %}">
+<link rel="stylesheet" href="{% static 'css/css2.css' %}">
+</head>
+<body>
+
+<!-- ── Scroll Progress Bar ─────────────────────── -->
+<div id="scroll-bar"></div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-mark">📄</div>
+    Online Printable<span class="accent">E-Invoicing</span>
+  </a>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#overview">System</a></li>
+    <li><a href="#for-who">Para Kanino</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">Paano</a></li>
+    <li><a href="#pricing">Presyo</a></li>
+  </ul>
+
+  <div class="nav-cta">
+    <button class="btn-nav-primary" id="launch-nav">Create Invoice Now →</button>
+  </div>
+
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<section id="hero">
+  <!-- background decorations -->
+  <div class="hero-mesh"></div>
+  <div class="hero-grid-deco"></div>
+
+  <div class="hero-layout">
+
+    <!-- LEFT: copy -->
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Online E-Invoicing · Pilipinas 🇵🇭
+      </div>
+
+      <h1 class="hero-h1">
+        Mag-Invoice<br>
+        <span class="grad-text">Nang Tama,</span><br>
+        Kahit Saan
+      </h1>
+
+      <p class="hero-p">
+        Isang <strong>libre at madaling gamitin</strong> na online invoicing system para sa mga Pilipinong nagbi-bili at nagbe-benta — 
+        freelancer man o may sariling tindahan. 
+        <strong>Walang bayad. Walang pag-install. Gawa para sa iyo.</strong>
+      </p>
+
+      <div class="hero-actions">
+        <!-- PRIMARY CTA — redirects to /landing/ -->
+        <button id="launch">
+          Create Invoice Now <span class="arrow">→</span>
+        </button>
+
+        <a href="#overview" class="btn-outline-hero">
+          ▶ Paano ito gumagana?
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-n">50K+</span>
+          <span class="stat-l">Mga Gumagamit</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">₱2.4B+</span>
+          <span class="stat-l">Nakolektang Bayad</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">5</span>
+          <span class="stat-l">Invoice Statuses</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n">100%</span>
+          <span class="stat-l">Non-Taxable Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Three.js 3D Invoice -->
+    <div class="hero-right">
+      <div id="three-wrap"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     MARQUEE TRUST STRIP
+============================================================ -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<!-- ============================================================
+     SYSTEM OVERVIEW
+============================================================ -->
+<section id="overview">
+  <div class="section-wrap">
+    <div class="overview-grid">
+
+      <!-- Visual mock invoice -->
+      <div class="overview-visual reveal-l">
+        <div class="overview-card-mock">
+          <div class="mock-header">
+            <div>
+              <div class="mock-logo">Online Printable E-Invoicing</div>
+              <div style="font-size:11px;opacity:0.6;margin-top:2px">INV-2025-00142</div>
+            </div>
+            <div class="mock-badge">✓ Finalized</div>
+          </div>
+          <div class="mock-line full"></div>
+          <div class="mock-line med"></div>
+          <div class="mock-line short"></div>
+          <div class="mock-divider"></div>
+          <div class="mock-row"><span class="mock-label">Item</span><span class="mock-label">Qty</span><span class="mock-label">Price</span></div>
+          <div class="mock-row"><span class="mock-val" style="opacity:.8">Graphic Design</span><span class="mock-val">1</span><span class="mock-val">₱3,500</span></div>
+          <div class="mock-row"><span class="mock-val" style="opacity:.8">Logo Package</span><span class="mock-val">1</span><span class="mock-val">₱1,800</span></div>
+          <div class="mock-divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="mock-total">₱5,300.00</div>
+              <div style="font-size:11px;opacity:0.6;margin-top:2px">Total Amount</div>
+            </div>
+            <div class="mock-qr">🔲</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text content -->
+      <div class="reveal-r">
+        <div class="section-eyebrow">Tungkol sa Sistema</div>
+        <h2 class="section-title">Ano ang<br><span class="grad-text">Online Printable E-Invoicing?</span></h2>
+        <p class="section-sub" style="margin-bottom:32px">
+          Web-System for <strong>informal, non-taxable</strong> buy-and-sell transactions in the Philippines. 
+          It creates an Invoice that is transparent, verifiable, and Tamper-resistant.
+        </p>
+        <div class="overview-points">
+          <div class="ov-point">
+            <div class="ov-icon">🤝</div>
+            <div class="ov-text">
+              <h4>Seller at Buyer Protection</h4>
+              <p>Ang seller ay gumagawa ng invoice; ang buyer ay nagre-review at nagko-confirm bago maging final — walang sorpresa.</p>
+            </div>
+          </div>
+          <div class="ov-point">
+            <div class="ov-icon">🔗</div>
+            <div class="ov-text">
+              <h4>Blockchain-Inspired Audit Trail</h4>
+              <p>Bawat pagbabago sa invoice ay nire-record nang permanente. Immutable, tamper-evident, at transparent sa lahat.</p>
+            </div>
+          </div>
+          <div class="ov-point">
+            <div class="ov-icon">🔲</div>
+            <div class="ov-text">
+              <h4>QR Code Verification</h4>
+              <p>Ang bawat finalized invoice ay may natatanging QR code na nagko-link sa online verification page — para sa pagiging tunay.</p>
+            </div>
+          </div>
+          <div class="ov-point">
+            <div class="ov-icon">📱</div>
+            <div class="ov-text">
+              <h4>Accessible sa Lahat ng Device</h4>
+              <p>Responsive design na gumagana sa kahit anong browser — cellphone, tablet, o computer. Walang app na kailangan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOR WHO
+============================================================ -->
+<section id="for-who">
+  <div class="section-wrap">
+    <div class="for-who-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Para Kanino</div>
+      <h2 class="section-title reveal">Dinisenyo para sa<br><span class="grad-text">Bawat Pilipino</span></h2>
+      <p class="section-sub reveal">Hindi mahalaga kung nag-iisa kang nagtatrabaho o may sariling tindahan — may solusyon kami para sa iyo.</p>
+    </div>
+    <div class="who-grid">
+
+      <!-- Freelancer card -->
+      <div class="who-card freelancer reveal-l">
+        <span class="who-corner-badge">SINGLE-ITEM</span>
+        <div class="who-tag free">Para sa Freelancer</div>
+        <div class="who-icon">💼</div>
+        <h3>Maningil nang Propesyonal</h3>
+        <p>Ikaw man ay graphic designer, web developer, content writer, social media manager, o virtual assistant — gumawa ng maayos na invoice para sa iyong serbisyo sa loob ng 30 segundo.</p>
+        <ul class="who-list">
+          <li><span class="check">✓</span> Single-service invoice (per project o per hour)</li>
+          <li><span class="check">✓</span> Custom profile picture at pangalan ng business</li>
+          <li><span class="check">✓</span> GCash, PayMaya, at bank transfer details</li>
+          <li><span class="check">✓</span> PDF download at direct sharing via Viber/Messenger</li>
+          <li><span class="check">✓</span> Payment status tracking (paid/unpaid)</li>
+          <li><span class="check">✓</span> Seller + Buyer full name, contact, email, social media</li>
+        </ul>
+      </div>
+
+      <!-- Sari-Sari Store card -->
+      <div class="who-card store reveal-r">
+        <span class="who-corner-badge">MULTI-ITEM</span>
+        <div class="who-tag store">Para sa Tindahan</div>
+        <div class="who-icon">🏪</div>
+        <h3>I-Manage ang Lahat ng Produkto</h3>
+        <p>Sari-sari store, karinderya, RTW tiangge, online seller, o palengkero ka man — madaling lumikha ng invoice na may maraming items, presyo, at dami. Digital receipt para sa lahat.</p>
+        <ul class="who-list">
+          <li><span class="check">✓</span> Multi-item invoice (unlimited na produkto)</li>
+          <li><span class="check">✓</span> Item description, quantity, at unit price</li>
+          <li><span class="check">✓</span> Awtomatikong total at subtotal na kalkulasyon</li>
+          <li><span class="check">✓</span> Customer history at repeat order record</li>
+          <li><span class="check">✓</span> Printable para sa counter at delivery</li>
+          <li><span class="check">✓</span> Negotiation support bago maging final</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     INVOICE WORKFLOW
+============================================================ -->
+<section id="workflow">
+  <div class="section-wrap">
+    <div class="workflow-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Invoice Workflow</div>
+      <h2 class="section-title reveal">5 Invoice Statuses,<br><span class="grad-text">Malinaw at Transparent</span></h2>
+      <p class="section-sub reveal" style="margin:0 auto;text-align:center">
+        Bawat invoice ay dumadaan sa malinaw na proseso — mula Draft hanggang Finalized — para walang confusion ang seller o buyer.
+      </p>
+    </div>
+
+    <!-- Visual status tracker -->
+    <div class="status-track reveal">
+      <div class="status-step active">
+        <div class="step-circle">📝</div>
+        <span class="step-name">Draft</span>
+        <span class="step-desc">Ginagawa pa ng seller</span>
+      </div>
+      <div class="status-step active">
+        <div class="step-circle">🤝</div>
+        <span class="step-name">Negotiating</span>
+        <span class="step-desc">Pinag-uusapan ng dalawa</span>
+      </div>
+      <div class="status-step active">
+        <div class="step-circle">⏳</div>
+        <span class="step-name">Pending</span>
+        <span class="step-desc">Hinihintay ang bayad</span>
+      </div>
+      <div class="status-step active">
+        <div class="step-circle">❓</div>
+        <span class="step-name">Unconfirmed</span>
+        <span class="step-desc">Na-receive, ibe-verify</span>
+      </div>
+      <div class="status-step active">
+        <div class="step-circle">✅</div>
+        <span class="step-name">Finalized</span>
+        <span class="step-desc">Kumpleto na + QR code</span>
+      </div>
+    </div>
+
+    <div class="status-pills reveal">
+      <span class="pill draft">Draft</span>
+      <span class="pill negotiating">Negotiating</span>
+      <span class="pill pending">Pending</span>
+      <span class="pill unconfirmed">Unconfirmed Payment</span>
+      <span class="pill finalized">Finalized</span>
+    </div>
+
+    <div class="workflow-cards reveal">
+      <div class="wf-card">
+        <div class="wf-num">01</div>
+        <h4>Draft</h4>
+        <p>Ginagawa pa ng seller. Maaaring i-edit nang kahit kailan.</p>
+      </div>
+      <div class="wf-card">
+        <div class="wf-num">02</div>
+        <h4>Negotiating</h4>
+        <p>Ibinahagi sa buyer. Maaaring mag-request ng pagbabago.</p>
+      </div>
+      <div class="wf-card">
+        <div class="wf-num">03</div>
+        <h4>Pending</h4>
+        <p>Nagkasundo na ang dalawa. Hinihintay na ang bayad.</p>
+      </div>
+      <div class="wf-card">
+        <div class="wf-num">04</div>
+        <h4>Unconfirmed</h4>
+        <p>Nagpadala na ng bayad ang buyer. Ibe-verify ng seller.</p>
+      </div>
+      <div class="wf-card">
+        <div class="wf-num">05</div>
+        <h4>Finalized</h4>
+        <p>Kumpirmadong bayad. QR code na, hindi na mababago.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURES
+============================================================ -->
+<section id="features">
+  <div class="section-wrap">
+    <div class="feat-header">
+      <div>
+        <div class="section-eyebrow reveal">Mga Feature</div>
+        <h2 class="section-title reveal">Lahat ng Kailangan,<br><span class="grad-text">Nasa Iisang Lugar</span></h2>
+      </div>
+      <p class="section-sub reveal" style="text-align:right">
+        Walang kumplikadong accounting. Basta <strong>mag-invoice at maningil.</strong>
+      </p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">👤</div>
+        <h4>Complete User Profiles</h4>
+        <p>Full name, contact number, email, social media account, at profile picture — para malinaw ang pagkakakilanlan ng seller at buyer sa bawat invoice.</p>
+      </div>
+      <div class="feat-card reveal d1">
+        <div class="feat-icon">🔗</div>
+        <h4>Immutable Audit Trail</h4>
+        <p>Bawat pagbabago, aksyon, at transaksyon ay nire-record nang permanente. Inspired by blockchain principles — tamper-evident at transparent.</p>
+      </div>
+      <div class="feat-card reveal d2">
+        <div class="feat-icon">🔲</div>
+        <h4>QR Code Verification</h4>
+        <p>Ang finalized invoice ay may natatanging QR code. I-scan para ma-verify ang authenticity ng invoice sa isang dedicated online page.</p>
+      </div>
+      <div class="feat-card reveal d1">
+        <div class="feat-icon">📊</div>
+        <h4>5-Stage Status Tracker</h4>
+        <p>Mula Draft hanggang Finalized — laging malinaw ang kasalukuyang status ng bawat invoice para sa seller at buyer.</p>
+      </div>
+      <div class="feat-card reveal d2">
+        <div class="feat-icon">🖨️</div>
+        <h4>Print-Ready Invoices</h4>
+        <p>I-download bilang PDF o direktang i-print. Perfect para sa physical na transaksyon sa tindahan o para sa digital na pagpapadala.</p>
+      </div>
+      <div class="feat-card reveal d3">
+        <div class="feat-icon">💬</div>
+        <h4>Negotiation Support</h4>
+        <p>Built-in negotiation stage — ang buyer ay maaaring mag-request ng pagbabago bago mag-confirm ng payment. Nire-record ang lahat.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📱</div>
+        <h4>Responsive sa Lahat ng Device</h4>
+        <p>Accessible sa kahit anong browser at device — cellphone, tablet, o laptop. Walang app na kailangan i-install.</p>
+      </div>
+      <div class="feat-card reveal d1">
+        <div class="feat-icon">🔒</div>
+        <h4>Immutable Finalized State</h4>
+        <p>Kapag finalized na ang invoice, hindi na ito mababago ng kahit sino. Proteksyon para sa seller at buyer laban sa disputes.</p>
+      </div>
+      <div class="feat-card reveal d2">
+        <div class="feat-icon">🇵🇭</div>
+        <h4>Para sa Informal Economy</h4>
+        <p>Dinisenyo para sa non-taxable buy-and-sell transactions. Hindi kailangan ng BIR registration o accounting background para magamit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+============================================================ -->
+<section id="how">
+  <div class="section-wrap">
+    <div class="how-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Paano Gumagana</div>
+      <h2 class="section-title reveal">Simple na Proseso,<br><span class="grad-text">Mula Simula hanggang Katapusan</span></h2>
+    </div>
+    <div class="steps-list">
+      <div class="step-row reveal">
+        <div class="step-bubble">01</div>
+        <div class="step-body">
+          <div class="step-tag">Mag-Sign Up</div>
+          <h3>Gumawa ng Libreng Account</h3>
+          <p>I-register ang iyong email address. I-fill ang iyong profile — full name, contact number, email, social media account, at mag-upload ng profile picture para sa personalized na invoice.</p>
+        </div>
+        <div class="step-aside"><span class="step-chip">✉ 2 minuto</span></div>
+      </div>
+      <div class="step-row reveal d1">
+        <div class="step-bubble">02</div>
+        <div class="step-body">
+          <div class="step-tag">Gumawa ng Invoice (Seller)</div>
+          <h3>I-Fill ang Invoice Form</h3>
+          <p>Piliin kung single-item (para sa freelancer) o multi-item (para sa tindahan). I-enter ang buyer's details, mga item o serbisyo, presyo, at payment instructions. I-save bilang Draft.</p>
+        </div>
+        <div class="step-aside"><span class="step-chip">📝 Draft</span></div>
+      </div>
+      <div class="step-row reveal d2">
+        <div class="step-bubble">03</div>
+        <div class="step-body">
+          <div class="step-tag">Ibahagi sa Buyer</div>
+          <h3>Ipadala ang Invoice Link</h3>
+          <p>I-share ang invoice link sa buyer via Messenger, Viber, email, o SMS. Makikita ng buyer ang lahat ng detalye at maaaring mag-request ng pagbabago (Negotiating stage).</p>
+        </div>
+        <div class="step-aside"><span class="step-chip">🤝 Negotiating</span></div>
+      </div>
+      <div class="step-row reveal d3">
+        <div class="step-bubble">04</div>
+        <div class="step-body">
+          <div class="step-tag">Buyer Confirmation</div>
+          <h3>I-Confirm ng Buyer at Magbayad</h3>
+          <p>Kapag nagkasundo na, ide-declare ng invoice bilang Pending. Magbabayad ang buyer at mag-a-upload ng proof of payment. Mire-record ito sa audit trail.</p>
+        </div>
+        <div class="step-aside"><span class="step-chip">⏳ Pending</span></div>
+      </div>
+      <div class="step-row reveal d4">
+        <div class="step-bubble">05</div>
+        <div class="step-body">
+          <div class="step-tag">Seller Verification</div>
+          <h3>I-Verify at I-Finalize</h3>
+          <p>Mave-verify ng seller ang natanggap na bayad. Kapag kumpirmado, ia-update ang status sa Finalized — awtomatikong magge-generate ng QR code para sa invoice verification. Hindi na mababago ang invoice.</p>
+        </div>
+        <div class="step-aside"><span class="step-chip">✅ Finalized</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SYSTEM PREVIEWS (4 tabs)
+============================================================ -->
+<section id="previews">
+  <div class="section-wrap">
+    <div class="previews-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Sistema Preview</div>
+      <h2 class="section-title reveal">Tingnan ang<br><span class="grad-text">Bawat Bahagi ng Sistema</span></h2>
+    </div>
+
+    <!-- Tab buttons -->
+    <div class="preview-tabs reveal">
+      <button class="ptab active" data-tab="seller">📝 Seller Form</button>
+      <button class="ptab" data-tab="buyer">👁 Buyer Confirmation</button>
+      <button class="ptab" data-tab="qr">🔲 QR Verification</button>
+      <button class="ptab" data-tab="audit">🔗 Audit Trail</button>
+    </div>
+
+    <!-- ── TAB 1: SELLER FORM ── -->
+    <div class="preview-panel active" id="panel-seller">
+      <div class="form-preview-wrap">
+        <div class="form-preview-header">
+          <h3>Gumawa ng Bagong Invoice</h3>
+          <p>I-fill ang lahat ng kinakailangang detalye para maging propesyonal ang iyong invoice.</p>
+        </div>
+        <div class="form-preview-body">
+
+          <!-- Seller Info -->
+          <div class="form-section-title">👤 Seller Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" placeholder="Juan dela Cruz" value="Maria Santos">
+            </div>
+            <div class="form-group">
+              <label>Contact Number *</label>
+              <input type="text" placeholder="09XX XXX XXXX" value="0917-234-5678">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" placeholder="email@example.com" value="maria@example.com">
+            </div>
+            <div class="form-group">
+              <label>Social Media Account *</label>
+              <input type="text" placeholder="@yourusername" value="@mariasantos.design">
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Profile Picture</label>
+              <div class="avatar-upload">
+                <div class="avatar-placeholder">👩</div>
+                <div>
+                  <button class="upload-btn">Upload Photo</button>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px">JPG, PNG max 2MB</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buyer Info -->
+          <div class="form-section-title" style="margin-top:20px">🛒 Buyer Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Buyer Full Name *</label>
+              <input type="text" placeholder="Buyer Name" value="Carlo Mendoza">
+            </div>
+            <div class="form-group">
+              <label>Buyer Contact *</label>
+              <input type="text" placeholder="09XX XXX XXXX" value="0919-876-5432">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Buyer Email</label>
+              <input type="email" placeholder="buyer@example.com" value="carlo@example.com">
+            </div>
+            <div class="form-group">
+              <label>Buyer Social Media</label>
+              <input type="text" placeholder="@buyerusername" value="@carlomendoza">
+            </div>
+          </div>
+
+          <!-- Invoice Type -->
+          <div class="form-section-title" style="margin-top:20px">📋 Invoice Type</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Invoice Type *</label>
+              <select>
+                <option>Single Item / Service (Freelancer)</option>
+                <option>Multi-Item (Sari-Sari Store / Tindahan)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Invoice Date *</label>
+              <input type="date" value="2025-07-15">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Due Date</label>
+              <input type="date" value="2025-07-22">
+            </div>
+            <div class="form-group">
+              <label>Payment Method</label>
+              <select><option>GCash</option><option>PayMaya</option><option>Bank Transfer</option><option>Cash</option></select>
+            </div>
+          </div>
+
+          <!-- Items table -->
+          <div class="form-section-title" style="margin-top:20px">📦 Items / Serbisyo</div>
+          <table class="item-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th style="width:80px">Qty</th>
+                <th style="width:100px">Unit Price</th>
+                <th style="width:100px">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input value="Logo Design Service"></td>
+                <td><input value="1" style="text-align:center"></td>
+                <td><input value="₱3,500"></td>
+                <td><input value="₱3,500" readonly style="color:var(--primary-start);font-weight:600"></td>
+              </tr>
+              <tr>
+                <td><input value="Brand Guidelines PDF"></td>
+                <td><input value="1" style="text-align:center"></td>
+                <td><input value="₱1,800"></td>
+                <td><input value="₱1,800" readonly style="color:var(--primary-start);font-weight:600"></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-item-btn">+ Magdagdag ng Item</button>
+
+          <!-- Notes -->
+          <div class="form-group" style="margin-bottom:20px">
+            <label>Notes / Remarks</label>
+            <textarea placeholder="Anumang karagdagang impormasyon para sa buyer...">Payment via GCash: 0917-234-5678. Salamat po!</textarea>
+          </div>
+
+          <!-- Total row -->
+          <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+            <div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;padding:16px 24px;text-align:right">
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">TOTAL AMOUNT</div>
+              <div style="font-family:var(--font-display);font-size:28px;font-weight:800;background:var(--primary-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">₱5,300.00</div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-save-draft">💾 Save as Draft</button>
+            <button class="btn-generate">📄 Generate Invoice →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 2: BUYER CONFIRMATION ── -->
+    <div class="preview-panel" id="panel-buyer">
+      <div class="buyer-preview-wrap">
+        <div class="buyer-preview-header">
+          <div>
+            <h3>Invoice for Review</h3>
+            <div class="buyer-inv-id">INV-2025-00142 · Sent by Maria Santos</div>
+          </div>
+          <div class="buyer-status-chip">⏳ Pending Confirmation</div>
+        </div>
+        <div class="buyer-body">
+          <div class="buyer-parties">
+            <div class="party-box">
+              <div class="party-label">From (Seller)</div>
+              <div class="party-name">👩 Maria Santos</div>
+              <div class="party-info">
+                📞 0917-234-5678<br>
+                ✉ maria@example.com<br>
+                📱 @mariasantos.design
+              </div>
+            </div>
+            <div class="party-box">
+              <div class="party-label">To (Buyer)</div>
+              <div class="party-name">👨 Carlo Mendoza</div>
+              <div class="party-info">
+                📞 0919-876-5432<br>
+                ✉ carlo@example.com<br>
+                📱 @carlomendoza
+              </div>
+            </div>
+          </div>
+
+          <div class="buyer-items">
+            <div class="buyer-items-header">
+              <span>Description</span><span>Qty</span><span>Unit Price</span><span>Total</span>
+            </div>
+            <div class="buyer-item-row">
+              <span>Logo Design Service</span><span>1</span><span>₱3,500</span><span style="font-weight:700">₱3,500</span>
+            </div>
+            <div class="buyer-item-row">
+              <span>Brand Guidelines PDF</span><span>1</span><span>₱1,800</span><span style="font-weight:700">₱1,800</span>
+            </div>
+          </div>
+
+          <div class="buyer-totals">
+            <div class="buyer-total-row"><span>Subtotal</span><span>₱5,300.00</span></div>
+            <div class="buyer-total-row"><span>Discount</span><span>— ₱0.00</span></div>
+            <div class="buyer-total-row grand"><span>TOTAL DUE</span><span>₱5,300.00</span></div>
+          </div>
+
+          <div style="background:rgba(102,126,234,0.04);border:1px solid rgba(102,126,234,0.15);border-radius:10px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--text-muted)">
+            💬 <em>"Payment via GCash: 0917-234-5678. Salamat po!"</em>
+          </div>
+
+          <div class="buyer-actions">
+            <button class="btn-reject">✗ Reject</button>
+            <button class="btn-negotiate">↩ Request Changes</button>
+            <button class="btn-confirm">✓ Confirm & Proceed to Pay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 3: QR VERIFICATION ── -->
+    <div class="preview-panel" id="panel-qr">
+      <div class="qr-preview-wrap">
+        <div class="qr-header">
+          <div class="qr-icon">🔲</div>
+          <h3>Invoice Verification Page</h3>
+          <p>I-scan ang QR code para ma-verify ang authenticity ng invoice</p>
+        </div>
+        <div class="qr-body">
+          <div class="qr-code-box">
+            <div class="qr-inner">📄</div>
+          </div>
+          <div class="qr-info">
+            <div class="inv-id">INV-2025-00142</div>
+            <div class="inv-date">Issued: July 15, 2025 · 3:42 PM</div>
+          </div>
+          <div class="qr-verified-badge">✓ Verified & Finalized Invoice</div>
+          <div class="qr-details-list">
+            <div class="qr-detail-row"><span class="key">Status</span><span class="value" style="color:#059669">✅ Finalized</span></div>
+            <div class="qr-detail-row"><span class="key">Seller</span><span class="value">Maria Santos</span></div>
+            <div class="qr-detail-row"><span class="key">Buyer</span><span class="value">Carlo Mendoza</span></div>
+            <div class="qr-detail-row"><span class="key">Total Amount</span><span class="value" style="color:var(--primary-start)">₱5,300.00</span></div>
+            <div class="qr-detail-row"><span class="key">Finalized On</span><span class="value">July 18, 2025 · 5:14 PM</span></div>
+            <div class="qr-detail-row"><span class="key">Invoice Hash</span><span class="value" style="font-family:monospace;font-size:11px">a8f3b2...9d1c</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB 4: AUDIT TRAIL ── -->
+    <div class="preview-panel" id="panel-audit">
+      <div class="audit-preview-wrap">
+        <div class="audit-header">
+          <h3>Audit Trail</h3>
+          <span class="audit-immutable-badge">🔒 Immutable</span>
+        </div>
+        <div class="audit-body">
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">📝 Invoice Created (Draft)</div>
+              <div class="audit-meta">Ginawa ni <strong>Maria Santos</strong> · INV-2025-00142 na-generate</div>
+              <div class="audit-hash">hash: 3f7a1c...b9e2</div>
+            </div>
+            <div class="audit-time">Jul 15, 2025<br>9:23 AM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">🤝 Sent to Buyer (Negotiating)</div>
+              <div class="audit-meta">Na-share kay <strong>Carlo Mendoza</strong> via invoice link</div>
+              <div class="audit-hash">hash: 7d2e9f...c4a8</div>
+            </div>
+            <div class="audit-time">Jul 15, 2025<br>9:45 AM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">💬 Buyer Requested Change</div>
+              <div class="audit-meta"><strong>Carlo Mendoza</strong>: "Pwede bang i-adjust ang Brand Guidelines sa ₱1,500?"</div>
+              <div class="audit-hash">hash: 1a5c3b...f8d7</div>
+            </div>
+            <div class="audit-time">Jul 15, 2025<br>11:12 AM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">📋 Invoice Updated by Seller</div>
+              <div class="audit-meta"><strong>Maria Santos</strong> nag-decline ng price adjustment. Final price: ₱5,300</div>
+              <div class="audit-hash">hash: 8b4f2e...a3c1</div>
+            </div>
+            <div class="audit-time">Jul 15, 2025<br>12:30 PM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">✅ Buyer Confirmed (Pending)</div>
+              <div class="audit-meta"><strong>Carlo Mendoza</strong> nag-confirm ng invoice. Nagbayad via GCash.</div>
+              <div class="audit-hash">hash: 5c9a7d...2e6b</div>
+            </div>
+            <div class="audit-time">Jul 16, 2025<br>2:15 PM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div><div class="audit-line"></div></div>
+            <div class="audit-content">
+              <div class="audit-action">🔲 Payment Uploaded (Unconfirmed)</div>
+              <div class="audit-meta"><strong>Carlo Mendoza</strong> nag-upload ng GCash screenshot bilang proof of payment</div>
+              <div class="audit-hash">hash: 9e1b4c...7f5a</div>
+            </div>
+            <div class="audit-time">Jul 16, 2025<br>2:22 PM</div>
+          </div>
+          <div class="audit-entry">
+            <div class="audit-timeline"><div class="audit-dot"></div></div>
+            <div class="audit-content">
+              <div class="audit-action" style="color:#059669">🏆 Invoice Finalized — QR Code Generated</div>
+              <div class="audit-meta"><strong>Maria Santos</strong> nag-confirm ng bayad. Invoice ay permanently locked at QR code na-generate.</div>
+              <div class="audit-hash">hash: d2f7a9...1e3c — <strong>FINAL BLOCK</strong></div>
+            </div>
+            <div class="audit-time">Jul 18, 2025<br>5:14 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRICING
+============================================================ -->
+<section id="pricing">
+  <div class="section-wrap">
+    <div class="pricing-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Presyo</div>
+      <h2 class="section-title reveal">Abot-Kayang Plano<br><span class="grad-text">Para sa Bawat Isa</span></h2>
+      <p class="section-sub reveal" style="margin:0 auto;text-align:center">Walang hidden charges. Bayad lang kung kailangan mo ng dagdag na feature.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="plan-tag">Libre</div>
+        <div class="plan-price"><span class="plan-num free">FREE</span></div>
+        <p class="plan-desc">Para sa mga nagsisimula pa lang. Walang expire.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> Hanggang 5 invoices bawat buwan</li>
+          <li><span class="chk">✓</span> Single-item invoice</li>
+          <li><span class="chk">✓</span> PDF download</li>
+          <li><span class="chk">✓</span> Complete user profile</li>
+          <li><span class="chk">✓</span> 5-stage status tracker</li>
+          <li><span class="x">✗</span> Unlimited invoices</li>
+          <li><span class="x">✗</span> Multi-item invoicing</li>
+          <li><span class="x">✗</span> QR code verification</li>
+        </ul>
+        <button class="plan-cta outline" onclick="document.getElementById('launch').click()">Subukan Nang Libre →</button>
+      </div>
+      <div class="price-card featured reveal d1">
+        <div class="most-popular">PINAKA-POPULAR</div>
+        <div class="plan-tag">Pro Freelancer</div>
+        <div class="plan-price">
+          <span class="plan-currency">₱</span>
+          <span class="plan-num">199</span>
+          <span class="plan-period">/buwan</span>
+        </div>
+        <p class="plan-desc">Para sa propesyonal na freelancer na regular na nagsisiningil.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> Unlimited invoices</li>
+          <li><span class="chk">✓</span> Full QR code verification</li>
+          <li><span class="chk">✓</span> Complete audit trail</li>
+          <li><span class="chk">✓</span> Custom profile & branding</li>
+          <li><span class="chk">✓</span> Email & Viber sharing</li>
+          <li><span class="chk">✓</span> Payment status tracker</li>
+          <li><span class="chk">✓</span> Negotiation history</li>
+        </ul>
+        <button class="plan-cta solid" onclick="document.getElementById('launch').click()">Subukan ng 14 Araw — Libre</button>
+      </div>
+      <div class="price-card reveal d2">
+        <div class="plan-tag" style="color:#d97706">Store Plus</div>
+        <div class="plan-price">
+          <span class="plan-currency">₱</span>
+          <span class="plan-num">349</span>
+          <span class="plan-period">/buwan</span>
+        </div>
+        <p class="plan-desc">Para sa may sariling tindahan na kailangan ng mas malakas na tools.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="chk">✓</span> Lahat ng nasa Pro Freelancer</li>
+          <li><span class="chk">✓</span> Unlimited multi-item invoicing</li>
+          <li><span class="chk">✓</span> Customer database</li>
+          <li><span class="chk">✓</span> Repeat order records</li>
+          <li><span class="chk">✓</span> Print-ready receipts</li>
+          <li><span class="chk">✓</span> Sales summary reports</li>
+          <li><span class="chk">✓</span> Priority support (Tagalog)</li>
+        </ul>
+        <button class="plan-cta outline" onclick="document.getElementById('launch').click()">I-Try ang Store Plus →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================ -->
+<section id="testimonials">
+  <div class="section-wrap">
+    <div class="testi-header">
+      <div class="section-eyebrow reveal" style="justify-content:center">Testimonyal</div>
+      <h2 class="section-title reveal">Sinasabi ng<br><span class="grad-text">Aming mga Gumagamit</span></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Dati, nag-aaway pa kami ng kliyente ko kung magkano ang bayad. Ngayon, ang invoice mismo ang nagpapatunay — may audit trail pa, kaya walang sinisisi-sisi. Game changer talaga!</p>
+        <div class="testi-author">
+          <div class="testi-av">👩</div>
+          <div>
+            <div class="testi-name">Maria Santos</div>
+            <div class="testi-role">Freelance Graphic Designer · Quezon City</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Sa aming tindahan, dati ay notebook lang. Ngayon, digital na kami! I-scan lang ng buyer ang QR code para makita ang lahat ng detalye ng kanilang order. Propesyonal na kami!</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(245,158,11,0.08)">👴</div>
+          <div>
+            <div class="testi-name">Rolando Reyes</div>
+            <div class="testi-role">Sari-Sari Store Owner · Cebu City</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">Ang immutable audit trail ay nakatulong na maraming beses kapag may dispute. Meron silang sinasabi, ipinakita ko ang trail — tapos na ang usapan. Transparent at ligtas ang sistema.</p>
+        <div class="testi-author">
+          <div class="testi-av" style="background:rgba(16,185,129,0.08)">👨</div>
+          <div>
+            <div class="testi-name">Carlo Mendoza</div>
+            <div class="testi-role">Web Developer · Davao City</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMPLIANCE
+============================================================ -->
+<section id="compliance">
+  <div class="section-wrap">
+    <div class="compliance-inner">
+      <div class="compliance-text">
+        <div class="section-eyebrow reveal">Legal & Seguridad</div>
+        <h2 class="section-title reveal" style="font-size:clamp(24px,3vw,38px)">Para sa Informal Economy<br><span class="grad-text">ng Pilipinas</span></h2>
+        <p class="section-sub reveal">Dinisenyo para sa <strong>non-taxable buy-and-sell</strong> transactions. Hindi kailangan ng BIR TIN para makapagsimula. Ligtas ang iyong data.</p>
+      </div>
+      <div class="comp-badges">
+        <div class="comp-badge reveal"><span class="ci">🇵🇭</span> PH-Based System</div>
+        <div class="comp-badge reveal d1"><span class="ci">🔒</span> SSL Encrypted</div>
+        <div class="comp-badge reveal d2"><span class="ci">🔗</span> Tamper-Evident</div>
+        <div class="comp-badge reveal d3"><span class="ci">📋</span> Non-Taxable Scope</div>
+        <div class="comp-badge reveal d1"><span class="ci">👁</span> Transparent Audit</div>
+        <div class="comp-badge reveal d2"><span class="ci">🛡</span> Dispute Protection</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA BANNER
+============================================================ -->
+<section id="cta-banner">
+  <div class="section-wrap">
+    <div class="cta-inner">
+      <div class="cta-eyebrow reveal">Huwag Mag-atubili</div>
+      <h2 class="cta-title reveal">
+        Simulan ang iyong Unang<br>Invoice — Ngayon Na.
+      </h2>
+      <p class="cta-sub reveal">
+        Libreng gamitin. Walang credit card. Libu-libong Pilipinong negosyante ang nagtitiwala sa Online Printable E-Invoicing para sa kanilang mga transaksyon.
+      </p>
+      <div class="cta-actions reveal">
+        <!-- CTA-level "Create Invoice Now" button -->
+        <button id="launch-cta">
+          Create Invoice Now <span style="font-size:16px">→</span>
+        </button>
+        <a href="#previews" class="btn-outline-white">Tingnan ang Sistema →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="section-wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="display:inline-flex">
+          <div class="logo-mark" style="width:30px;height:30px;font-size:14px;border-radius:7px">📄</div>
+          <span style="color:#e5e7eb;font-family:var(--font-display)">Online Printable<span style="background:var(--primary-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">E-Invoicing</span></span>
+        </a>
+        <p>Online e-invoicing para sa bawat Pilipino. Mula freelancer hanggang tindahan — isang platform para sa lahat ng buy-and-sell transactions.</p>
+        <div class="footer-social">
+          <a href="#" class="soc-btn" title="Facebook">f</a>
+          <a href="#" class="soc-btn" title="Instagram">ig</a>
+          <a href="#" class="soc-btn" title="Viber">v</a>
+          <a href="#" class="soc-btn" title="TikTok">tt</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Sistema</h4>
+        <ul>
+          <li><a href="#for-who">Para sa Freelancer</a></li>
+          <li><a href="#for-who">Para sa Tindahan</a></li>
+          <li><a href="#workflow">Invoice Workflow</a></li>
+          <li><a href="#previews">QR Verification</a></li>
+          <li><a href="#previews">Audit Trail</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Mga Tutorial</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Makipag-ugnayan</a></li>
+          <li><a href="#">Status Page</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Tungkol sa Amin</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Scope & Disclaimer</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Online Printable E-Invoicing. Lahat ng karapatan ay nakalaan. Gawa sa Pilipinas 🇵🇭</p>
+      <p>Para sa informal, non-taxable transactions lamang · Hindi kapalit ng opisyal na resibo</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     THREE.JS (3D Invoice in Hero)
+============================================================ -->
+<script src="{% static 'js/imported/three.min.js' %}"></script>
+
+<script>
+/* ============================================================
+   JAVASCRIPT — Modular, well-commented
+   
+   Modules:
+   1. scrollProgress    — progress bar at top
+   2. navScroll         — nav sticky behaviour
+   3. marquee           — trust strip content
+   4. revealOnScroll    — Intersection Observer reveals
+   5. previewTabs       — tab switching in #previews
+   6. launchButtons     — "Create Invoice Now" redirects
+   7. threeScene        — Three.js 3D invoice + scroll animation
+   8. navMobile         — hamburger toggle
+============================================================ */
+
+/* ── 1. Scroll Progress Bar ──────────────────────────────── */
+(function scrollProgress() {
+  const bar = document.getElementById('scroll-bar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+  }, { passive: true });
+})();
+
+/* ── 2. Nav Scroll State ─────────────────────────────────── */
+(function navScroll() {
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+})();
+
+/* ── 3. Marquee Content ──────────────────────────────────── */
+(function buildMarquee() {
+  const items = [
+    'SELLER FORM', 'BUYER CONFIRMATION', '5-STAGE WORKFLOW',
+    'QR VERIFICATION', 'AUDIT TRAIL', 'IMMUTABLE RECORDS',
+    'PILIPINAS 🇵🇭', 'FREELANCER READY', 'SARI-SARI STORE',
+    'NON-TAXABLE', 'DISPUTE PROTECTION', 'PDF DOWNLOAD',
+    'INFORMAL ECONOMY', 'SINGLE & MULTI-ITEM'
+  ];
+  const track = document.getElementById('mtrack');
+  // Duplicate for seamless loop
+  [...items, ...items].forEach(text => {
+    const el = document.createElement('div');
+    el.className = 'marquee-item';
+    el.innerHTML = `<span class="dot"></span>${text}`;
+    track.appendChild(el);
+  });
+})();
+
+/* ── 4. Scroll Reveal via Intersection Observer ──────────── */
+(function scrollReveal() {
+  const els = document.querySelectorAll('.reveal, .reveal-l, .reveal-r');
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+  els.forEach(el => observer.observe(el));
+})();
+
+/* ── 5. Preview Panel Tab Switcher ───────────────────────── */
+(function previewTabs() {
+  const tabs   = document.querySelectorAll('.ptab');
+  const panels = document.querySelectorAll('.preview-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+
+      // Deactivate all
+      tabs.forEach(t   => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      // Activate selected
+      tab.classList.add('active');
+      const panel = document.getElementById(`panel-${target}`);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* ── 6. "Create Invoice Now" Launch Buttons ──────────────── */
+(function launchButtons() {
+  /**
+   * All three #launch / #launch-nav / #launch-cta buttons
+   * redirect to /landing/ as specified in the task.
+   */
+  const handler = () => {
+    window.location.href = '/landing/';
+  };
+
+  // Hero primary CTA (the specified button)
+  const heroBtn = document.getElementById('launch');
+  if (heroBtn) heroBtn.onclick = handler;
+
+  // Nav-level CTA
+  const navBtn = document.getElementById('launch-nav');
+  if (navBtn) navBtn.onclick = handler;
+
+  // CTA banner button
+  const ctaBtn = document.getElementById('launch-cta');
+  if (ctaBtn) ctaBtn.onclick = handler;
+})();
+
+/* ── 7. Mobile Nav Toggle ────────────────────────────────── */
+(function navMobile() {
+  const toggle = document.getElementById('nav-toggle');
+  const links  = document.getElementById('nav-links');
+  if (!toggle || !links) return;
+
+  toggle.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.cssText = open
+      ? ''
+      : 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:#fff;padding:20px 24px 28px;gap:18px;border-bottom:1px solid var(--border);z-index:999;box-shadow:var(--shadow-lg)';
+  });
+
+  // Close on link click
+  links.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => { links.style.cssText = ''; })
+  );
+})();
+
+/* ── 8. Three.js — 3D Invoice Scene ─────────────────────── */
+(function initThreeScene() {
+  const wrapper = document.getElementById('three-wrap');
+  if (!wrapper) return;
+
+  /* ── Scene + Camera ── */
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    wrapper.clientWidth / wrapper.clientHeight,
+    1, 2000
+  );
+  camera.position.set(0, 20, 380);
+
+  /* ── Renderer ── */
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  wrapper.appendChild(renderer.domElement);
+
+  /* ── Lights ── */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  dirLight.position.set(80, 120, 100);
+  scene.add(dirLight);
+
+  // Brand-coloured point lights (purple + violet)
+  const pLight1 = new THREE.PointLight(0x667eea, 3.5, 500);
+  pLight1.position.set(-100, 80, 120);
+  scene.add(pLight1);
+
+  const pLight2 = new THREE.PointLight(0x764ba2, 2.5, 400);
+  pLight2.position.set(100, -50, 80);
+  scene.add(pLight2);
+
+  const pLight3 = new THREE.PointLight(0xf0f0ff, 1.5, 300);
+  pLight3.position.set(0, 150, 60);
+  scene.add(pLight3);
+
+  /* ── Build Invoice Geometry ── */
+  const group = new THREE.Group();
+
+  // Material helpers
+  const mat = (hex, r = 0.3, m = 0.05, emissive = 0, ei = 0) =>
+    new THREE.MeshStandardMaterial({ color: hex, roughness: r, metalness: m, emissive, emissiveIntensity: ei });
+
+  // ─ Main paper sheet ─
+  const paper = new THREE.Mesh(new THREE.BoxGeometry(130, 170, 5), mat(0xf7f8ff, 0.25, 0.04));
+  paper.castShadow = true;
+  group.add(paper);
+
+  // ─ Paper shadow clone (behind) ─
+  const shadow2 = new THREE.Mesh(new THREE.BoxGeometry(125, 165, 4), mat(0xdde4ff, 0.4, 0, 0, 0));
+  shadow2.material.transparent = true; shadow2.material.opacity = 0.5;
+  shadow2.position.set(8, -8, -8); shadow2.rotation.z = 0.05;
+  group.add(shadow2);
+
+  const shadow3 = new THREE.Mesh(new THREE.BoxGeometry(120, 160, 4), mat(0xc8d4ff, 0.5, 0));
+  shadow3.material.transparent = true; shadow3.material.opacity = 0.3;
+  shadow3.position.set(15, -15, -16); shadow3.rotation.z = 0.1;
+  group.add(shadow3);
+
+  // ─ Header bar (brand gradient colour ~667eea) ─
+  const header = new THREE.Mesh(new THREE.BoxGeometry(130, 36, 7),
+    mat(0x5a6fd6, 0.2, 0.2, 0x4a5fc6, 0.25));
+  header.position.set(0, 67, 1);
+  group.add(header);
+
+  // ─ Accent stripe (764ba2) ─
+  const stripe = new THREE.Mesh(new THREE.BoxGeometry(130, 5, 8),
+    mat(0x764ba2, 0.1, 0.4, 0x764ba2, 0.5));
+  stripe.position.set(0, 48.5, 1);
+  group.add(stripe);
+
+  // ─ Logo block in header ─
+  const logoBg = new THREE.Mesh(new THREE.BoxGeometry(26, 16, 8),
+    mat(0x667eea, 0.15, 0.4, 0x667eea, 0.3));
+  logoBg.position.set(-42, 67, 4);
+  group.add(logoBg);
+
+  // ─ Content text lines ─
+  const lm1 = mat(0xc0caee, 0.8); // light line
+  const lm2 = mat(0xdee4ff, 0.8); // lighter line
+  const lmB = mat(0x667eea, 0.3, 0.2, 0x667eea, 0.15); // blue accent line
+
+  const makeBar = (w, h, x, y, z, material) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, z || 2), material);
+    m.position.set(x, y, 4); group.add(m); return m;
+  };
+
+  // Info rows
+  makeBar(80, 5, -65 + 40 + 5, 35, 2, lm1);
+  makeBar(60, 4, -65 + 30 + 5, 26, 2, lm2);
+  makeBar(72, 4, -65 + 36 + 5, 17, 2, lm2);
+
+  // Divider
+  makeBar(112, 1.5, 0, 9, 2, lm2);
+
+  // Column headers (blue)
+  [-28, 18, 43, 58].forEach(x =>
+    makeBar(12, 3.5, x, 3, 2, lmB)
+  );
+
+  // Item rows ×3
+  [-7, -16, -25].forEach((y, ri) => {
+    const m = ri % 2 === 0 ? lm1 : lm2;
+    const ws = [48, 10, 10, 12];
+    const xs = [-28, 18, 43, 58];
+    ws.forEach((w, ci) => makeBar(w, 4, xs[ci], y, 2, m));
+  });
+
+  // Total divider (purple)
+  makeBar(112, 1.5, 0, -32, 3, mat(0x764ba2, 0.1, 0.3, 0x764ba2, 0.4));
+
+  // Total amount
+  makeBar(30, 5.5, -35, -40, 2, lm1);
+  makeBar(26, 5.5, 50, -40, 3, mat(0x667eea, 0.2, 0.2, 0x667eea, 0.2));
+
+  // ─ PAID stamp ring ─
+  const stampRing = new THREE.Mesh(
+    new THREE.TorusGeometry(20, 2.2, 16, 64),
+    mat(0x10b981, 0.2, 0.1, 0x10b981, 0.45)
+  );
+  stampRing.material.transparent = true; stampRing.material.opacity = 0.75;
+  stampRing.position.set(38, -58, 6);
+  group.add(stampRing);
+
+  const stampFill = new THREE.Mesh(
+    new THREE.CylinderGeometry(19, 19, 1.5, 48),
+    mat(0x10b981, 1, 0)
+  );
+  stampFill.material.transparent = true; stampFill.material.opacity = 0.07;
+  stampFill.rotation.x = Math.PI / 2;
+  stampFill.position.set(38, -58, 5);
+  group.add(stampFill);
+
+  // PAID text bars
+  makeBar(20, 4, 38, -55, 3, mat(0x10b981, 0.2, 0, 0x10b981, 0.55));
+  makeBar(13, 3, 38, -61, 3, mat(0x10b981, 0.4, 0));
+
+  // ─ Folded corner ─
+  const foldSize = 22;
+  const foldGeo  = new THREE.BufferGeometry();
+  foldGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    65, 85, 3,
+    65 - foldSize, 85, 3,
+    65, 85 - foldSize, 3
+  ]), 3));
+  group.add(new THREE.Mesh(foldGeo, mat(0xb0c0e0, 0.5)));
+
+  const foldShadowGeo = new THREE.BufferGeometry();
+  foldShadowGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    65, 85, 3.5,
+    65 - foldSize, 85, 3.5,
+    65, 85 - foldSize, 3.5
+  ]), 3));
+  const foldShadowMat = mat(0x8090b0, 0.5);
+  foldShadowMat.transparent = true; foldShadowMat.opacity = 0.3;
+  foldShadowMat.side = THREE.DoubleSide;
+  group.add(new THREE.Mesh(foldShadowGeo, foldShadowMat));
+
+  // ─ Initial tilt ─
+  group.rotation.y = -0.3;
+  group.rotation.x = 0.12;
+  scene.add(group);
+
+  /* ── State for animation ── */
+  let mouseX = 0, mouseY = 0;
+  let rotTargetY = 0, rotTargetX = 0;
+  const clock = new THREE.Clock();
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX - window.innerWidth  / 2;
+    mouseY = e.clientY - window.innerHeight / 2;
+  }, { passive: true });
+
+  /* ── Resize handler ── */
+  window.addEventListener('resize', () => {
+    camera.aspect = wrapper.clientWidth / wrapper.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+  });
+
+  /* ── Animation Loop ── */
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const t          = clock.getElapsedTime();
+    const scrollY    = window.scrollY;
+    const heroH      = document.getElementById('hero')?.offsetHeight || window.innerHeight;
+    const scrollFrac = Math.min(scrollY / heroH, 1);
+
+    // Scroll-driven: invoice falls forward and down
+    group.position.y  = -scrollFrac * 160 + Math.sin(t * 0.55) * 5;
+    group.position.z  = -scrollFrac * 60;
+
+    // Mouse parallax
+    rotTargetY += (mouseX * 0.0007 - rotTargetY) * 0.06;
+    rotTargetX += (-mouseY * 0.0004 - rotTargetX + 0.12) * 0.06;
+
+    group.rotation.y = -0.3 + rotTargetY;
+    group.rotation.x = rotTargetX + scrollFrac * 0.8;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+})();
+</script>
+</body>
+</html>

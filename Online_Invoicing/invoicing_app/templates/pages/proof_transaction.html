@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{% static 'css/proof_transaction.css' %}">
   <link rel="stylesheet" href="{% static 'css/proofTransactionDesign2.css' %}">
   <link rel="stylesheet" href="{% static 'css/typing_label.css' %}">
+  <link rel="stylesheet" href="{% static 'css/audit_trail.css' %}">
 </head>
 <body>
   <div id="loadingModal" class="loading-modal">
@@ -26,6 +27,7 @@
   </div>
 
   <div class="container" id="mainContent" style="display: none;">
+    <a href="{% url 'landing' %}" class="btn btn_primary_back"> 🏠︎ Home </a>
     <h1>📄 Proof of Transaction</h1>
 
     <div class="room-info">      
@@ -71,7 +73,13 @@
         </div>
         <div class="Seller_Img">
           {% if seller.profile_picture %}
-            <img src="{{ seller.profile_picture.url }}" alt="Seller Profile Picture" class="profile-image">
+          <img src="{% if seller.profile_picture %}
+                      {{ seller.profile_picture.url }}
+                    {% else %}
+                      {% static 'images/default_img.png' %}
+                    {% endif %}"
+              alt="Seller Profile Picture"
+              class="profile-image">
           {% endif %}
         </div>
       </div>
@@ -86,7 +94,13 @@
         </div>
         <div class="Buyer_Img">
            {% if buyer.profile_picture %}
-              <img src="{{ buyer.profile_picture.url }}" alt="Buyer Profile Picture" class="profile-image">
+              <img src="{% if buyer.profile_picture %}
+                {{ buyer.profile_picture.url }}
+              {% else %}
+                {% static 'images/default_img.png' %}
+              {% endif %}"
+              alt="Buyer Profile Picture"
+              class="profile-image">
             {% endif %}
         </div>
       </div>
@@ -151,16 +165,29 @@
           {% endif %}
         </div>
       </div>
+      
+      <!--<div class="audit-trail-section">
+        <h1>TRANSACTION - AUDIT TRAIL</h1>
+        <div class="Single_Item">
+          <h3>History</h3>
+          <ul>
+            {% for h in history %}
+              <li>{{ h.actor }} - {{ h.action }} ({{ h.created_at }}) Notes: {{ h.notes|default:"-" }}</li>
+            {% empty %}
+              <li>No Negotiation History</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>-->
 
+      <div class="download-section">
+        <a href="{% url 'proof_of_transaction_pdf' room_hash %}" 
+          class="btn btn-primary" target="_blank">
+          ⬇️ DOWNLOAD NOW
+        </a>
+      </div>
     </div>
-
-    </div>
-
-    <div class="download-section">
-    <a href="{% url 'proof_of_transaction_pdf' room_hash %}" 
-      class="btn btn-primary" target="_blank">
-      ⬇️ DOWNLOAD NOW
-    </a>
+  </div>
 </div>
 
 
@@ -170,8 +197,11 @@
 
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>-->
+
+  <script src="{% static 'js/imported/qrcode.min.js' %}"></script>
+  <script src="{% static 'js/imported/html2pdf.bundle.min.js' %}"></script>
 
   <script src="{% static 'js/proof_transaction.js' %}"></script>
   <script>
@@ -179,17 +209,16 @@
       const loadingModal = document.getElementById('loadingModal');
       const mainContent = document.getElementById('mainContent');
 
-      const roomHash = "{{ room_hash }}"; 
+      const roomId = "{{ room_id }}";   // UUID
       const buyerHash = "{{ buyer_hash|default:'' }}";
       let shareableLink;
 
       const origin = window.location.origin.replace(/\/$/, '');
       if (buyerHash) {
-        shareableLink = `${origin}/buyer_invoice_room/${roomHash}/${buyerHash}/`;
+        shareableLink = `${origin}/encrypted-invoice/${roomId}/`;
       } else {
-        shareableLink = `${origin}/buyer_room/${roomHash}/`;
+        shareableLink = `${origin}/encrypted-invoice/${roomId}/`;
       }
-
 
       setTimeout(function() {
         loadingModal.style.opacity = '0';
@@ -231,29 +260,5 @@
       });
     });
   </script>
-  
-  <script>
-    const text = "Bound By Truth & Guarded Flame, No Hand May Alter, For All Is Sealed In Steadfast Security.";
-    const typingElement = document.getElementById("typing");
-    let index = 0;
-
-    function typeEffect() {
-      if (index < text.length) {
-        typingElement.textContent += text.charAt(index);
-        index++;
-        setTimeout(typeEffect, 80);
-      } else {
-        setTimeout(() => {
-          typingElement.textContent = "";
-          index = 0;
-          typeEffect();
-        }, 3000);
-      }
-    }
-
-    typeEffect();
-  </script>
 </body>
 </html>
-
-

@@ -4,13 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+
   <title>Seller Room</title>
   <link rel="stylesheet" href="{% static 'css/seller_room.css' %}">
   <link rel="stylesheet" href="{% static 'css/sellerRoom.css' %}">
 </head>
 <body>
   <div class="container">
-    <h1>📄 Seller Room</h1>
+    <h1 style="margin-top: 15px;">📄 Seller Room</h1>
+
+    {% if invoice_status == "draft" %}
+      <h1 style="font-size: 12px;">Invoice Status: <strong id="invoiceActionStatus" style="color: black;">Draft</strong></h1>
+    {% elif invoice_status == "negotiating" %}
+      <h1 style="font-size: 12px;">Invoice Status: <strong id="invoiceActionStatus" style="color: black;">Negotiating</strong></h1>
+    {% elif invoice_status == "pending" %}
+      <h1 style="font-size: 12px;">Invoice Status: <strong id="invoiceActionStatus" style="color: black;">Pending</strong></h1>
+    {% elif invoice_status == "unconfirmed_payment" %}
+      <h1 style="font-size: 12px;">Invoice Status: <strong id="invoiceActionStatus" style="color: black;">Unconfirmed Payment</strong></h1>
+    {% elif invoice_status == "finalized" %}
+      <h1 style="font-size: 12px;">Invoice Status: <strong id="invoiceActionStatus" style="color: black;">Finalized</strong></h1>
+    {% endif %}
 
     <div class="room-info">
       <p><strong>Room Hash:</strong> <span id="roomHash"></span></p>
@@ -49,7 +63,6 @@
               src="{% if seller.preview_image %}{{ seller.preview_image.url }}{% else %}{% static 'default_img.png' %}{% endif %}" 
               alt="Preview" 
               class="preview-image">
-
           </div>
 
         </div>
@@ -81,7 +94,6 @@
         </div>
 
         <div class="multi-item-invoice">
-          <h3>Invoice Details</h3>
           <div id="itemsContainer">
             <div class="item-block">
               <div class="form-group">
@@ -137,9 +149,16 @@
     <div id="negotiationModal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeNegotiationModal()">&times;</span>
-        <h2>💬 Negotiation Started</h2>
+        <h2>💬 Buyer Wants to Negotiate</h2>
         <p>The invoice is now in <strong>negotiation status</strong>. You can update the details freely.</p>
         <button class="primary-btn" onclick="closeNegotiationModal()">Got it</button>
+      </div>
+    </div>
+
+    <div id="BuyerNotifModal" class="buyer_joined_modal">
+      <div class="buyer_joined_modal_content">
+        <span class="close-btn" onclick="closeNegotiationModal()">&times;</span>
+        <h2>👤 Buyer Joins the Room</h2>
       </div>
     </div>
 
@@ -163,7 +182,7 @@
           <div id="BuyerImage">
 
             <img id="buyerProfilePic" 
-              src="{% if buyer.profile_picture %}{{ buyer.profile_picture.url }}{% else %}/media/default_img.webp{% endif %}" 
+              src="{% if buyer.profile_picture %}{{ buyer.profile_picture.url }}{% else %}{% static 'default_img.png' %}{% endif %}" 
               alt="Buyer Profile Picture" 
               class="profile-image">
 

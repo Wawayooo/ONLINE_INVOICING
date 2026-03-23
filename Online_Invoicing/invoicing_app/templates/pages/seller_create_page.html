@@ -5,34 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Invoice - Seller</title>
-
-  <!-- Link external CSS -->
    {% load static %}
   <link rel="stylesheet" href="{% static 'css/seller_create.css' %}">
+  <link rel="stylesheet" href="{% static 'css/seller_create_multiple_invoice_page.css' %}">
 </head>
 
 <body>
   <div class="container">
+    <!--<a style="background: black; font-size: 12px; text-decoration: none;" href="{% url 'landing' %}" class="btn-submit"> ⮜ Back </a>-->
     <h1>📄 Create Invoice</h1>
     <p class="subtitle">Fill in the details to create a new invoice</p>
 
     <form id="invoiceForm">
-      <!-- Seller Information -->
       <div class="section" id="seller-info">
         <h3>👤 Seller Information</h3>
         
         <div class="seller-content">
-            <!-- Left: Profile Image -->
             <div class="seller-profile-section">
                 <div class="profile-upload-area">
                     <label>Profile Picture</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
-                        <label for="sellerProfilePic" class="file-input-label">
-                            <span class="icon">📷</span>
-                            <span class="text">Choose Photo</span>
-                        </label>
-                    </div>
+                    <input type="file" id="sellerProfilePic" name="seller_profile_picture" accept="image/*">
                 </div>
                 <div class="profile-preview-area">
                     <img id="sellerPreview" class="preview-image" alt="Preview" style="display:none;">
@@ -43,37 +35,35 @@
                 </div>
             </div>
 
-            <!-- Right: Seller Details -->
             <div class="seller-details-section">
                 <div class="form-row">
                     <div class="form-field full-width">
                         <label for="sellerFullname">Full Name *</label>
-                        <input type="text" id="sellerFullname" name="seller_fullname" required>
+                        <input type="text" id="sellerFullname" name="seller_fullname" placeholder="Ex: John Doe" required>
                     </div>
                 </div>
 
                 <div class="form-row two-column">
                     <div class="form-field">
                         <label for="sellerEmail">Email</label>
-                        <input type="email" id="sellerEmail" name="seller_email">
+                        <input type="email" id="sellerEmail" name="seller_email" placeholder="example@gmail.com" required>
                     </div>
                     <div class="form-field">
                         <label for="sellerPhone">Phone</label>
-                        <input type="text" id="sellerPhone" name="seller_phone">
+                        <input type="text" id="sellerPhone" name="seller_phone" placeholder="0912-345-1477" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-field full-width">
                         <label for="sellerSocial">Social Media Handle</label>
-                        <input type="text" id="sellerSocial" name="seller_social_media" placeholder="Ex: Elon Musk (FB)">
+                        <input type="text" id="sellerSocial" name="seller_social_media" placeholder="Ex: Elon Musk (FB)" required>
                     </div>
                 </div>
             </div>
         </div>
       </div>
 
-      <!-- Secret Key -->
       <div class="section" id="seller-secret-key">
         <h3>🔑 Seller Secret Key</h3>
         
@@ -106,7 +96,6 @@
         </div>
       </div>
 
-      <!-- Invoice Details -->
       <div class="section" id="invoice-info">
         <h3>📋 Invoice Details</h3>
 
@@ -124,7 +113,7 @@
 
             <div class="form-row" style="margin-bottom: 20px; margin-top: 20px;">
                 <div class="form-field full-width">
-                    <label for="description">Description *</label>
+                    <label for="description">Product/Service Name and Description *</label>
                     <textarea id="description" name="description" required placeholder="Describe the product or service..." rows="4"></textarea>
                 </div>
             </div>
@@ -132,11 +121,11 @@
             <div class="form-row two-column">
                 <div class="form-field">
                     <label for="quantity">Quantity *</label>
-                    <input type="number" id="quantity" name="quantity" min="1" required>
+                    <input placeholder="Enter the Quantity" type="number" id="quantity" name="quantity" min="1" required>
                 </div>
                 <div class="form-field">
                     <label for="unitPrice">Unit Price *</label>
-                    <input type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
+                    <input placeholder="Enter the Price" type="number" id="unitPrice" name="unit_price" step="0.01" min="0" required>
                 </div>
             </div>
 
@@ -154,7 +143,6 @@
                         <option value="">Select Payment Method</option>
                         <option value="cash">Cash</option>
                         <option value="gcash">GCash</option>
-                        <option value="paypal">PayPal</option>
                         <option value="bank_transfer">Bank Transfer</option>
                         <option value="other">Other</option>
                     </select>
@@ -163,16 +151,14 @@
         </div>
       </div>
 
-      <!-- Submit Button -->
       <div class="submit-section">
         <button type="submit" class="btn-submit" id="submitBtn">
             <span class="icon">🔗</span>
-            <span class="text">Create Invoice & Get Shareable Link</span>
+            <span class="text">Create Invoice</span>
         </button>
       </div>
     </form>
 
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading" style="display: none;">
         <div class="loading-content">
             <div class="spinner"></div>
@@ -181,10 +167,8 @@
     </div>
   </div>
 
-  <!-- Link external JS -->
   <script type="module" src="{% static 'js/seller_create.js' %}"></script>
   <script>
-      // Profile image preview
       document.getElementById('sellerProfilePic').addEventListener('change', function(event) {
           const file = event.target.files[0];
           const preview = document.getElementById('sellerPreview');
@@ -205,7 +189,6 @@
           }
       });
 
-      // Calculate line total
       function calculateTotal() {
           const quantity = parseFloat(document.getElementById('quantity').value) || 0;
           const unitPrice = parseFloat(document.getElementById('unitPrice').value) || 0;
@@ -215,17 +198,6 @@
 
       document.getElementById('quantity').addEventListener('input', calculateTotal);
       document.getElementById('unitPrice').addEventListener('input', calculateTotal);
-
-      // Form submission
-      document.getElementById('invoiceForm').addEventListener('submit', function(e) {
-          e.preventDefault();
-          
-          // Show loading
-          document.getElementById('loading').style.display = 'flex';
-          
-          // Your form submission logic here
-          // After success, hide loading: document.getElementById('loading').style.display = 'none';
-      });
   </script>
 </body>
 
