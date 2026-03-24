@@ -76,11 +76,10 @@ def qr_code(c, data, x, y, size):
 
 
 def _qr_block(c, data, y, width, request):
-    if not data.get("room_hash"):
+    if not data.get("room_id"):
         return y
     base = f"{request.scheme}://{request.get_host()}" if request else "http://localhost:8000"
-    bh = data.get("buyer", {}).get("buyer_hash")
-    url = f"{base}/buyer_invoice_room/{data['room_hash']}/{bh}/" if bh else f"{base}/proof_transaction/{data['room_hash']}/"
+    url = f"{base}/encrypted-invoice/{data['room_id']}/"
     sz = 64
     qx = (width - sz) / 2
     c.setFont("Helvetica", 6)
@@ -95,11 +94,11 @@ def _qr_block(c, data, y, width, request):
     lw = c.stringWidth(lbl, "Helvetica-Bold", 6)
     c.drawString(MARGIN, y, lbl)
     c.setFillColor(colors.HexColor("#BB0000"))
-    c.drawString(MARGIN + lw, y, data["room_hash"])
+    c.drawString(MARGIN + lw, y, str(data["room_hash"]))
     y -= 9
     c.setFont("Helvetica", 5.5)
     c.setFillColor(colors.HexColor("#888888"))
-    y = put(c, "Keep this hash — required to decrypt transaction data.", MARGIN, y, CW, "Helvetica", 5.5, 8)
+    y = put(c, "Keep this ID — required to access transaction data.", MARGIN, y, CW, "Helvetica", 5.5, 8)
     return y - 4
 
 
