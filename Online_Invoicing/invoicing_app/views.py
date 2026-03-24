@@ -142,7 +142,10 @@ def proof_of_transaction_pdf(request, room_hash):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="Your_Proof_of_Transaction.pdf"'
 
-    return build_proof_transaction_pdf(response, serializer.data)
+    data = serializer.data.copy()
+    data["room_id"] = str(room.id)  # 👈 add this
+
+    return build_proof_transaction_pdf(response, data, request=request)
 
 def buyer_invoice_room_view(request, room_hash, buyer_hash):
     room = get_object_or_404(Room, room_hash=room_hash)
